@@ -22,6 +22,7 @@ import { CourseModule } from './course/course.module';
 import { SyllabusModule } from './syllabus/syllabus.module';
 import { HolidayModule } from './holiday/holiday.module';
 import { ServiceModule } from './service/service.module';
+import { BookingModule } from './booking/booking.module';
 
 @Module({
   imports: [
@@ -65,6 +66,7 @@ import { ServiceModule } from './service/service.module';
     SyllabusModule,
     HolidayModule,
     ServiceModule,
+    BookingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

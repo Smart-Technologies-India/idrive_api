@@ -2,6 +2,59 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Booking {
+  bookingDate: DateTime!
+  bookingId: String!
+  carId: String!
+  carName: String!
+  confirmationNumber: String
+  courseId: String!
+  courseName: String!
+  coursePrice: Int!
+  createdAt: DateTime!
+  customer: User
+  customerEmail: String
+  customerId: Int
+  customerMobile: String!
+  customerName: String
+  deletedAt: DateTime
+  id: Int!
+  notes: String
+  parsedServices: [BookingService!]
+  school: School
+  schoolId: Int!
+  selectedServices: String
+  services: String
+  slot: String!
+  status: BookingStatus!
+  totalAmount: Int!
+  updatedAt: DateTime!
+}
+
+type BookingService {
+  description: String!
+  id: Int!
+  name: String!
+  price: Int!
+  serviceType: String!
+}
+
+input BookingServiceInput {
+  description: String
+  id: Int!
+  name: String!
+  price: Int!
+  serviceType: String!
+}
+
+enum BookingStatus {
+  CANCELLED
+  COMPLETED
+  CONFIRMED
+  NO_SHOW
+  PENDING
+}
+
 type Car {
   assignedDriverId: Int
   carId: String!
@@ -89,6 +142,27 @@ enum CourseType {
   BEGINNER
   INTERMEDIATE
   REFRESHER
+}
+
+input CreateBookingInput {
+  bookingDate: DateTime!
+  bookingId: String!
+  carId: String!
+  carName: String!
+  confirmationNumber: String
+  courseId: String!
+  courseName: String!
+  coursePrice: Int!
+  customerEmail: String
+  customerId: Int
+  customerMobile: String!
+  customerName: String
+  notes: String
+  schoolId: Int!
+  selectedServices: [BookingServiceInput!]
+  services: [String!]
+  slot: String!
+  totalAmount: Int!
 }
 
 input CreateCarInput {
@@ -420,6 +494,7 @@ input LoginUserInput {
 }
 
 type Mutation {
+  createBooking(inputType: CreateBookingInput!): Booking!
   createCar(inputType: CreateCarInput!): Car!
   createCourse(inputType: CreateCourseInput!): Course!
   createDriver(inputType: CreateDriverInput!): Driver!
@@ -430,6 +505,7 @@ type Mutation {
   createService(inputType: CreateServiceInput!): Service!
   createSyllabus(inputType: CreateSyllabusInput!): Syllabus!
   createUser(inputType: CreateUserInput!): User!
+  deleteBooking(id: Int!): Booking!
   deleteCar(id: Int!, userid: Int!): Car!
   deleteCourse(id: Int!, userid: Int!): Course!
   deleteDriver(id: Int!, userid: Int!): Driver!
@@ -442,6 +518,7 @@ type Mutation {
   deleteUser(id: Int!, userid: Int!): User!
   optLogin(contact: String!): User!
   signup(signUpUserInput: SignUpUserInput!): User!
+  updateBooking(id: Int!, updateType: UpdateBookingInput!): Booking!
   updateCar(id: Int!, updateType: UpdateCarInput!): Car!
   updateCourse(id: Int!, updateType: UpdateCourseInput!): Course!
   updateDriver(id: Int!, updateType: UpdateDriverInput!): Driver!
@@ -456,6 +533,7 @@ type Mutation {
 }
 
 type Query {
+  getAllBooking(whereSearchInput: WhereBookingSearchInput!): [Booking!]!
   getAllCar(whereSearchInput: SearchCarInput!): [Car!]!
   getAllCourse(whereSearchInput: SearchCourseInput!): [Course!]!
   getAllDriver(whereSearchInput: WhereDriverSearchInput!): [Driver!]!
@@ -466,6 +544,7 @@ type Query {
   getAllService(whereSearchInput: WhereServiceSearchInput!): [Service!]!
   getAllSyllabus(whereSearchInput: SearchSyllabusInput!): [Syllabus!]!
   getAllUser(whereSearchInput: WhereUserSearchInput!): [User!]!
+  getBookingById(id: Int!): Booking!
   getCarById(id: Int!): Car!
   getCourseById(id: Int!): Course!
   getDriverById(id: Int!): Driver!
@@ -719,6 +798,28 @@ enum TransmissionType {
   MANUAL
 }
 
+input UpdateBookingInput {
+  bookingDate: DateTime
+  bookingId: String
+  carId: String
+  carName: String
+  confirmationNumber: String
+  courseId: String
+  courseName: String
+  coursePrice: Int
+  customerEmail: String
+  customerId: Int
+  customerMobile: String
+  customerName: String
+  notes: String
+  schoolId: Int
+  selectedServices: [BookingServiceInput!]
+  services: [String!]
+  slot: String
+  status: BookingStatus
+  totalAmount: Int
+}
+
 input UpdateCarInput {
   assignedDriverId: Int
   carId: String
@@ -947,6 +1048,34 @@ type UserPagination {
   skip: Int!
   take: Int!
   total: Int!
+}
+
+input WhereBookingSearchInput {
+  bookingDate: DateTime
+  bookingDateFrom: DateTime
+  bookingDateTo: DateTime
+  bookingId: String
+  carId: String
+  carName: String
+  confirmationNumber: String
+  courseId: String
+  courseName: String
+  coursePrice: Int
+  createdAt: DateTime
+  customerEmail: String
+  customerId: Int
+  customerMobile: String
+  customerName: String
+  deletedAt: DateTime
+  id: Int
+  notes: String
+  schoolId: Int
+  selectedServices: [BookingServiceInput!]
+  services: [String!]
+  slot: String
+  status: BookingStatus
+  totalAmount: Int
+  updatedAt: DateTime
 }
 
 input WhereDriverSearchInput {

@@ -89,6 +89,7 @@ model user {
   schoolId        Int?
   school          school?   @relation(fields: [schoolId], references: [id])
   driver          driver?   @relation("UserDriver")
+  bookings        booking[] @relation("BookingCustomer")
 }
 
 model driver {
@@ -273,6 +274,7 @@ model school {
   courses                 course[]
   holidays                holiday[]
   services                service[]
+  bookings                booking[]
 }
 
 model car {
@@ -524,4 +526,64 @@ model holiday {
   @@index([status])
   @@index([startDate])
   @@index([endDate])
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+model booking {
+  id                      Int                @id @default(autoincrement())
+  schoolId                Int
+  bookingId               String             @unique
+  
+  // Car & Slot Information
+  carId                   String
+  carName                 String
+  slot                    String
+  bookingDate             DateTime
+  
+  // Customer Information
+  customerMobile          String
+  customerName            String?
+  customerEmail           String?
+  customerId              Int?               // Reference to user table if customer exists
+  
+  // Course Information
+  courseId                String
+  courseName              String
+  coursePrice             Float
+  
+  // Services Information
+  services                String?            @db.LongText // JSON array of service IDs
+  selectedServices        String?            @db.LongText // JSON array of service details
+  
+  // Pricing
+  totalAmount             Float
+  
+  // Additional Information
+  notes                   String?            @db.LongText
+  
+  // Status & Tracking
+  status                  BookingStatus      @default(PENDING)
+  confirmationNumber      String?
+  
+  // Timestamps
+  createdAt               DateTime           @default(now())
+  updatedAt               DateTime           @updatedAt
+  deletedAt               DateTime?
+  
+  // Relations
+  school                  school             @relation(fields: [schoolId], references: [id])
+  customer                user?              @relation("BookingCustomer", fields: [customerId], references: [id])
+  
+  @@index([schoolId])
+  @@index([customerId])
+  @@index([bookingDate])
+  @@index([status])
+  @@index([carId])
 }

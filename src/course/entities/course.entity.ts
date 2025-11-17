@@ -48,7 +48,7 @@ export class Course {
   courseType: CourseType;
 
   @Field(() => Int)
-  hoursPerDay: number;
+  minsPerDay: number;
 
   @Field(() => Int)
   courseDays: number;

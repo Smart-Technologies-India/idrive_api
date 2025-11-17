@@ -1,6 +1,14 @@
-import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
+import {
+  ObjectType,
+  Field,
+  Int,
+  Float,
+  registerEnumType,
+} from '@nestjs/graphql';
 import { School } from 'src/school/entities/school.entity';
 import { User } from 'src/user/entities/user.entity';
+import { Car } from 'src/car/entities/car.entity';
+import { BookingSession } from 'src/booking-session/entities/booking-session.entity';
 
 export enum BookingStatus {
   PENDING = 'PENDING',
@@ -28,7 +36,7 @@ export class BookingService {
   @Field(() => String)
   description: string;
 
-  @Field(() => Int)
+  @Field(() => Float)
   price: number;
 }
 
@@ -44,8 +52,8 @@ export class Booking {
   bookingId: string;
 
   // Car & Slot Information
-  @Field(() => String)
-  carId: string;
+  @Field(() => Int)
+  carId: number;
 
   @Field(() => String)
   carName: string;
@@ -76,7 +84,7 @@ export class Booking {
   @Field(() => String)
   courseName: string;
 
-  @Field(() => Int)
+  @Field(() => Float)
   coursePrice: number;
 
   // Services Information
@@ -90,7 +98,7 @@ export class Booking {
   parsedServices?: BookingService[]; // Computed field for GraphQL
 
   // Pricing
-  @Field(() => Int)
+  @Field(() => Float)
   totalAmount: number;
 
   // Additional Information
@@ -120,4 +128,10 @@ export class Booking {
 
   @Field(() => User, { nullable: true })
   customer?: User;
+
+  @Field(() => Car, { nullable: true })
+  car?: Car;
+
+  @Field(() => [BookingSession], { nullable: true })
+  sessions?: BookingSession[];
 }

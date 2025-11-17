@@ -1,4 +1,4 @@
-import { InputType, Field, Int } from '@nestjs/graphql';
+import { InputType, Field, Int, Float } from '@nestjs/graphql';
 import {
   IsNotEmpty,
   IsString,
@@ -6,7 +6,6 @@ import {
   IsInt,
   IsEmail,
   IsDateString,
-  IsJSON,
   Length,
   IsPositive,
 } from 'class-validator';
@@ -35,7 +34,7 @@ export class BookingServiceInput {
 
   @IsNotEmpty()
   @IsPositive()
-  @Field(() => Int)
+  @Field(() => Float)
   price: number;
 }
 
@@ -53,9 +52,9 @@ export class CreateBookingInput {
 
   // Car & Slot Information
   @IsNotEmpty()
-  @IsString()
-  @Field(() => String)
-  carId: string;
+  @IsInt()
+  @Field(() => Int)
+  carId: number;
 
   @IsNotEmpty()
   @IsString()
@@ -107,7 +106,7 @@ export class CreateBookingInput {
 
   @IsNotEmpty()
   @IsPositive()
-  @Field(() => Int)
+  @Field(() => Float)
   coursePrice: number;
 
   // Services Information
@@ -122,7 +121,7 @@ export class CreateBookingInput {
   // Pricing
   @IsNotEmpty()
   @IsPositive()
-  @Field(() => Int)
+  @Field(() => Float)
   totalAmount: number;
 
   // Additional Information

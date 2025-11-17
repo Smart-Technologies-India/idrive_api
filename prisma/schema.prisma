@@ -328,6 +328,8 @@ model car {
   // Relations
   school                  school             @relation(fields: [schoolId], references: [id])
   holidays                holiday[]
+  bookings                booking[]          @relation("BookingCar")
+  bookingSessions         bookingSession[]   @relation("BookingSessionCar")
   
   @@index([schoolId])
   @@index([status])
@@ -356,7 +358,7 @@ model course {
   // Basic Information
   courseName              String
   courseType              CourseType
-  hoursPerDay             Int                // 30 or 60 minutes
+  minsPerDay              Int                // Minutes per day (e.g., 30, 60, 90)
   courseDays              Int                // Number of days
   price                   Float
   
@@ -536,13 +538,21 @@ enum BookingStatus {
   NO_SHOW
 }
 
+enum BookingSessionStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
 model booking {
   id                      Int                @id @default(autoincrement())
   schoolId                Int
   bookingId               String             @unique
   
   // Car & Slot Information
-  carId                   String
+  carId                   Int
   carName                 String
   slot                    String
   bookingDate             DateTime
@@ -580,10 +590,61 @@ model booking {
   // Relations
   school                  school             @relation(fields: [schoolId], references: [id])
   customer                user?              @relation("BookingCustomer", fields: [customerId], references: [id])
+  car                     car                @relation("BookingCar", fields: [carId], references: [id])
+  sessions                bookingSession[]   @relation("BookingSessions")
   
   @@index([schoolId])
   @@index([customerId])
   @@index([bookingDate])
   @@index([status])
   @@index([carId])
+}
+
+model bookingSession {
+  id                      Int                      @id @default(autoincrement())
+  bookingId               Int
+  sessionId               String                   @unique
+  
+  // Session Information
+  dayNumber               Int                      // Day 1, Day 2, etc. of the course
+  sessionDate             DateTime                 // Scheduled date for this session
+  slot                    String                   // Time slot (e.g., "09:00-10:00")
+  
+  // Car & Driver Information
+  carId                   Int
+  carName                 String
+  driverId                Int?                     // Assigned driver for this session
+  driverName              String?
+  
+  // Session Details
+  status                  BookingSessionStatus     @default(PENDING)
+  attended                Boolean                  @default(false)
+  completedAt             DateTime?
+  
+  // Session Notes
+  instructorNotes         String?                  @db.LongText
+  customerFeedback        String?                  @db.LongText
+  internalNotes           String?                  @db.LongText
+  
+  // Performance Tracking
+  performanceRating       Int?                     // 1-5 rating
+  skillsAssessed          String?                  @db.LongText // JSON array of skills
+  progressNotes           String?                  @db.LongText
+  
+  // Timestamps
+  createdAt               DateTime                 @default(now())
+  updatedAt               DateTime                 @updatedAt
+  deletedAt               DateTime?
+  
+  // Relations
+  booking                 booking                  @relation("BookingSessions", fields: [bookingId], references: [id], onDelete: Cascade)
+  car                     car                      @relation("BookingSessionCar", fields: [carId], references: [id])
+  
+  @@unique([bookingId, dayNumber])
+  @@index([bookingId])
+  @@index([sessionDate])
+  @@index([status])
+  @@index([carId])
+  @@index([driverId])
+  @@index([dayNumber])
 }

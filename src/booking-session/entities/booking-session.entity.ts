@@ -1,0 +1,97 @@
+import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
+import { Booking } from 'src/booking/entities/booking.entity';
+import { Car } from 'src/car/entities/car.entity';
+
+export enum BookingSessionStatus {
+  PENDING = 'PENDING',
+  CONFIRMED = 'CONFIRMED',
+  COMPLETED = 'COMPLETED',
+  CANCELLED = 'CANCELLED',
+  NO_SHOW = 'NO_SHOW',
+}
+
+registerEnumType(BookingSessionStatus, {
+  name: 'BookingSessionStatus',
+});
+
+@ObjectType()
+export class BookingSession {
+  @Field(() => Int)
+  id: number;
+
+  @Field(() => Int)
+  bookingId: number;
+
+  @Field(() => String)
+  sessionId: string;
+
+  // Session Information
+  @Field(() => Int)
+  dayNumber: number;
+
+  @Field(() => Date)
+  sessionDate: Date;
+
+  @Field(() => String)
+  slot: string;
+
+  // Car & Driver Information
+  @Field(() => Int)
+  carId: number;
+
+  @Field(() => String)
+  carName: string;
+
+  @Field(() => Int, { nullable: true })
+  driverId?: number;
+
+  @Field(() => String, { nullable: true })
+  driverName?: string;
+
+  // Session Details
+  @Field(() => BookingSessionStatus)
+  status: BookingSessionStatus;
+
+  @Field(() => Boolean)
+  attended: boolean;
+
+  @Field(() => Date, { nullable: true })
+  completedAt?: Date;
+
+  // Session Notes
+  @Field(() => String, { nullable: true })
+  instructorNotes?: string;
+
+  @Field(() => String, { nullable: true })
+  customerFeedback?: string;
+
+  @Field(() => String, { nullable: true })
+  internalNotes?: string;
+
+  // Performance Tracking
+  @Field(() => Int, { nullable: true })
+  performanceRating?: number;
+
+  @Field(() => String, { nullable: true })
+  skillsAssessed?: string;
+
+  @Field(() => String, { nullable: true })
+  progressNotes?: string;
+
+  // Timestamps
+  @Field(() => Date)
+  createdAt: Date;
+
+  @Field(() => Date)
+  updatedAt: Date;
+
+  @Field(() => Date, { nullable: true })
+  deletedAt?: Date;
+
+  // Relations
+  @Field(() => Booking, { nullable: true })
+  booking?: Booking;
+
+  @Field(() => Car, { nullable: true })
+  car?: Car;
+}

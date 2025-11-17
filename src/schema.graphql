@@ -5,12 +5,13 @@
 type Booking {
   bookingDate: DateTime!
   bookingId: String!
-  carId: String!
+  car: Car
+  carId: Int!
   carName: String!
   confirmationNumber: String
   courseId: String!
   courseName: String!
-  coursePrice: Int!
+  coursePrice: Float!
   createdAt: DateTime!
   customer: User
   customerEmail: String
@@ -25,17 +26,25 @@ type Booking {
   schoolId: Int!
   selectedServices: String
   services: String
+  sessions: [BookingSession!]
   slot: String!
   status: BookingStatus!
-  totalAmount: Int!
+  totalAmount: Float!
   updatedAt: DateTime!
+}
+
+type BookingPagination {
+  data: [Booking!]!
+  skip: Int!
+  take: Int!
+  total: Int!
 }
 
 type BookingService {
   description: String!
   id: Int!
   name: String!
-  price: Int!
+  price: Float!
   serviceType: String!
 }
 
@@ -43,8 +52,50 @@ input BookingServiceInput {
   description: String
   id: Int!
   name: String!
-  price: Int!
+  price: Float!
   serviceType: String!
+}
+
+type BookingSession {
+  attended: Boolean!
+  booking: Booking
+  bookingId: Int!
+  car: Car
+  carId: Int!
+  carName: String!
+  completedAt: DateTime
+  createdAt: DateTime!
+  customerFeedback: String
+  dayNumber: Int!
+  deletedAt: DateTime
+  driverId: Int
+  driverName: String
+  id: Int!
+  instructorNotes: String
+  internalNotes: String
+  performanceRating: Int
+  progressNotes: String
+  sessionDate: DateTime!
+  sessionId: String!
+  skillsAssessed: String
+  slot: String!
+  status: BookingSessionStatus!
+  updatedAt: DateTime!
+}
+
+type BookingSessionPagination {
+  data: [BookingSession!]!
+  skip: Int!
+  take: Int!
+  total: Int!
+}
+
+enum BookingSessionStatus {
+  CANCELLED
+  COMPLETED
+  CONFIRMED
+  NO_SHOW
+  PENDING
 }
 
 enum BookingStatus {
@@ -110,8 +161,8 @@ type Course {
   deletedAt: DateTime
   description: String!
   enrolledStudents: Int!
-  hoursPerDay: Int!
   id: Int!
+  minsPerDay: Int!
   price: Float!
   requirements: String
   school: School
@@ -147,12 +198,12 @@ enum CourseType {
 input CreateBookingInput {
   bookingDate: DateTime!
   bookingId: String!
-  carId: String!
+  carId: Int!
   carName: String!
   confirmationNumber: String
   courseId: String!
   courseName: String!
-  coursePrice: Int!
+  coursePrice: Float!
   customerEmail: String
   customerId: Int
   customerMobile: String!
@@ -162,7 +213,28 @@ input CreateBookingInput {
   selectedServices: [BookingServiceInput!]
   services: [String!]
   slot: String!
-  totalAmount: Int!
+  totalAmount: Float!
+}
+
+input CreateBookingSessionInput {
+  attended: Boolean = false
+  bookingId: Int!
+  carId: Int!
+  carName: String!
+  completedAt: DateTime
+  customerFeedback: String
+  dayNumber: Int!
+  driverId: Int
+  driverName: String
+  instructorNotes: String
+  internalNotes: String
+  performanceRating: Int
+  progressNotes: String
+  sessionDate: DateTime!
+  sessionId: String!
+  skillsAssessed: String
+  slot: String!
+  status: BookingSessionStatus = PENDING
 }
 
 input CreateCarInput {
@@ -198,7 +270,7 @@ input CreateCourseInput {
   courseType: CourseType!
   description: String!
   enrolledStudents: Int = 0
-  hoursPerDay: Int!
+  minsPerDay: Int!
   price: Float!
   requirements: String
   schoolId: Int!
@@ -495,6 +567,7 @@ input LoginUserInput {
 
 type Mutation {
   createBooking(inputType: CreateBookingInput!): Booking!
+  createBookingSession(inputType: CreateBookingSessionInput!): BookingSession!
   createCar(inputType: CreateCarInput!): Car!
   createCourse(inputType: CreateCourseInput!): Course!
   createDriver(inputType: CreateDriverInput!): Driver!
@@ -505,7 +578,8 @@ type Mutation {
   createService(inputType: CreateServiceInput!): Service!
   createSyllabus(inputType: CreateSyllabusInput!): Syllabus!
   createUser(inputType: CreateUserInput!): User!
-  deleteBooking(id: Int!): Booking!
+  deleteBooking(id: Int!, userid: Int!): Booking!
+  deleteBookingSession(id: Int!, userid: Int!): BookingSession!
   deleteCar(id: Int!, userid: Int!): Car!
   deleteCourse(id: Int!, userid: Int!): Course!
   deleteDriver(id: Int!, userid: Int!): Driver!
@@ -519,6 +593,7 @@ type Mutation {
   optLogin(contact: String!): User!
   signup(signUpUserInput: SignUpUserInput!): User!
   updateBooking(id: Int!, updateType: UpdateBookingInput!): Booking!
+  updateBookingSession(id: Int!, updateType: UpdateBookingSessionInput!): BookingSession!
   updateCar(id: Int!, updateType: UpdateCarInput!): Car!
   updateCourse(id: Int!, updateType: UpdateCourseInput!): Course!
   updateDriver(id: Int!, updateType: UpdateDriverInput!): Driver!
@@ -534,6 +609,7 @@ type Mutation {
 
 type Query {
   getAllBooking(whereSearchInput: WhereBookingSearchInput!): [Booking!]!
+  getAllBookingSession(whereSearchInput: WhereBookingSessionSearchInput!): [BookingSession!]!
   getAllCar(whereSearchInput: SearchCarInput!): [Car!]!
   getAllCourse(whereSearchInput: SearchCourseInput!): [Course!]!
   getAllDriver(whereSearchInput: WhereDriverSearchInput!): [Driver!]!
@@ -545,11 +621,14 @@ type Query {
   getAllSyllabus(whereSearchInput: SearchSyllabusInput!): [Syllabus!]!
   getAllUser(whereSearchInput: WhereUserSearchInput!): [User!]!
   getBookingById(id: Int!): Booking!
+  getBookingSessionById(id: Int!): BookingSession!
   getCarById(id: Int!): Car!
   getCourseById(id: Int!): Course!
   getDriverById(id: Int!): Driver!
   getHolidayById(id: Int!): Holiday!
   getLeaveHistoryById(id: Int!): LeaveHistory!
+  getPaginatedBooking(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereBookingSearchInput!): BookingPagination!
+  getPaginatedBookingSession(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereBookingSessionSearchInput!): BookingSessionPagination!
   getPaginatedCar(searchPaginationInput: SearchPaginationInput!, whereSearchInput: SearchCarInput!): CarPagination!
   getPaginatedCourse(searchPaginationInput: SearchPaginationInput!, whereSearchInput: SearchCourseInput!): CoursePagination!
   getPaginatedDriver(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereDriverSearchInput!): DriverPagination!
@@ -566,6 +645,8 @@ type Query {
   getSyllabusById(id: Int!): Syllabus!
   getUserById(id: Int!): User!
   login(loginUserInput: LoginUserInput!): User!
+  searchBooking(whereSearchInput: WhereBookingSearchInput!): Booking
+  searchBookingSession(whereSearchInput: WhereBookingSessionSearchInput!): BookingSession
   searchCar(whereSearchInput: SearchCarInput!): Car
   searchCourse(whereSearchInput: SearchCourseInput!): Course
   searchDriver(whereSearchInput: WhereDriverSearchInput!): Driver
@@ -801,12 +882,12 @@ enum TransmissionType {
 input UpdateBookingInput {
   bookingDate: DateTime
   bookingId: String
-  carId: String
+  carId: Int
   carName: String
   confirmationNumber: String
   courseId: String
   courseName: String
-  coursePrice: Int
+  coursePrice: Float
   customerEmail: String
   customerId: Int
   customerMobile: String
@@ -817,7 +898,29 @@ input UpdateBookingInput {
   services: [String!]
   slot: String
   status: BookingStatus
-  totalAmount: Int
+  totalAmount: Float
+}
+
+input UpdateBookingSessionInput {
+  attended: Boolean = false
+  bookingId: Int
+  carId: Int
+  carName: String
+  completedAt: DateTime
+  customerFeedback: String
+  dayNumber: Int
+  driverId: Int
+  driverName: String
+  id: Int!
+  instructorNotes: String
+  internalNotes: String
+  performanceRating: Int
+  progressNotes: String
+  sessionDate: DateTime
+  sessionId: String
+  skillsAssessed: String
+  slot: String
+  status: BookingSessionStatus = PENDING
 }
 
 input UpdateCarInput {
@@ -857,6 +960,7 @@ input UpdateCourseInput {
   enrolledStudents: Int
   hoursPerDay: Int
   id: Int!
+  minsPerDay: Int
   price: Float
   requirements: String
   schoolId: Int
@@ -1055,12 +1159,12 @@ input WhereBookingSearchInput {
   bookingDateFrom: DateTime
   bookingDateTo: DateTime
   bookingId: String
-  carId: String
+  carId: Int
   carName: String
   confirmationNumber: String
   courseId: String
   courseName: String
-  coursePrice: Int
+  coursePrice: Float
   createdAt: DateTime
   customerEmail: String
   customerId: Int
@@ -1074,8 +1178,23 @@ input WhereBookingSearchInput {
   services: [String!]
   slot: String
   status: BookingStatus
-  totalAmount: Int
+  totalAmount: Float
   updatedAt: DateTime
+}
+
+input WhereBookingSessionSearchInput {
+  attended: Boolean
+  bookingId: Int
+  carId: Int
+  carName: String
+  dayNumber: Int
+  driverId: Int
+  driverName: String
+  id: Int
+  sessionDate: DateTime
+  sessionId: String
+  slot: String
+  status: BookingSessionStatus
 }
 
 input WhereDriverSearchInput {

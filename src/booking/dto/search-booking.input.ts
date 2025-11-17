@@ -21,9 +21,9 @@ export class WhereBookingSearchInput extends PartialType(CreateBookingInput) {
   schoolId?: number;
 
   @IsOptional()
-  @IsString()
-  @Field(() => String, { nullable: true })
-  carId?: string;
+  @IsInt()
+  @Field(() => Int, { nullable: true })
+  carId?: number;
 
   @IsOptional()
   @IsString()

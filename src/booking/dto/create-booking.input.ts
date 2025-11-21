@@ -11,34 +11,6 @@ import {
 } from 'class-validator';
 
 @InputType()
-export class BookingServiceInput {
-  @IsNotEmpty()
-  @IsInt()
-  @Field(() => Int)
-  id: number;
-
-  @IsNotEmpty()
-  @IsString()
-  @Field(() => String)
-  name: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @Field(() => String)
-  serviceType: string;
-
-  @IsOptional()
-  @IsString()
-  @Field(() => String, { nullable: true })
-  description?: string;
-
-  @IsNotEmpty()
-  @IsPositive()
-  @Field(() => Float)
-  price: number;
-}
-
-@InputType()
 export class CreateBookingInput {
   @IsNotEmpty()
   @IsInt()
@@ -95,9 +67,9 @@ export class CreateBookingInput {
 
   // Course Information
   @IsNotEmpty()
-  @IsString()
-  @Field(() => String)
-  courseId: string;
+  @IsInt()
+  @Field(() => Int)
+  courseId: number;
 
   @IsNotEmpty()
   @IsString()
@@ -108,15 +80,6 @@ export class CreateBookingInput {
   @IsPositive()
   @Field(() => Float)
   coursePrice: number;
-
-  // Services Information
-  @IsOptional()
-  @Field(() => [String], { nullable: true })
-  services?: string[]; // Array of service IDs
-
-  @IsOptional()
-  @Field(() => [BookingServiceInput], { nullable: true })
-  selectedServices?: BookingServiceInput[]; // Array of service details
 
   // Pricing
   @IsNotEmpty()

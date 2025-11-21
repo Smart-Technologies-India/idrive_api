@@ -385,6 +385,7 @@ model course {
   // Relations
   school                  school             @relation(fields: [schoolId], references: [id])
   syllabusItems           syllabus[]
+  bookings                booking[]
   
   @@index([schoolId])
   @@index([status])
@@ -473,6 +474,7 @@ model service {
   
   // Relations
   school                  school             @relation(fields: [schoolId], references: [id])
+  bookingServices         bookingService[]
   
   @@index([schoolId])
   @@index([status])
@@ -564,13 +566,9 @@ model booking {
   customerId              Int?               // Reference to user table if customer exists
   
   // Course Information
-  courseId                String
+  courseId                Int                // Now references course table
   courseName              String
   coursePrice             Float
-  
-  // Services Information
-  services                String?            @db.LongText // JSON array of service IDs
-  selectedServices        String?            @db.LongText // JSON array of service details
   
   // Pricing
   totalAmount             Float
@@ -591,19 +589,45 @@ model booking {
   school                  school             @relation(fields: [schoolId], references: [id])
   customer                user?              @relation("BookingCustomer", fields: [customerId], references: [id])
   car                     car                @relation("BookingCar", fields: [carId], references: [id])
+  course                  course             @relation(fields: [courseId], references: [id])
   sessions                bookingSession[]   @relation("BookingSessions")
+  bookingServices         bookingService[]   @relation("BookingServices")
   
   @@index([schoolId])
   @@index([customerId])
   @@index([bookingDate])
   @@index([status])
   @@index([carId])
+  @@index([courseId])
+}
+
+model bookingService {
+  id                      Int                @id @default(autoincrement())
+  bookingId               Int
+  serviceId               Int
+  
+  // Service Details (denormalized for historical reference)
+  serviceName             String
+  serviceType             String
+  price                   Float
+  description             String?            @db.LongText
+  
+  // Timestamps
+  createdAt               DateTime           @default(now())
+  updatedAt               DateTime           @updatedAt
+  deletedAt               DateTime?
+  
+  // Relations
+  booking                 booking            @relation("BookingServices", fields: [bookingId], references: [id], onDelete: Cascade)
+  service                 service            @relation(fields: [serviceId], references: [id])
+  
+  @@index([bookingId])
+  @@index([serviceId])
 }
 
 model bookingSession {
   id                      Int                      @id @default(autoincrement())
   bookingId               Int
-  sessionId               String                   @unique
   
   // Session Information
   dayNumber               Int                      // Day 1, Day 2, etc. of the course

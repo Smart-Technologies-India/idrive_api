@@ -22,9 +22,6 @@ export class BookingSession {
   @Field(() => Int)
   bookingId: number;
 
-  @Field(() => String)
-  sessionId: string;
-
   // Session Information
   @Field(() => Int)
   dayNumber: number;

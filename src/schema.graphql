@@ -5,11 +5,13 @@
 type Booking {
   bookingDate: DateTime!
   bookingId: String!
+  bookingServices: [BookingService!]
   car: Car
   carId: Int!
   carName: String!
   confirmationNumber: String
-  courseId: String!
+  course: Course
+  courseId: Int!
   courseName: String!
   coursePrice: Float!
   createdAt: DateTime!
@@ -21,7 +23,7 @@ type Booking {
   deletedAt: DateTime
   id: Int!
   notes: String
-  parsedServices: [BookingService!]
+  parsedServices: [BookingServiceInfo!]
   school: School
   schoolId: Int!
   selectedServices: String
@@ -41,6 +43,21 @@ type BookingPagination {
 }
 
 type BookingService {
+  booking: Booking
+  bookingId: Int!
+  createdAt: DateTime!
+  deletedAt: DateTime
+  description: String
+  id: Int!
+  price: Float!
+  service: Service
+  serviceId: Int!
+  serviceName: String!
+  serviceType: String!
+  updatedAt: DateTime!
+}
+
+type BookingServiceInfo {
   description: String!
   id: Int!
   name: String!
@@ -48,12 +65,11 @@ type BookingService {
   serviceType: String!
 }
 
-input BookingServiceInput {
-  description: String
-  id: Int!
-  name: String!
-  price: Float!
-  serviceType: String!
+type BookingServicePagination {
+  data: [BookingService!]!
+  skip: Int!
+  take: Int!
+  total: Int!
 }
 
 type BookingSession {
@@ -76,7 +92,6 @@ type BookingSession {
   performanceRating: Int
   progressNotes: String
   sessionDate: DateTime!
-  sessionId: String!
   skillsAssessed: String
   slot: String!
   status: BookingSessionStatus!
@@ -201,7 +216,7 @@ input CreateBookingInput {
   carId: Int!
   carName: String!
   confirmationNumber: String
-  courseId: String!
+  courseId: Int!
   courseName: String!
   coursePrice: Float!
   customerEmail: String
@@ -210,10 +225,17 @@ input CreateBookingInput {
   customerName: String
   notes: String
   schoolId: Int!
-  selectedServices: [BookingServiceInput!]
-  services: [String!]
   slot: String!
   totalAmount: Float!
+}
+
+input CreateBookingServiceInput {
+  bookingId: Int!
+  description: String
+  price: Float!
+  serviceId: Int!
+  serviceName: String!
+  serviceType: String!
 }
 
 input CreateBookingSessionInput {
@@ -231,7 +253,6 @@ input CreateBookingSessionInput {
   performanceRating: Int
   progressNotes: String
   sessionDate: DateTime!
-  sessionId: String!
   skillsAssessed: String
   slot: String!
   status: BookingSessionStatus = PENDING
@@ -567,6 +588,7 @@ input LoginUserInput {
 
 type Mutation {
   createBooking(inputType: CreateBookingInput!): Booking!
+  createBookingService(inputType: CreateBookingServiceInput!): BookingService!
   createBookingSession(inputType: CreateBookingSessionInput!): BookingSession!
   createCar(inputType: CreateCarInput!): Car!
   createCourse(inputType: CreateCourseInput!): Course!
@@ -579,6 +601,7 @@ type Mutation {
   createSyllabus(inputType: CreateSyllabusInput!): Syllabus!
   createUser(inputType: CreateUserInput!): User!
   deleteBooking(id: Int!, userid: Int!): Booking!
+  deleteBookingService(id: Int!, userid: Int!): BookingService!
   deleteBookingSession(id: Int!, userid: Int!): BookingSession!
   deleteCar(id: Int!, userid: Int!): Car!
   deleteCourse(id: Int!, userid: Int!): Course!
@@ -593,6 +616,7 @@ type Mutation {
   optLogin(contact: String!): User!
   signup(signUpUserInput: SignUpUserInput!): User!
   updateBooking(id: Int!, updateType: UpdateBookingInput!): Booking!
+  updateBookingService(id: Int!, updateType: UpdateBookingServiceInput!): BookingService!
   updateBookingSession(id: Int!, updateType: UpdateBookingSessionInput!): BookingSession!
   updateCar(id: Int!, updateType: UpdateCarInput!): Car!
   updateCourse(id: Int!, updateType: UpdateCourseInput!): Course!
@@ -609,6 +633,7 @@ type Mutation {
 
 type Query {
   getAllBooking(whereSearchInput: WhereBookingSearchInput!): [Booking!]!
+  getAllBookingService(whereSearchInput: WhereBookingServiceSearchInput!): [BookingService!]!
   getAllBookingSession(whereSearchInput: WhereBookingSessionSearchInput!): [BookingSession!]!
   getAllCar(whereSearchInput: SearchCarInput!): [Car!]!
   getAllCourse(whereSearchInput: SearchCourseInput!): [Course!]!
@@ -621,6 +646,7 @@ type Query {
   getAllSyllabus(whereSearchInput: SearchSyllabusInput!): [Syllabus!]!
   getAllUser(whereSearchInput: WhereUserSearchInput!): [User!]!
   getBookingById(id: Int!): Booking!
+  getBookingServiceById(id: Int!): BookingService!
   getBookingSessionById(id: Int!): BookingSession!
   getCarById(id: Int!): Car!
   getCourseById(id: Int!): Course!
@@ -628,6 +654,7 @@ type Query {
   getHolidayById(id: Int!): Holiday!
   getLeaveHistoryById(id: Int!): LeaveHistory!
   getPaginatedBooking(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereBookingSearchInput!): BookingPagination!
+  getPaginatedBookingService(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereBookingServiceSearchInput!): BookingServicePagination!
   getPaginatedBookingSession(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereBookingSessionSearchInput!): BookingSessionPagination!
   getPaginatedCar(searchPaginationInput: SearchPaginationInput!, whereSearchInput: SearchCarInput!): CarPagination!
   getPaginatedCourse(searchPaginationInput: SearchPaginationInput!, whereSearchInput: SearchCourseInput!): CoursePagination!
@@ -646,6 +673,7 @@ type Query {
   getUserById(id: Int!): User!
   login(loginUserInput: LoginUserInput!): User!
   searchBooking(whereSearchInput: WhereBookingSearchInput!): Booking
+  searchBookingService(whereSearchInput: WhereBookingServiceSearchInput!): BookingService
   searchBookingSession(whereSearchInput: WhereBookingSessionSearchInput!): BookingSession
   searchCar(whereSearchInput: SearchCarInput!): Car
   searchCourse(whereSearchInput: SearchCourseInput!): Course
@@ -885,7 +913,7 @@ input UpdateBookingInput {
   carId: Int
   carName: String
   confirmationNumber: String
-  courseId: String
+  courseId: Int
   courseName: String
   coursePrice: Float
   customerEmail: String
@@ -894,11 +922,19 @@ input UpdateBookingInput {
   customerName: String
   notes: String
   schoolId: Int
-  selectedServices: [BookingServiceInput!]
-  services: [String!]
   slot: String
   status: BookingStatus
   totalAmount: Float
+}
+
+input UpdateBookingServiceInput {
+  bookingId: Int
+  description: String
+  id: Int!
+  price: Float
+  serviceId: Int
+  serviceName: String
+  serviceType: String
 }
 
 input UpdateBookingSessionInput {
@@ -917,7 +953,6 @@ input UpdateBookingSessionInput {
   performanceRating: Int
   progressNotes: String
   sessionDate: DateTime
-  sessionId: String
   skillsAssessed: String
   slot: String
   status: BookingSessionStatus = PENDING
@@ -1162,7 +1197,7 @@ input WhereBookingSearchInput {
   carId: Int
   carName: String
   confirmationNumber: String
-  courseId: String
+  courseId: Int
   courseName: String
   coursePrice: Float
   createdAt: DateTime
@@ -1174,11 +1209,20 @@ input WhereBookingSearchInput {
   id: Int
   notes: String
   schoolId: Int
-  selectedServices: [BookingServiceInput!]
-  services: [String!]
   slot: String
   status: BookingStatus
   totalAmount: Float
+  updatedAt: DateTime
+}
+
+input WhereBookingServiceSearchInput {
+  bookingId: Int
+  createdAt: DateTime
+  deletedAt: DateTime
+  id: Int
+  serviceId: Int
+  serviceName: String
+  serviceType: String
   updatedAt: DateTime
 }
 

@@ -8,7 +8,9 @@ import {
 import { School } from 'src/school/entities/school.entity';
 import { User } from 'src/user/entities/user.entity';
 import { Car } from 'src/car/entities/car.entity';
+import { Course } from 'src/course/entities/course.entity';
 import { BookingSession } from 'src/booking-session/entities/booking-session.entity';
+import { BookingService as BookingServiceEntity } from 'src/booking-service/entities/booking-service.entity';
 
 export enum BookingStatus {
   PENDING = 'PENDING',
@@ -23,7 +25,7 @@ registerEnumType(BookingStatus, {
 });
 
 @ObjectType()
-export class BookingService {
+export class BookingServiceInfo {
   @Field(() => Int)
   id: number;
 
@@ -78,8 +80,8 @@ export class Booking {
   customerId?: number;
 
   // Course Information
-  @Field(() => String)
-  courseId: string;
+  @Field(() => Int)
+  courseId: number;
 
   @Field(() => String)
   courseName: string;
@@ -87,15 +89,15 @@ export class Booking {
   @Field(() => Float)
   coursePrice: number;
 
-  // Services Information
+  // Services Information (deprecated - moved to bookingServices relation)
   @Field(() => String, { nullable: true })
-  services?: string; // JSON array of service IDs
+  services?: string; // JSON array of service IDs (deprecated)
 
   @Field(() => String, { nullable: true })
-  selectedServices?: string; // JSON array of service details
+  selectedServices?: string; // JSON array of service details (deprecated)
 
-  @Field(() => [BookingService], { nullable: true })
-  parsedServices?: BookingService[]; // Computed field for GraphQL
+  @Field(() => [BookingServiceInfo], { nullable: true })
+  parsedServices?: BookingServiceInfo[]; // Computed field for GraphQL (deprecated)
 
   // Pricing
   @Field(() => Float)
@@ -132,6 +134,12 @@ export class Booking {
   @Field(() => Car, { nullable: true })
   car?: Car;
 
+  @Field(() => Course, { nullable: true })
+  course?: Course;
+
   @Field(() => [BookingSession], { nullable: true })
   sessions?: BookingSession[];
+
+  @Field(() => [BookingServiceEntity], { nullable: true })
+  bookingServices?: BookingServiceEntity[];
 }

@@ -24,6 +24,7 @@ import { HolidayModule } from './holiday/holiday.module';
 import { ServiceModule } from './service/service.module';
 import { BookingModule } from './booking/booking.module';
 import { BookingSessionModule } from './booking-session/booking-session.module';
+import { BookingServiceModule } from './booking-service/booking-service.module';
 
 @Module({
   imports: [
@@ -69,6 +70,7 @@ import { BookingSessionModule } from './booking-session/booking-session.module';
     ServiceModule,
     BookingModule,
     BookingSessionModule,
+    BookingServiceModule,
   ],
   controllers: [AppController],
   providers: [AppService],

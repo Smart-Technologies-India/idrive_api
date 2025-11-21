@@ -17,11 +17,6 @@ export class CreateBookingSessionInput {
   @Field(() => Int)
   bookingId: number;
 
-  @IsNotEmpty()
-  @IsString()
-  @Field(() => String)
-  sessionId: string;
-
   // Session Information
   @IsNotEmpty()
   @IsInt()

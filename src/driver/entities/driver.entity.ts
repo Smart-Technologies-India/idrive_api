@@ -9,6 +9,7 @@ import { User } from 'src/user/entities/user.entity';
 import { School } from 'src/school/entities/school.entity';
 import { LeaveHistory } from 'src/leave-history/entities/leave-history.entity';
 import { SalaryHistory } from 'src/salary-history/entities/salary-history.entity';
+import { Car } from 'src/car/entities/car.entity';
 
 export enum DriverStatus {
   ACTIVE = 'ACTIVE',
@@ -132,4 +133,7 @@ export class Driver {
 
   @Field(() => [SalaryHistory], { nullable: true })
   salaryHistory?: SalaryHistory[];
+
+  @Field(() => [Car], { nullable: true })
+  assignedCars?: Car[];
 }

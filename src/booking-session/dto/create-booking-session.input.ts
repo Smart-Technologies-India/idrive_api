@@ -39,19 +39,9 @@ export class CreateBookingSessionInput {
   carId: number;
 
   @IsNotEmpty()
-  @IsString()
-  @Field(() => String)
-  carName: string;
-
-  @IsOptional()
   @IsInt()
-  @Field(() => Int, { nullable: true })
-  driverId?: number;
-
-  @IsOptional()
-  @IsString()
-  @Field(() => String, { nullable: true })
-  driverName?: string;
+  @Field(() => Int)
+  driverId: number;
 
   // Session Details
   @IsOptional()

@@ -143,6 +143,8 @@ model driver {
   school                  school          @relation(fields: [schoolId], references: [id])
   leaveHistory            leaveHistory[]
   salaryHistory           salaryHistory[]
+  assignedCars            car[]           @relation("CarAssignedDriver")
+  bookingSessions         bookingSession[] @relation("BookingSessionDriver")
   
   @@index([schoolId])
   @@index([userId])
@@ -327,6 +329,7 @@ model car {
   
   // Relations
   school                  school             @relation(fields: [schoolId], references: [id])
+  assignedDriver          driver?            @relation("CarAssignedDriver", fields: [assignedDriverId], references: [id])
   holidays                holiday[]
   bookings                booking[]          @relation("BookingCar")
   bookingSessions         bookingSession[]   @relation("BookingSessionCar")
@@ -636,9 +639,7 @@ model bookingSession {
   
   // Car & Driver Information
   carId                   Int
-  carName                 String
-  driverId                Int?                     // Assigned driver for this session
-  driverName              String?
+  driverId                Int                      // Assigned driver for this session
   
   // Session Details
   status                  BookingSessionStatus     @default(PENDING)
@@ -663,6 +664,7 @@ model bookingSession {
   // Relations
   booking                 booking                  @relation("BookingSessions", fields: [bookingId], references: [id], onDelete: Cascade)
   car                     car                      @relation("BookingSessionCar", fields: [carId], references: [id])
+  driver                  driver?                  @relation("BookingSessionDriver", fields: [driverId], references: [id])
   
   @@unique([bookingId, dayNumber])
   @@index([bookingId])

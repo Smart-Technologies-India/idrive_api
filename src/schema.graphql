@@ -78,14 +78,13 @@ type BookingSession {
   bookingId: Int!
   car: Car
   carId: Int!
-  carName: String!
   completedAt: DateTime
   createdAt: DateTime!
   customerFeedback: String
   dayNumber: Int!
   deletedAt: DateTime
-  driverId: Int
-  driverName: String
+  driver: Driver
+  driverId: Int!
   id: Int!
   instructorNotes: String
   internalNotes: String
@@ -122,6 +121,7 @@ enum BookingStatus {
 }
 
 type Car {
+  assignedDriver: Driver
   assignedDriverId: Int
   carId: String!
   carName: String!
@@ -242,12 +242,10 @@ input CreateBookingSessionInput {
   attended: Boolean = false
   bookingId: Int!
   carId: Int!
-  carName: String!
   completedAt: DateTime
   customerFeedback: String
   dayNumber: Int!
-  driverId: Int
-  driverName: String
+  driverId: Int!
   instructorNotes: String
   internalNotes: String
   performanceRating: Int
@@ -455,6 +453,7 @@ scalar DateTime
 type Driver {
   address: String!
   alternatePhone: String
+  assignedCars: [Car!]
   bloodGroup: String
   cancelledBookings: Int!
   completedBookings: Int!
@@ -941,12 +940,10 @@ input UpdateBookingSessionInput {
   attended: Boolean = false
   bookingId: Int
   carId: Int
-  carName: String
   completedAt: DateTime
   customerFeedback: String
   dayNumber: Int
   driverId: Int
-  driverName: String
   id: Int!
   instructorNotes: String
   internalNotes: String

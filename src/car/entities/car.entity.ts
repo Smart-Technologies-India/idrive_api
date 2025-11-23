@@ -6,6 +6,7 @@ import {
   Float,
 } from '@nestjs/graphql';
 import { School } from 'src/school/entities/school.entity';
+import { Driver } from 'src/driver/entities/driver.entity';
 
 export enum CarStatus {
   AVAILABLE = 'AVAILABLE',
@@ -139,4 +140,7 @@ export class Car {
   // Relations
   @Field(() => School, { nullable: true })
   school?: School;
+
+  @Field(() => Driver, { nullable: true })
+  assignedDriver?: Driver;
 }

@@ -1,6 +1,7 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
 import { Booking } from 'src/booking/entities/booking.entity';
 import { Car } from 'src/car/entities/car.entity';
+import { Driver } from 'src/driver/entities/driver.entity';
 
 export enum BookingSessionStatus {
   PENDING = 'PENDING',
@@ -36,14 +37,8 @@ export class BookingSession {
   @Field(() => Int)
   carId: number;
 
-  @Field(() => String)
-  carName: string;
-
-  @Field(() => Int, { nullable: true })
-  driverId?: number;
-
-  @Field(() => String, { nullable: true })
-  driverName?: string;
+  @Field(() => Int)
+  driverId: number;
 
   // Session Details
   @Field(() => BookingSessionStatus)
@@ -91,4 +86,7 @@ export class BookingSession {
 
   @Field(() => Car, { nullable: true })
   car?: Car;
+
+  @Field(() => Driver, { nullable: true })
+  driver?: Driver;
 }

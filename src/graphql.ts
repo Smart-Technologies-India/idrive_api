@@ -159,12 +159,10 @@ export interface CreateBookingSessionInput {
     attended?: Nullable<boolean>;
     bookingId: number;
     carId: number;
-    carName: string;
     completedAt?: Nullable<DateTime>;
     customerFeedback?: Nullable<string>;
     dayNumber: number;
-    driverId?: Nullable<number>;
-    driverName?: Nullable<string>;
+    driverId: number;
     instructorNotes?: Nullable<string>;
     internalNotes?: Nullable<string>;
     performanceRating?: Nullable<number>;
@@ -448,12 +446,10 @@ export interface UpdateBookingSessionInput {
     attended?: Nullable<boolean>;
     bookingId?: Nullable<number>;
     carId?: Nullable<number>;
-    carName?: Nullable<string>;
     completedAt?: Nullable<DateTime>;
     customerFeedback?: Nullable<string>;
     dayNumber?: Nullable<number>;
     driverId?: Nullable<number>;
-    driverName?: Nullable<string>;
     id: number;
     instructorNotes?: Nullable<string>;
     internalNotes?: Nullable<string>;
@@ -869,14 +865,13 @@ export interface BookingSession {
     bookingId: number;
     car?: Nullable<Car>;
     carId: number;
-    carName: string;
     completedAt?: Nullable<DateTime>;
     createdAt: DateTime;
     customerFeedback?: Nullable<string>;
     dayNumber: number;
     deletedAt?: Nullable<DateTime>;
-    driverId?: Nullable<number>;
-    driverName?: Nullable<string>;
+    driver?: Nullable<Driver>;
+    driverId: number;
     id: number;
     instructorNotes?: Nullable<string>;
     internalNotes?: Nullable<string>;
@@ -897,6 +892,7 @@ export interface BookingSessionPagination {
 }
 
 export interface Car {
+    assignedDriver?: Nullable<Driver>;
     assignedDriverId?: Nullable<number>;
     carId: string;
     carName: string;
@@ -967,6 +963,7 @@ export interface CoursePagination {
 export interface Driver {
     address: string;
     alternatePhone?: Nullable<string>;
+    assignedCars?: Nullable<Car[]>;
     bloodGroup?: Nullable<string>;
     cancelledBookings: number;
     completedBookings: number;

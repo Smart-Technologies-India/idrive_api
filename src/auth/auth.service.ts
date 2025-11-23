@@ -6,7 +6,6 @@ import {
   ConflictException,
   Logger,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'prisma/prisma.service';
 import * as argon2 from 'argon2';
 import axios from 'axios';
@@ -15,10 +14,7 @@ import axios from 'axios';
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
 
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async login(contact: string, password: string) {
     try {
@@ -135,16 +131,11 @@ export class AuthService {
       const otp = this.generateOTP(4);
 
       // Get SMS config from environment
-      const smsConfig = this.configService.get<{
-        apiKey: string;
-        sender: string;
-        peId: string;
-        tempId: string;
-      }>('sms');
-      const apiKey = smsConfig?.apiKey || 'c21hcnRUY2g6NUFiMU9GR2U=';
-      const sender = smsConfig?.sender || 'DBAWLA';
-      const peId = smsConfig?.peId || '1001424959147859474';
-      const tempId = smsConfig?.tempId || '1007815568981115610';
+
+      const apiKey = 'c21hcnRUY2g6NUFiMU9GR2U=';
+      const sender = 'DBAWLA';
+      const peId = '1001424959147859474';
+      const tempId = '1007815568981115610';
 
       const smsUrl = `https://webpostservice.com/sendsms_v2.0/sendsms.php?apikey=${apiKey}&type=TEXT&sender=${sender}&mobile=${contact}&message=Your%20OTP%20for%20Dabbawala%20App%20Login%20is%20${otp}.The%20OTP%20is%20valid%20for%203%20Mins.&peId=${peId}&tempId=${tempId}`;
 

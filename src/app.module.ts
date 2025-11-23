@@ -7,9 +7,6 @@ import { join } from 'path';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
-import { ConfigModule } from '@nestjs/config';
-import configuration from './config/configuration.js';
-import { validationSchema } from './config/env.validation.js';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { UploaderModule } from './uploader/uploader.module';
@@ -28,18 +25,6 @@ import { BookingServiceModule } from './booking-service/booking-service.module';
 
 @Module({
   imports: [
-    // Configuration Module - Load first
-    ConfigModule.forRoot({
-      isGlobal: true, // Make config available globally
-      load: [configuration],
-      validationSchema,
-      validationOptions: {
-        allowUnknown: true, // Allow unknown env variables
-        abortEarly: false, // Validate all fields, not just first error
-      },
-      cache: true, // Cache config values
-      expandVariables: true, // Allow variable expansion in .env
-    }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       playground: false,

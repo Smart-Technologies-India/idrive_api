@@ -14,10 +14,10 @@ export class CreateSchoolInput {
   @Field(() => String)
   name: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsEmail()
-  @Field(() => String)
-  email: string;
+  @Field(() => String, { nullable: true })
+  email?: string;
 
   @IsNotEmpty()
   @IsString()

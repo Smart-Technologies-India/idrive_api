@@ -224,7 +224,7 @@ export interface CreateDriverInput {
     completedBookings?: Nullable<number>;
     dateOfBirth: DateTime;
     driverId: string;
-    email: string;
+    email?: Nullable<string>;
     emergencyContactName?: Nullable<string>;
     emergencyContactNumber?: Nullable<string>;
     emergencyContactRelation?: Nullable<string>;
@@ -292,7 +292,7 @@ export interface CreateSchoolInput {
     branchName?: Nullable<string>;
     dayEndTime?: Nullable<string>;
     dayStartTime?: Nullable<string>;
-    email: string;
+    email?: Nullable<string>;
     establishedYear: string;
     facebook?: Nullable<string>;
     gstNumber?: Nullable<string>;
@@ -449,6 +449,7 @@ export interface UpdateBookingSessionInput {
     completedAt?: Nullable<DateTime>;
     customerFeedback?: Nullable<string>;
     dayNumber?: Nullable<number>;
+    deletedAt?: Nullable<DateTime>;
     driverId?: Nullable<number>;
     id: number;
     instructorNotes?: Nullable<string>;
@@ -971,7 +972,7 @@ export interface Driver {
     dateOfBirth: DateTime;
     deletedAt?: Nullable<DateTime>;
     driverId: string;
-    email: string;
+    email?: Nullable<string>;
     emergencyContactName?: Nullable<string>;
     emergencyContactNumber?: Nullable<string>;
     emergencyContactRelation?: Nullable<string>;
@@ -1194,10 +1195,10 @@ export interface School {
     dayEndTime?: Nullable<string>;
     dayStartTime?: Nullable<string>;
     deletedAt?: Nullable<DateTime>;
-    email: string;
+    email?: Nullable<string>;
     establishedYear: string;
     facebook?: Nullable<string>;
-    gstNumber: string;
+    gstNumber?: Nullable<string>;
     id: number;
     ifscCode?: Nullable<string>;
     instagram?: Nullable<string>;

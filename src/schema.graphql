@@ -307,7 +307,7 @@ input CreateDriverInput {
   completedBookings: Int = 0
   dateOfBirth: DateTime!
   driverId: String!
-  email: String!
+  email: String
   emergencyContactName: String
   emergencyContactNumber: String
   emergencyContactRelation: String
@@ -375,7 +375,7 @@ input CreateSchoolInput {
   branchName: String
   dayEndTime: String
   dayStartTime: String
-  email: String!
+  email: String
   establishedYear: String!
   facebook: String
   gstNumber: String
@@ -461,7 +461,7 @@ type Driver {
   dateOfBirth: DateTime!
   deletedAt: DateTime
   driverId: String!
-  email: String!
+  email: String
   emergencyContactName: String
   emergencyContactNumber: String
   emergencyContactRelation: String
@@ -741,10 +741,10 @@ type School {
   dayEndTime: String
   dayStartTime: String
   deletedAt: DateTime
-  email: String!
+  email: String
   establishedYear: String!
   facebook: String
-  gstNumber: String!
+  gstNumber: String
   id: Int!
   ifscCode: String
   instagram: String
@@ -943,6 +943,7 @@ input UpdateBookingSessionInput {
   completedAt: DateTime
   customerFeedback: String
   dayNumber: Int
+  deletedAt: DateTime
   driverId: Int
   id: Int!
   instructorNotes: String

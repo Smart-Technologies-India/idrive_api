@@ -142,9 +142,12 @@ export class BaseService<
         update as Record<string, unknown>,
       );
 
+      // Remove undefined values to avoid issues with optional unique fields
+      const cleanedUpdate = this.removeUndefinedValues(processedUpdate);
+
       const item = await this.delegate.update({
         where: { id },
-        data: processedUpdate,
+        data: cleanedUpdate,
         select: fields,
       });
 
@@ -316,5 +319,19 @@ export class BaseService<
     }
 
     return processedInput;
+  }
+
+  private removeUndefinedValues(
+    obj: Record<string, unknown>,
+  ): Record<string, unknown> {
+    const cleaned: Record<string, unknown> = {};
+
+    Object.keys(obj).forEach((key) => {
+      if (obj[key] !== undefined) {
+        cleaned[key] = obj[key];
+      }
+    });
+
+    return cleaned;
   }
 }

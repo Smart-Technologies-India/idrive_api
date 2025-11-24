@@ -19,8 +19,8 @@ export class School {
   @Field(() => String)
   name: string;
 
-  @Field(() => String)
-  email: string;
+  @Field(() => String, { nullable: true })
+  email?: string;
 
   @Field(() => String)
   phone: string;
@@ -34,8 +34,8 @@ export class School {
   @Field(() => String)
   registrationNumber: string;
 
-  @Field(() => String)
-  gstNumber: string;
+  @Field(() => String, { nullable: true })
+  gstNumber?: string;
 
   @Field(() => String)
   establishedYear: string;

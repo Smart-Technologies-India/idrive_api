@@ -1111,6 +1111,7 @@ export interface IQuery {
     getAllLeaveHistory(whereSearchInput: WhereLeaveHistorySearchInput): LeaveHistory[] | Promise<LeaveHistory[]>;
     getAllSalaryHistory(whereSearchInput: WhereSalaryHistorySearchInput): SalaryHistory[] | Promise<SalaryHistory[]>;
     getAllSchool(whereSearchInput: WhereSchoolSearchInput): School[] | Promise<School[]>;
+    getAllSchoolWithCounts(): SchoolWithCounts[] | Promise<SchoolWithCounts[]>;
     getAllService(whereSearchInput: WhereServiceSearchInput): Service[] | Promise<Service[]>;
     getAllSyllabus(whereSearchInput: SearchSyllabusInput): Syllabus[] | Promise<Syllabus[]>;
     getAllUser(whereSearchInput: WhereUserSearchInput): User[] | Promise<User[]>;
@@ -1137,6 +1138,8 @@ export interface IQuery {
     getPaginatedUser(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereUserSearchInput): UserPagination | Promise<UserPagination>;
     getSalaryHistoryById(id: number): SalaryHistory | Promise<SalaryHistory>;
     getSchoolById(id: number): School | Promise<School>;
+    getSchoolDashboardStats(schoolId: number): SchoolDashboardStats | Promise<SchoolDashboardStats>;
+    getSchoolStatistics(): SchoolStatistics | Promise<SchoolStatistics>;
     getServiceById(id: number): Service | Promise<Service>;
     getSyllabusById(id: number): Syllabus | Promise<Syllabus>;
     getUserById(id: number): User | Promise<User>;
@@ -1224,11 +1227,72 @@ export interface School {
     weeklyHoliday?: Nullable<string>;
 }
 
+export interface SchoolDashboardStats {
+    activeCustomers: number;
+    pendingBookings: number;
+    todayBookings: number;
+    totalRevenue: number;
+}
+
 export interface SchoolPagination {
     data: School[];
     skip: number;
     take: number;
     total: number;
+}
+
+export interface SchoolStatistics {
+    activeSchools: number;
+    inactiveSchools: number;
+    suspendedSchools: number;
+    totalBookings: number;
+    totalCars: number;
+    totalDrivers: number;
+    totalSchools: number;
+    totalUsers: number;
+}
+
+export interface SchoolWithCounts {
+    accountNumber?: Nullable<string>;
+    address: string;
+    alternatePhone?: Nullable<string>;
+    bankName?: Nullable<string>;
+    bookingCount?: Nullable<number>;
+    branchName?: Nullable<string>;
+    carCount?: Nullable<number>;
+    createdAt: DateTime;
+    dayEndTime?: Nullable<string>;
+    dayStartTime?: Nullable<string>;
+    deletedAt?: Nullable<DateTime>;
+    driverCount?: Nullable<number>;
+    email?: Nullable<string>;
+    establishedYear: string;
+    facebook?: Nullable<string>;
+    gstNumber?: Nullable<string>;
+    id: number;
+    ifscCode?: Nullable<string>;
+    instagram?: Nullable<string>;
+    insuranceExpiry?: Nullable<DateTime>;
+    insurancePolicyNumber?: Nullable<string>;
+    insuranceProvider?: Nullable<string>;
+    logo?: Nullable<string>;
+    lunchEndTime?: Nullable<string>;
+    lunchStartTime?: Nullable<string>;
+    name: string;
+    ownerEmail?: Nullable<string>;
+    ownerName?: Nullable<string>;
+    ownerPhone?: Nullable<string>;
+    phone: string;
+    registrationNumber: string;
+    rtoLicenseExpiry?: Nullable<DateTime>;
+    rtoLicenseNumber?: Nullable<string>;
+    status: SchoolStatus;
+    twitter?: Nullable<string>;
+    updatedAt: DateTime;
+    userCount?: Nullable<number>;
+    users?: Nullable<User[]>;
+    website: string;
+    weeklyHoliday?: Nullable<string>;
 }
 
 export interface Service {

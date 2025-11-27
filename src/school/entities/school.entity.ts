@@ -1,11 +1,6 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
+import { SchoolStatus } from '@prisma/client';
 import { User } from 'src/user/entities/user.entity';
-
-export enum SchoolStatus {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
-  SUSPENDED = 'SUSPENDED',
-}
 
 registerEnumType(SchoolStatus, {
   name: 'SchoolStatus',

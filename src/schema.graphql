@@ -641,6 +641,7 @@ type Query {
   getAllLeaveHistory(whereSearchInput: WhereLeaveHistorySearchInput!): [LeaveHistory!]!
   getAllSalaryHistory(whereSearchInput: WhereSalaryHistorySearchInput!): [SalaryHistory!]!
   getAllSchool(whereSearchInput: WhereSchoolSearchInput!): [School!]!
+  getAllSchoolWithCounts: [SchoolWithCounts!]!
   getAllService(whereSearchInput: WhereServiceSearchInput!): [Service!]!
   getAllSyllabus(whereSearchInput: SearchSyllabusInput!): [Syllabus!]!
   getAllUser(whereSearchInput: WhereUserSearchInput!): [User!]!
@@ -667,6 +668,8 @@ type Query {
   getPaginatedUser(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereUserSearchInput!): UserPagination!
   getSalaryHistoryById(id: Int!): SalaryHistory!
   getSchoolById(id: Int!): School!
+  getSchoolDashboardStats(schoolId: Int!): SchoolDashboardStats!
+  getSchoolStatistics: SchoolStatistics!
   getServiceById(id: Int!): Service!
   getSyllabusById(id: Int!): Syllabus!
   getUserById(id: Int!): User!
@@ -770,6 +773,13 @@ type School {
   weeklyHoliday: String
 }
 
+type SchoolDashboardStats {
+  activeCustomers: Int!
+  pendingBookings: Int!
+  todayBookings: Int!
+  totalRevenue: Float!
+}
+
 type SchoolPagination {
   data: [School!]!
   skip: Int!
@@ -777,10 +787,64 @@ type SchoolPagination {
   total: Int!
 }
 
+type SchoolStatistics {
+  activeSchools: Int!
+  inactiveSchools: Int!
+  suspendedSchools: Int!
+  totalBookings: Int!
+  totalCars: Int!
+  totalDrivers: Int!
+  totalSchools: Int!
+  totalUsers: Int!
+}
+
 enum SchoolStatus {
   ACTIVE
   INACTIVE
   SUSPENDED
+}
+
+type SchoolWithCounts {
+  accountNumber: String
+  address: String!
+  alternatePhone: String
+  bankName: String
+  bookingCount: Int
+  branchName: String
+  carCount: Int
+  createdAt: DateTime!
+  dayEndTime: String
+  dayStartTime: String
+  deletedAt: DateTime
+  driverCount: Int
+  email: String
+  establishedYear: String!
+  facebook: String
+  gstNumber: String
+  id: Int!
+  ifscCode: String
+  instagram: String
+  insuranceExpiry: DateTime
+  insurancePolicyNumber: String
+  insuranceProvider: String
+  logo: String
+  lunchEndTime: String
+  lunchStartTime: String
+  name: String!
+  ownerEmail: String
+  ownerName: String
+  ownerPhone: String
+  phone: String!
+  registrationNumber: String!
+  rtoLicenseExpiry: DateTime
+  rtoLicenseNumber: String
+  status: SchoolStatus!
+  twitter: String
+  updatedAt: DateTime!
+  userCount: Int
+  users: [User!]
+  website: String!
+  weeklyHoliday: String
 }
 
 input SearchCarInput {

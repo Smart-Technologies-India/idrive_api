@@ -87,9 +87,10 @@ model user {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
   schoolId  Int?
-  school    school?   @relation(fields: [schoolId], references: [id])
-  driver    driver?   @relation("UserDriver")
-  bookings  booking[] @relation("BookingCustomer")
+  school          school?           @relation(fields: [schoolId], references: [id])
+  driver          driver?           @relation("UserDriver")
+  bookings        booking[]         @relation("BookingCustomer")
+  bookingServices bookingService[]  @relation("UserBookingServices")
 }
 
 model driver {
@@ -270,13 +271,14 @@ model school {
   deletedAt DateTime?
 
   // Relations
-  users    user[]
-  drivers  driver[]
-  cars     car[]
-  courses  course[]
-  holidays holiday[]
-  services service[]
-  bookings booking[]
+  users           user[]
+  drivers         driver[]
+  cars            car[]
+  courses         course[]
+  holidays        holiday[]
+  services        service[]
+  bookings        booking[]
+  bookingServices bookingService[]
 }
 
 model car {
@@ -606,14 +608,17 @@ model booking {
 
 model bookingService {
   id        Int @id @default(autoincrement())
-  bookingId Int
+  bookingId Int? // Optional - for service bookings without car/course
   serviceId Int
+  schoolId  Int
+  userId    Int
 
   // Service Details (denormalized for historical reference)
-  serviceName String
-  serviceType String
-  price       Float
-  description String? @db.LongText
+  serviceName        String
+  serviceType        String
+  price              Float
+  description        String? @db.LongText
+  confirmationNumber String? @unique
 
   // Timestamps
   createdAt DateTime  @default(now())
@@ -621,11 +626,16 @@ model bookingService {
   deletedAt DateTime?
 
   // Relations
-  booking booking @relation("BookingServices", fields: [bookingId], references: [id], onDelete: Cascade)
-  service service @relation(fields: [serviceId], references: [id])
+  booking booking? @relation("BookingServices", fields: [bookingId], references: [id], onDelete: Cascade)
+  service service  @relation(fields: [serviceId], references: [id])
+  school  school   @relation(fields: [schoolId], references: [id])
+  user    user     @relation("UserBookingServices", fields: [userId], references: [id])
 
   @@index([bookingId])
   @@index([serviceId])
+  @@index([schoolId])
+  @@index([userId])
+  @@index([confirmationNumber])
 }
 
 model bookingSession {

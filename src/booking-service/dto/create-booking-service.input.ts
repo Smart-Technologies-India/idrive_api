@@ -9,15 +9,25 @@ import {
 
 @InputType()
 export class CreateBookingServiceInput {
-  @IsNotEmpty()
+  @IsOptional()
   @IsInt()
-  @Field(() => Int)
-  bookingId: number;
+  @Field(() => Int, { nullable: true })
+  bookingId?: number;
 
   @IsNotEmpty()
   @IsInt()
   @Field(() => Int)
   serviceId: number;
+
+  @IsNotEmpty()
+  @IsInt()
+  @Field(() => Int)
+  schoolId: number;
+
+  @IsNotEmpty()
+  @IsInt()
+  @Field(() => Int)
+  userId: number;
 
   // Service Details (denormalized for historical reference)
   @IsNotEmpty()
@@ -39,4 +49,9 @@ export class CreateBookingServiceInput {
   @IsString()
   @Field(() => String, { nullable: true })
   description?: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, { nullable: true })
+  confirmationNumber?: string;
 }

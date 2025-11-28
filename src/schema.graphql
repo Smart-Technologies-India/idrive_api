@@ -44,17 +44,22 @@ type BookingPagination {
 
 type BookingService {
   booking: Booking
-  bookingId: Int!
+  bookingId: Int
+  confirmationNumber: String
   createdAt: DateTime!
   deletedAt: DateTime
   description: String
   id: Int!
   price: Float!
+  school: School
+  schoolId: Int!
   service: Service
   serviceId: Int!
   serviceName: String!
   serviceType: String!
   updatedAt: DateTime!
+  user: User
+  userId: Int!
 }
 
 type BookingServiceInfo {
@@ -230,12 +235,15 @@ input CreateBookingInput {
 }
 
 input CreateBookingServiceInput {
-  bookingId: Int!
+  bookingId: Int
+  confirmationNumber: String
   description: String
   price: Float!
+  schoolId: Int!
   serviceId: Int!
   serviceName: String!
   serviceType: String!
+  userId: Int!
 }
 
 input CreateBookingSessionInput {
@@ -992,12 +1000,15 @@ input UpdateBookingInput {
 
 input UpdateBookingServiceInput {
   bookingId: Int
+  confirmationNumber: String
   description: String
   id: Int!
   price: Float
+  schoolId: Int
   serviceId: Int
   serviceName: String
   serviceType: String
+  userId: Int
 }
 
 input UpdateBookingSessionInput {
@@ -1279,13 +1290,16 @@ input WhereBookingSearchInput {
 
 input WhereBookingServiceSearchInput {
   bookingId: Int
+  confirmationNumber: String
   createdAt: DateTime
   deletedAt: DateTime
   id: Int
+  schoolId: Int
   serviceId: Int
   serviceName: String
   serviceType: String
   updatedAt: DateTime
+  userId: Int
 }
 
 input WhereBookingSessionSearchInput {

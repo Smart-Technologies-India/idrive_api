@@ -19,6 +19,16 @@ export class WhereBookingServiceSearchInput {
   serviceId?: number;
 
   @IsOptional()
+  @IsInt()
+  @Field(() => Int, { nullable: true })
+  schoolId?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Field(() => Int, { nullable: true })
+  userId?: number;
+
+  @IsOptional()
   @IsString()
   @Field(() => String, { nullable: true })
   serviceName?: string;
@@ -27,6 +37,11 @@ export class WhereBookingServiceSearchInput {
   @IsString()
   @Field(() => String, { nullable: true })
   serviceType?: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, { nullable: true })
+  confirmationNumber?: string;
 
   @IsOptional()
   @IsDateString()

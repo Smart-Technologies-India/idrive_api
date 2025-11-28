@@ -147,12 +147,15 @@ export interface CreateBookingInput {
 }
 
 export interface CreateBookingServiceInput {
-    bookingId: number;
+    bookingId?: Nullable<number>;
+    confirmationNumber?: Nullable<string>;
     description?: Nullable<string>;
     price: number;
+    schoolId: number;
     serviceId: number;
     serviceName: string;
     serviceType: string;
+    userId: number;
 }
 
 export interface CreateBookingSessionInput {
@@ -434,12 +437,15 @@ export interface UpdateBookingInput {
 
 export interface UpdateBookingServiceInput {
     bookingId?: Nullable<number>;
+    confirmationNumber?: Nullable<string>;
     description?: Nullable<string>;
     id: number;
     price?: Nullable<number>;
+    schoolId?: Nullable<number>;
     serviceId?: Nullable<number>;
     serviceName?: Nullable<string>;
     serviceType?: Nullable<string>;
+    userId?: Nullable<number>;
 }
 
 export interface UpdateBookingSessionInput {
@@ -688,13 +694,16 @@ export interface WhereBookingSearchInput {
 
 export interface WhereBookingServiceSearchInput {
     bookingId?: Nullable<number>;
+    confirmationNumber?: Nullable<string>;
     createdAt?: Nullable<DateTime>;
     deletedAt?: Nullable<DateTime>;
     id?: Nullable<number>;
+    schoolId?: Nullable<number>;
     serviceId?: Nullable<number>;
     serviceName?: Nullable<string>;
     serviceType?: Nullable<string>;
     updatedAt?: Nullable<DateTime>;
+    userId?: Nullable<number>;
 }
 
 export interface WhereBookingSessionSearchInput {
@@ -832,17 +841,22 @@ export interface BookingPagination {
 
 export interface BookingService {
     booking?: Nullable<Booking>;
-    bookingId: number;
+    bookingId?: Nullable<number>;
+    confirmationNumber?: Nullable<string>;
     createdAt: DateTime;
     deletedAt?: Nullable<DateTime>;
     description?: Nullable<string>;
     id: number;
     price: number;
+    school?: Nullable<School>;
+    schoolId: number;
     service?: Nullable<Service>;
     serviceId: number;
     serviceName: string;
     serviceType: string;
     updatedAt: DateTime;
+    user?: Nullable<User>;
+    userId: number;
 }
 
 export interface BookingServiceInfo {

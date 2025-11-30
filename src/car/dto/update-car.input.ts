@@ -76,6 +76,10 @@ export class UpdateCarInput extends PartialType(CreateCarInput) {
   @Field(() => Int, { nullable: true })
   assignedDriverId?: number;
 
+  // Course Assignment (many-to-many)
+  @Field(() => [Int], { nullable: true, description: 'Array of course IDs to associate with this car' })
+  courseIds?: number[];
+
   // Performance Metrics
   @Field(() => Int, { nullable: true })
   totalBookings?: number;

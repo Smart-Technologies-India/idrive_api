@@ -22,6 +22,8 @@ import { ServiceModule } from './service/service.module';
 import { BookingModule } from './booking/booking.module';
 import { BookingSessionModule } from './booking-session/booking-session.module';
 import { BookingServiceModule } from './booking-service/booking-service.module';
+import { CarCourseModule } from './car-course/car-course.module';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
@@ -56,6 +58,8 @@ import { BookingServiceModule } from './booking-service/booking-service.module';
     BookingModule,
     BookingSessionModule,
     BookingServiceModule,
+    CarCourseModule,
+    PaymentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

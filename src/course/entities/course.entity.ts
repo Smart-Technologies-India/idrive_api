@@ -6,6 +6,7 @@ import {
   Float,
 } from '@nestjs/graphql';
 import { School } from 'src/school/entities/school.entity';
+import { Car } from 'src/car/entities/car.entity';
 
 export enum CourseType {
   BEGINNER = 'BEGINNER',
@@ -94,4 +95,7 @@ export class Course {
   // Relations
   @Field(() => School, { nullable: true })
   school?: School;
+
+  @Field(() => [Car], { nullable: true })
+  cars?: Car[];
 }

@@ -176,12 +176,18 @@ export interface CreateBookingSessionInput {
     status?: Nullable<BookingSessionStatus>;
 }
 
+export interface CreateCarCourseInput {
+    carId: number;
+    courseId: number;
+}
+
 export interface CreateCarInput {
     assignedDriverId?: Nullable<number>;
     carId: string;
     carName: string;
     chassisNumber?: Nullable<string>;
     color: string;
+    courseIds?: Nullable<number[]>;
     currentMileage?: Nullable<number>;
     engineNumber?: Nullable<string>;
     fitnessExpiry?: Nullable<DateTime>;
@@ -203,6 +209,7 @@ export interface CreateCarInput {
 }
 
 export interface CreateCourseInput {
+    carIds?: Nullable<number[]>;
     courseDays: number;
     courseId: string;
     courseName: string;
@@ -268,6 +275,18 @@ export interface CreateLeaveHistoryInput {
     rejectionReason?: Nullable<string>;
     toDate: DateTime;
     totalDays: number;
+}
+
+export interface CreatePaymentInput {
+    amount: number;
+    bookingId: number;
+    installmentNumber: number;
+    notes?: Nullable<string>;
+    paymentMethod?: Nullable<string>;
+    paymentNumber: string;
+    totalInstallments: number;
+    transactionId?: Nullable<string>;
+    userId: number;
 }
 
 export interface CreateSalaryHistoryInput {
@@ -370,6 +389,11 @@ export interface LoginUserInput {
     password: string;
 }
 
+export interface SearchCarCourseInput {
+    carId?: Nullable<number>;
+    courseId?: Nullable<number>;
+}
+
 export interface SearchCarInput {
     assignedDriverId?: Nullable<number>;
     fuelType?: Nullable<FuelType>;
@@ -400,6 +424,14 @@ export interface SearchPaginationInput {
     search?: Nullable<string>;
     skip: number;
     take: number;
+}
+
+export interface SearchPaymentInput {
+    bookingId?: Nullable<number>;
+    paymentMethod?: Nullable<string>;
+    paymentNumber?: Nullable<string>;
+    status?: Nullable<string>;
+    userId?: Nullable<number>;
 }
 
 export interface SearchSyllabusInput {
@@ -468,12 +500,20 @@ export interface UpdateBookingSessionInput {
     status?: Nullable<BookingSessionStatus>;
 }
 
+export interface UpdateCarCourseInput {
+    carId?: Nullable<number>;
+    courseId?: Nullable<number>;
+    deletedAt?: Nullable<DateTime>;
+    id: number;
+}
+
 export interface UpdateCarInput {
     assignedDriverId?: Nullable<number>;
     carId?: Nullable<string>;
     carName?: Nullable<string>;
     chassisNumber?: Nullable<string>;
     color?: Nullable<string>;
+    courseIds?: Nullable<number[]>;
     currentMileage?: Nullable<number>;
     engineNumber?: Nullable<string>;
     fitnessExpiry?: Nullable<DateTime>;
@@ -497,6 +537,7 @@ export interface UpdateCarInput {
 }
 
 export interface UpdateCourseInput {
+    carIds?: Nullable<number[]>;
     courseDays?: Nullable<number>;
     courseId?: Nullable<string>;
     courseName?: Nullable<string>;
@@ -564,6 +605,20 @@ export interface UpdateLeaveHistoryInput {
     status?: Nullable<LeaveStatus>;
     toDate?: Nullable<DateTime>;
     totalDays?: Nullable<number>;
+}
+
+export interface UpdatePaymentInput {
+    amount?: Nullable<number>;
+    bookingId?: Nullable<number>;
+    id: number;
+    installmentNumber?: Nullable<number>;
+    notes?: Nullable<string>;
+    paymentMethod?: Nullable<string>;
+    paymentNumber?: Nullable<string>;
+    status?: Nullable<string>;
+    totalInstallments?: Nullable<number>;
+    transactionId?: Nullable<string>;
+    userId?: Nullable<number>;
 }
 
 export interface UpdateSalaryHistoryInput {
@@ -913,6 +968,7 @@ export interface Car {
     carName: string;
     chassisNumber?: Nullable<string>;
     color: string;
+    courses?: Nullable<Course[]>;
     createdAt: DateTime;
     currentMileage: number;
     deletedAt?: Nullable<DateTime>;
@@ -939,6 +995,24 @@ export interface Car {
     year: number;
 }
 
+export interface CarCourse {
+    car?: Nullable<Car>;
+    carId: number;
+    course?: Nullable<Course>;
+    courseId: number;
+    createdAt: DateTime;
+    deletedAt?: Nullable<DateTime>;
+    id: number;
+    updatedAt: DateTime;
+}
+
+export interface CarCoursePagination {
+    data: CarCourse[];
+    skip: number;
+    take: number;
+    total: number;
+}
+
 export interface CarPagination {
     data: Car[];
     skip: number;
@@ -947,6 +1021,7 @@ export interface CarPagination {
 }
 
 export interface Course {
+    cars?: Nullable<Car[]>;
     courseDays: number;
     courseId: string;
     courseName: string;
@@ -1074,10 +1149,12 @@ export interface IMutation {
     createBookingService(inputType: CreateBookingServiceInput): BookingService | Promise<BookingService>;
     createBookingSession(inputType: CreateBookingSessionInput): BookingSession | Promise<BookingSession>;
     createCar(inputType: CreateCarInput): Car | Promise<Car>;
+    createCarCourse(inputType: CreateCarCourseInput): CarCourse | Promise<CarCourse>;
     createCourse(inputType: CreateCourseInput): Course | Promise<Course>;
     createDriver(inputType: CreateDriverInput): Driver | Promise<Driver>;
     createHoliday(inputType: CreateHolidayInput): Holiday | Promise<Holiday>;
     createLeaveHistory(inputType: CreateLeaveHistoryInput): LeaveHistory | Promise<LeaveHistory>;
+    createPayment(inputType: CreatePaymentInput): Payment | Promise<Payment>;
     createSalaryHistory(inputType: CreateSalaryHistoryInput): SalaryHistory | Promise<SalaryHistory>;
     createSchool(inputType: CreateSchoolInput): School | Promise<School>;
     createService(inputType: CreateServiceInput): Service | Promise<Service>;
@@ -1087,10 +1164,12 @@ export interface IMutation {
     deleteBookingService(id: number, userid: number): BookingService | Promise<BookingService>;
     deleteBookingSession(id: number, userid: number): BookingSession | Promise<BookingSession>;
     deleteCar(id: number, userid: number): Car | Promise<Car>;
+    deleteCarCourse(id: number, userid: number): CarCourse | Promise<CarCourse>;
     deleteCourse(id: number, userid: number): Course | Promise<Course>;
     deleteDriver(id: number, userid: number): Driver | Promise<Driver>;
     deleteHoliday(id: number, userid: number): Holiday | Promise<Holiday>;
     deleteLeaveHistory(id: number, userid: number): LeaveHistory | Promise<LeaveHistory>;
+    deletePayment(id: number, userid: number): Payment | Promise<Payment>;
     deleteSalaryHistory(id: number, userid: number): SalaryHistory | Promise<SalaryHistory>;
     deleteSchool(id: number, userid: number): School | Promise<School>;
     deleteService(id: number, userid: number): Service | Promise<Service>;
@@ -1102,10 +1181,12 @@ export interface IMutation {
     updateBookingService(id: number, updateType: UpdateBookingServiceInput): BookingService | Promise<BookingService>;
     updateBookingSession(id: number, updateType: UpdateBookingSessionInput): BookingSession | Promise<BookingSession>;
     updateCar(id: number, updateType: UpdateCarInput): Car | Promise<Car>;
+    updateCarCourse(id: number, updateType: UpdateCarCourseInput): CarCourse | Promise<CarCourse>;
     updateCourse(id: number, updateType: UpdateCourseInput): Course | Promise<Course>;
     updateDriver(id: number, updateType: UpdateDriverInput): Driver | Promise<Driver>;
     updateHoliday(id: number, updateType: UpdateHolidayInput): Holiday | Promise<Holiday>;
     updateLeaveHistory(id: number, updateType: UpdateLeaveHistoryInput): LeaveHistory | Promise<LeaveHistory>;
+    updatePayment(id: number, updateType: UpdatePaymentInput): Payment | Promise<Payment>;
     updateSalaryHistory(id: number, updateType: UpdateSalaryHistoryInput): SalaryHistory | Promise<SalaryHistory>;
     updateSchool(id: number, updateType: UpdateSchoolInput): School | Promise<School>;
     updateService(id: number, updateType: UpdateServiceInput): Service | Promise<Service>;
@@ -1114,15 +1195,42 @@ export interface IMutation {
     verifyOtp(contact: string, otp: string): User | Promise<User>;
 }
 
+export interface Payment {
+    amount: number;
+    bookingId: number;
+    createdAt: DateTime;
+    deletedAt?: Nullable<DateTime>;
+    id: number;
+    installmentNumber: number;
+    notes?: Nullable<string>;
+    paymentDate: DateTime;
+    paymentMethod?: Nullable<string>;
+    paymentNumber: string;
+    status: string;
+    totalInstallments: number;
+    transactionId?: Nullable<string>;
+    updatedAt: DateTime;
+    userId: number;
+}
+
+export interface PaymentPagination {
+    data: Payment[];
+    skip: number;
+    take: number;
+    total: number;
+}
+
 export interface IQuery {
     getAllBooking(whereSearchInput: WhereBookingSearchInput): Booking[] | Promise<Booking[]>;
     getAllBookingService(whereSearchInput: WhereBookingServiceSearchInput): BookingService[] | Promise<BookingService[]>;
     getAllBookingSession(whereSearchInput: WhereBookingSessionSearchInput): BookingSession[] | Promise<BookingSession[]>;
     getAllCar(whereSearchInput: SearchCarInput): Car[] | Promise<Car[]>;
+    getAllCarCourse(whereSearchInput: SearchCarCourseInput): CarCourse[] | Promise<CarCourse[]>;
     getAllCourse(whereSearchInput: SearchCourseInput): Course[] | Promise<Course[]>;
     getAllDriver(whereSearchInput: WhereDriverSearchInput): Driver[] | Promise<Driver[]>;
     getAllHoliday(whereSearchInput: SearchHolidayInput): Holiday[] | Promise<Holiday[]>;
     getAllLeaveHistory(whereSearchInput: WhereLeaveHistorySearchInput): LeaveHistory[] | Promise<LeaveHistory[]>;
+    getAllPayment(whereSearchInput: SearchPaymentInput): Payment[] | Promise<Payment[]>;
     getAllSalaryHistory(whereSearchInput: WhereSalaryHistorySearchInput): SalaryHistory[] | Promise<SalaryHistory[]>;
     getAllSchool(whereSearchInput: WhereSchoolSearchInput): School[] | Promise<School[]>;
     getAllSchoolWithCounts(): SchoolWithCounts[] | Promise<SchoolWithCounts[]>;
@@ -1133,6 +1241,7 @@ export interface IQuery {
     getBookingServiceById(id: number): BookingService | Promise<BookingService>;
     getBookingSessionById(id: number): BookingSession | Promise<BookingSession>;
     getCarById(id: number): Car | Promise<Car>;
+    getCarCourseById(id: number): CarCourse | Promise<CarCourse>;
     getCourseById(id: number): Course | Promise<Course>;
     getDriverById(id: number): Driver | Promise<Driver>;
     getHolidayById(id: number): Holiday | Promise<Holiday>;
@@ -1141,15 +1250,18 @@ export interface IQuery {
     getPaginatedBookingService(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereBookingServiceSearchInput): BookingServicePagination | Promise<BookingServicePagination>;
     getPaginatedBookingSession(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereBookingSessionSearchInput): BookingSessionPagination | Promise<BookingSessionPagination>;
     getPaginatedCar(searchPaginationInput: SearchPaginationInput, whereSearchInput: SearchCarInput): CarPagination | Promise<CarPagination>;
+    getPaginatedCarCourse(searchPaginationInput: SearchPaginationInput, whereSearchInput: SearchCarCourseInput): CarCoursePagination | Promise<CarCoursePagination>;
     getPaginatedCourse(searchPaginationInput: SearchPaginationInput, whereSearchInput: SearchCourseInput): CoursePagination | Promise<CoursePagination>;
     getPaginatedDriver(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereDriverSearchInput): DriverPagination | Promise<DriverPagination>;
     getPaginatedHoliday(searchPaginationInput: SearchPaginationInput, whereSearchInput: SearchHolidayInput): HolidayPagination | Promise<HolidayPagination>;
     getPaginatedLeaveHistory(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereLeaveHistorySearchInput): LeaveHistoryPagination | Promise<LeaveHistoryPagination>;
+    getPaginatedPayment(searchPaginationInput: SearchPaginationInput, whereSearchInput: SearchPaymentInput): PaymentPagination | Promise<PaymentPagination>;
     getPaginatedSalaryHistory(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereSalaryHistorySearchInput): SalaryHistoryPagination | Promise<SalaryHistoryPagination>;
     getPaginatedSchool(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereSchoolSearchInput): SchoolPagination | Promise<SchoolPagination>;
     getPaginatedService(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereServiceSearchInput): ServicePagination | Promise<ServicePagination>;
     getPaginatedSyllabus(searchPaginationInput: SearchPaginationInput, whereSearchInput: SearchSyllabusInput): SyllabusPagination | Promise<SyllabusPagination>;
     getPaginatedUser(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereUserSearchInput): UserPagination | Promise<UserPagination>;
+    getPaymentById(id: number): Payment | Promise<Payment>;
     getSalaryHistoryById(id: number): SalaryHistory | Promise<SalaryHistory>;
     getSchoolById(id: number): School | Promise<School>;
     getSchoolDashboardStats(schoolId: number): SchoolDashboardStats | Promise<SchoolDashboardStats>;
@@ -1162,10 +1274,12 @@ export interface IQuery {
     searchBookingService(whereSearchInput: WhereBookingServiceSearchInput): Nullable<BookingService> | Promise<Nullable<BookingService>>;
     searchBookingSession(whereSearchInput: WhereBookingSessionSearchInput): Nullable<BookingSession> | Promise<Nullable<BookingSession>>;
     searchCar(whereSearchInput: SearchCarInput): Nullable<Car> | Promise<Nullable<Car>>;
+    searchCarCourse(whereSearchInput: SearchCarCourseInput): Nullable<CarCourse> | Promise<Nullable<CarCourse>>;
     searchCourse(whereSearchInput: SearchCourseInput): Nullable<Course> | Promise<Nullable<Course>>;
     searchDriver(whereSearchInput: WhereDriverSearchInput): Nullable<Driver> | Promise<Nullable<Driver>>;
     searchHoliday(whereSearchInput: SearchHolidayInput): Nullable<Holiday> | Promise<Nullable<Holiday>>;
     searchLeaveHistory(whereSearchInput: WhereLeaveHistorySearchInput): Nullable<LeaveHistory> | Promise<Nullable<LeaveHistory>>;
+    searchPayment(whereSearchInput: SearchPaymentInput): Nullable<Payment> | Promise<Nullable<Payment>>;
     searchSalaryHistory(whereSearchInput: WhereSalaryHistorySearchInput): Nullable<SalaryHistory> | Promise<Nullable<SalaryHistory>>;
     searchSchool(whereSearchInput: WhereSchoolSearchInput): Nullable<School> | Promise<Nullable<School>>;
     searchService(whereSearchInput: WhereServiceSearchInput): Nullable<Service> | Promise<Nullable<Service>>;

@@ -46,6 +46,13 @@ export class CreateCourseInput {
   @Field(() => Float, { nullable: true, defaultValue: 0 })
   totalRevenue?: number;
 
+  // Car Assignment (many-to-many)
+  @Field(() => [Int], {
+    nullable: true,
+    description: 'Array of car IDs to associate with this course',
+  })
+  carIds?: number[];
+
   // Status
   @Field(() => CourseStatus, {
     nullable: true,

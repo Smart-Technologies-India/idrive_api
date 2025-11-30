@@ -87,10 +87,11 @@ model user {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
   schoolId  Int?
-  school          school?           @relation(fields: [schoolId], references: [id])
-  driver          driver?           @relation("UserDriver")
-  bookings        booking[]         @relation("BookingCustomer")
-  bookingServices bookingService[]  @relation("UserBookingServices")
+  school          school?          @relation(fields: [schoolId], references: [id])
+  driver          driver?          @relation("UserDriver")
+  bookings        booking[]        @relation("BookingCustomer")
+  bookingServices bookingService[] @relation("UserBookingServices")
+  payments        payment[]        @relation("PaymentUser")
 }
 
 model driver {
@@ -335,10 +336,28 @@ model car {
   holidays        holiday[]
   bookings        booking[]        @relation("BookingCar")
   bookingSessions bookingSession[] @relation("BookingSessionCar")
+  carCourses      carCourse[]      @relation("CarToCourse")
 
   @@index([schoolId])
   @@index([status])
   @@index([assignedDriverId])
+}
+
+model carCourse {
+  id        Int       @id @default(autoincrement())
+  carId     Int
+  courseId  Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  // Relations
+  car    car    @relation("CarToCourse", fields: [carId], references: [id], onDelete: Cascade)
+  course course @relation("CourseToCar", fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([carId, courseId])
+  @@index([carId])
+  @@index([courseId])
 }
 
 enum CourseType {
@@ -388,9 +407,10 @@ model course {
   deletedAt DateTime?
 
   // Relations
-  school        school     @relation(fields: [schoolId], references: [id])
+  school        school       @relation(fields: [schoolId], references: [id])
   syllabusItems syllabus[]
   bookings      booking[]
+  courseCars    carCourse[]  @relation("CourseToCar")
 
   @@index([schoolId])
   @@index([status])
@@ -597,6 +617,7 @@ model booking {
   course          course           @relation(fields: [courseId], references: [id])
   sessions        bookingSession[] @relation("BookingSessions")
   bookingServices bookingService[] @relation("BookingServices")
+  payments        payment[]        @relation("BookingPayments")
 
   @@index([schoolId])
   @@index([customerId])
@@ -682,4 +703,47 @@ model bookingSession {
   @@index([carId])
   @@index([driverId])
   @@index([dayNumber])
+}
+
+model payment {
+  id        Int      @id @default(autoincrement())
+  bookingId Int
+  userId    Int
+  amount    Float
+  
+  // Payment tracking
+  paymentNumber String   @unique // Unique identifier for this payment
+  paymentDate   DateTime @default(now())
+  paymentMethod String?  // CASH, CARD, UPI, BANK_TRANSFER, etc.
+  transactionId String?  // Bank/UPI transaction ID
+  
+  // Installment tracking
+  installmentNumber Int // 1, 2, 3, etc.
+  totalInstallments Int // Total planned installments for this booking
+  
+  // Notes and status
+  notes     String?  @db.LongText
+  status    PaymentStatus @default(COMPLETED)
+  
+  // Timestamps
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  
+  // Relations
+  booking booking @relation("BookingPayments", fields: [bookingId], references: [id], onDelete: Cascade)
+  user    user    @relation("PaymentUser", fields: [userId], references: [id])
+  
+  @@index([bookingId])
+  @@index([userId])
+  @@index([paymentDate])
+  @@index([status])
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+  CANCELLED
 }

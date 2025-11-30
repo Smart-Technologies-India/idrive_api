@@ -75,6 +75,13 @@ export class CreateCarInput {
   @Field(() => Int, { nullable: true })
   assignedDriverId?: number;
 
+  // Course Assignment (many-to-many)
+  @Field(() => [Int], {
+    nullable: true,
+    description: 'Array of course IDs to associate with this car',
+  })
+  courseIds?: number[];
+
   // Status
   @Field(() => CarStatus, { nullable: true, defaultValue: CarStatus.AVAILABLE })
   status?: CarStatus;

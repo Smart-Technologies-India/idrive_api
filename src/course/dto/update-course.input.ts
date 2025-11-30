@@ -50,6 +50,10 @@ export class UpdateCourseInput extends PartialType(CreateCourseInput) {
   @Field(() => Float, { nullable: true })
   totalRevenue?: number;
 
+  // Car Assignment (many-to-many)
+  @Field(() => [Int], { nullable: true, description: 'Array of car IDs to associate with this course' })
+  carIds?: number[];
+
   // Status
   @Field(() => CourseStatus, { nullable: true })
   status?: CourseStatus;

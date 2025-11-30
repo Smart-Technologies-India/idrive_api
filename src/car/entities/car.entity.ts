@@ -7,6 +7,7 @@ import {
 } from '@nestjs/graphql';
 import { School } from 'src/school/entities/school.entity';
 import { Driver } from 'src/driver/entities/driver.entity';
+import { Course } from 'src/course/entities/course.entity';
 
 export enum CarStatus {
   AVAILABLE = 'AVAILABLE',
@@ -143,4 +144,7 @@ export class Car {
 
   @Field(() => Driver, { nullable: true })
   assignedDriver?: Driver;
+
+  @Field(() => [Course], { nullable: true })
+  courses?: Course[];
 }

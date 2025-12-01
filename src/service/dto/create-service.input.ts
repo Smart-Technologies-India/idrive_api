@@ -13,11 +13,6 @@ import { ServiceType, ServiceStatus } from '../entities/service.entity';
 @InputType()
 export class CreateServiceInput {
   @IsNotEmpty()
-  @IsInt()
-  @Field(() => Int)
-  schoolId: number;
-
-  @IsNotEmpty()
   @IsString()
   @Field(() => String)
   serviceId: string;
@@ -28,20 +23,9 @@ export class CreateServiceInput {
   serviceName: string;
 
   @IsNotEmpty()
-  @IsEnum(ServiceType)
-  @Field(() => ServiceType)
-  serviceType: ServiceType;
-
-  @IsNotEmpty()
   @IsString()
   @Field(() => String)
   category: string;
-
-  @IsNotEmpty()
-  @IsNumber()
-  @Min(0)
-  @Field(() => Number)
-  price: number;
 
   @IsNotEmpty()
   @IsInt()
@@ -73,18 +57,6 @@ export class CreateServiceInput {
   @IsString()
   @Field(() => String, { nullable: true })
   termsAndConditions?: string;
-
-  @IsOptional()
-  @IsInt()
-  @Min(0)
-  @Field(() => Int, { nullable: true })
-  activeUsers?: number;
-
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  @Field(() => Number, { nullable: true })
-  totalRevenue?: number;
 
   @IsOptional()
   @IsEnum(ServiceStatus)

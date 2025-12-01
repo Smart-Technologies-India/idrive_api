@@ -1,5 +1,4 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
-import { School } from 'src/school/entities/school.entity';
 
 export enum ServiceType {
   LICENSE = 'LICENSE',
@@ -26,9 +25,6 @@ export class Service {
   @Field(() => Int)
   id: number;
 
-  @Field(() => Int)
-  schoolId: number;
-
   @Field(() => String)
   serviceId: string;
 
@@ -36,16 +32,10 @@ export class Service {
   @Field(() => String)
   serviceName: string;
 
-  @Field(() => ServiceType)
-  serviceType: ServiceType;
-
   @Field(() => String)
   category: string;
 
   // Pricing & Duration
-  @Field(() => Number)
-  price: number;
-
   @Field(() => Int)
   duration: number;
 
@@ -65,13 +55,6 @@ export class Service {
   @Field(() => String, { nullable: true })
   termsAndConditions?: string;
 
-  // Performance Metrics
-  @Field(() => Int)
-  activeUsers: number;
-
-  @Field(() => Number)
-  totalRevenue: number;
-
   // Status
   @Field(() => ServiceStatus)
   status: ServiceStatus;
@@ -85,8 +68,4 @@ export class Service {
 
   @Field(() => Date, { nullable: true })
   deletedAt?: Date;
-
-  // Relations
-  @Field(() => School, { nullable: true })
-  school?: School;
 }

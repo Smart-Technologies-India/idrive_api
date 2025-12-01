@@ -8,6 +8,7 @@ import {
 import { School } from 'src/school/entities/school.entity';
 import { Driver } from 'src/driver/entities/driver.entity';
 import { Course } from 'src/course/entities/course.entity';
+import { CarAdmin } from 'src/car-admin/entities/car-admin.entity';
 
 export enum CarStatus {
   AVAILABLE = 'AVAILABLE',
@@ -53,6 +54,9 @@ export class Car {
 
   @Field(() => String)
   carId: string;
+
+  @Field(() => Int, { nullable: true })
+  carAdminId?: number;
 
   // Basic Information
   @Field(() => String)
@@ -141,6 +145,9 @@ export class Car {
   // Relations
   @Field(() => School, { nullable: true })
   school?: School;
+
+  @Field(() => CarAdmin, { nullable: true })
+  carAdmin?: CarAdmin;
 
   @Field(() => Driver, { nullable: true })
   assignedDriver?: Driver;

@@ -277,15 +277,52 @@ model school {
   cars            car[]
   courses         course[]
   holidays        holiday[]
-  services        service[]
   bookings        booking[]
   bookingServices bookingService[]
+  schoolServices  schoolService[]
+}
+
+enum CarCategory {
+  SEDAN
+  MUV
+  SUV
+  HATCHBACK
+}
+
+enum CarAdminStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model carAdmin {
+  id        Int    @id @default(autoincrement())
+
+  // Basic Information
+  name         String
+  manufacturer String
+  category     CarCategory
+
+  // Status
+  status CarAdminStatus @default(ACTIVE)
+
+  // Timestamps
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  // Relations
+  cars car[]
+
+  @@index([status])
+  @@index([name])
+  @@index([category])
 }
 
 model car {
   id       Int    @id @default(autoincrement())
   schoolId Int
   carId    String @unique
+  carAdminId Int?
 
   // Basic Information
   carName            String
@@ -332,6 +369,7 @@ model car {
 
   // Relations
   school          school           @relation(fields: [schoolId], references: [id])
+  carAdmin        carAdmin?        @relation(fields: [carAdminId], references: [id])
   assignedDriver  driver?          @relation("CarAssignedDriver", fields: [assignedDriverId], references: [id])
   holidays        holiday[]
   bookings        booking[]        @relation("BookingCar")
@@ -339,6 +377,7 @@ model car {
   carCourses      carCourse[]      @relation("CarToCourse")
 
   @@index([schoolId])
+  @@index([carAdminId])
   @@index([status])
   @@index([assignedDriverId])
 }
@@ -466,16 +505,13 @@ enum ServiceStatus {
 
 model service {
   id        Int    @id @default(autoincrement())
-  schoolId  Int
   serviceId String @unique
 
   // Basic Information
   serviceName String
-  serviceType ServiceType
   category    String
 
   // Pricing & Duration
-  price    Float
   duration Int // Duration in days (validity period)
 
   // Service Details
@@ -484,10 +520,6 @@ model service {
   includedServices   String? @db.LongText // Comma-separated or JSON array
   requirements       String? @db.LongText
   termsAndConditions String? @db.LongText
-
-  // Performance Metrics
-  activeUsers  Int   @default(0)
-  totalRevenue Float @default(0)
 
   // Status
   status ServiceStatus @default(ACTIVE)
@@ -498,12 +530,43 @@ model service {
   deletedAt DateTime?
 
   // Relations
-  school          school           @relation(fields: [schoolId], references: [id])
   bookingServices bookingService[]
+  schoolServices  schoolService[]
 
-  @@index([schoolId])
   @@index([status])
-  @@index([serviceType])
+}
+
+enum SchoolServiceStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model schoolService {
+  id              Int    @id @default(autoincrement())
+  schoolId        Int
+  serviceId       Int
+  schoolServiceId String @unique
+
+  // Pricing
+  licensePrice Float // Price for license service
+  addonPrice   Float // Price for addon service
+
+  // Status
+  status SchoolServiceStatus @default(ACTIVE)
+
+  // Timestamps
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  // Relations
+  school  school  @relation(fields: [schoolId], references: [id])
+  service service @relation(fields: [serviceId], references: [id])
+
+  @@unique([schoolId, serviceId])
+  @@index([schoolId])
+  @@index([serviceId])
+  @@index([status])
 }
 
 enum HolidayDeclarationType {

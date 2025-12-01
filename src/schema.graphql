@@ -128,6 +128,8 @@ enum BookingStatus {
 type Car {
   assignedDriver: Driver
   assignedDriverId: Int
+  carAdmin: CarAdmin
+  carAdminId: Int
   carId: String!
   carName: String!
   chassisNumber: String
@@ -157,6 +159,36 @@ type Car {
   transmission: TransmissionType!
   updatedAt: DateTime!
   year: Int!
+}
+
+type CarAdmin {
+  category: CarCategory!
+  createdAt: DateTime!
+  deletedAt: DateTime
+  id: Int!
+  manufacturer: String!
+  name: String!
+  status: CarAdminStatus!
+  updatedAt: DateTime!
+}
+
+type CarAdminPagination {
+  data: [CarAdmin!]!
+  skip: Int!
+  take: Int!
+  total: Int!
+}
+
+enum CarAdminStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum CarCategory {
+  HATCHBACK
+  MUV
+  SEDAN
+  SUV
 }
 
 type CarCourse {
@@ -282,6 +314,13 @@ input CreateBookingSessionInput {
   skillsAssessed: String
   slot: String!
   status: BookingSessionStatus = PENDING
+}
+
+input CreateCarAdminInput {
+  category: CarCategory!
+  manufacturer: String!
+  name: String!
+  status: CarAdminStatus
 }
 
 input CreateCarCourseInput {
@@ -470,22 +509,24 @@ input CreateSchoolInput {
   weeklyHoliday: String
 }
 
+input CreateSchoolServiceInput {
+  addonPrice: Float!
+  licensePrice: Float!
+  schoolId: Int!
+  serviceId: Int!
+}
+
 input CreateServiceInput {
-  activeUsers: Int
   category: String!
   description: String!
   duration: Int!
   features: String
   includedServices: String
-  price: Float!
   requirements: String
-  schoolId: Int!
   serviceId: String!
   serviceName: String!
-  serviceType: ServiceType!
   status: ServiceStatus
   termsAndConditions: String
-  totalRevenue: Float
 }
 
 input CreateSyllabusInput {
@@ -660,6 +701,7 @@ type Mutation {
   createBookingService(inputType: CreateBookingServiceInput!): BookingService!
   createBookingSession(inputType: CreateBookingSessionInput!): BookingSession!
   createCar(inputType: CreateCarInput!): Car!
+  createCarAdmin(inputType: CreateCarAdminInput!): CarAdmin!
   createCarCourse(inputType: CreateCarCourseInput!): CarCourse!
   createCourse(inputType: CreateCourseInput!): Course!
   createDriver(inputType: CreateDriverInput!): Driver!
@@ -668,6 +710,7 @@ type Mutation {
   createPayment(inputType: CreatePaymentInput!): Payment!
   createSalaryHistory(inputType: CreateSalaryHistoryInput!): SalaryHistory!
   createSchool(inputType: CreateSchoolInput!): School!
+  createSchoolService(inputType: CreateSchoolServiceInput!): SchoolService!
   createService(inputType: CreateServiceInput!): Service!
   createSyllabus(inputType: CreateSyllabusInput!): Syllabus!
   createUser(inputType: CreateUserInput!): User!
@@ -675,6 +718,7 @@ type Mutation {
   deleteBookingService(id: Int!, userid: Int!): BookingService!
   deleteBookingSession(id: Int!, userid: Int!): BookingSession!
   deleteCar(id: Int!, userid: Int!): Car!
+  deleteCarAdmin(id: Int!, userid: Int!): CarAdmin!
   deleteCarCourse(id: Int!, userid: Int!): CarCourse!
   deleteCourse(id: Int!, userid: Int!): Course!
   deleteDriver(id: Int!, userid: Int!): Driver!
@@ -683,6 +727,7 @@ type Mutation {
   deletePayment(id: Int!, userid: Int!): Payment!
   deleteSalaryHistory(id: Int!, userid: Int!): SalaryHistory!
   deleteSchool(id: Int!, userid: Int!): School!
+  deleteSchoolService(id: Int!, userid: Int!): SchoolService!
   deleteService(id: Int!, userid: Int!): Service!
   deleteSyllabus(id: Int!, userid: Int!): Syllabus!
   deleteUser(id: Int!, userid: Int!): User!
@@ -692,6 +737,7 @@ type Mutation {
   updateBookingService(id: Int!, updateType: UpdateBookingServiceInput!): BookingService!
   updateBookingSession(id: Int!, updateType: UpdateBookingSessionInput!): BookingSession!
   updateCar(id: Int!, updateType: UpdateCarInput!): Car!
+  updateCarAdmin(id: Int!, updateType: UpdateCarAdminInput!): CarAdmin!
   updateCarCourse(id: Int!, updateType: UpdateCarCourseInput!): CarCourse!
   updateCourse(id: Int!, updateType: UpdateCourseInput!): Course!
   updateDriver(id: Int!, updateType: UpdateDriverInput!): Driver!
@@ -700,6 +746,7 @@ type Mutation {
   updatePayment(id: Int!, updateType: UpdatePaymentInput!): Payment!
   updateSalaryHistory(id: Int!, updateType: UpdateSalaryHistoryInput!): SalaryHistory!
   updateSchool(id: Int!, updateType: UpdateSchoolInput!): School!
+  updateSchoolService(id: Int!, updateType: UpdateSchoolServiceInput!): SchoolService!
   updateService(id: Int!, updateType: UpdateServiceInput!): Service!
   updateSyllabus(id: Int!, updateType: UpdateSyllabusInput!): Syllabus!
   updateUser(id: Int!, updateType: UpdateUserInput!): User!
@@ -736,6 +783,7 @@ type Query {
   getAllBookingService(whereSearchInput: WhereBookingServiceSearchInput!): [BookingService!]!
   getAllBookingSession(whereSearchInput: WhereBookingSessionSearchInput!): [BookingSession!]!
   getAllCar(whereSearchInput: SearchCarInput!): [Car!]!
+  getAllCarAdmin(whereSearchInput: WhereCarAdminSearchInput!): [CarAdmin!]!
   getAllCarCourse(whereSearchInput: SearchCarCourseInput!): [CarCourse!]!
   getAllCourse(whereSearchInput: SearchCourseInput!): [Course!]!
   getAllDriver(whereSearchInput: WhereDriverSearchInput!): [Driver!]!
@@ -744,6 +792,7 @@ type Query {
   getAllPayment(whereSearchInput: SearchPaymentInput!): [Payment!]!
   getAllSalaryHistory(whereSearchInput: WhereSalaryHistorySearchInput!): [SalaryHistory!]!
   getAllSchool(whereSearchInput: WhereSchoolSearchInput!): [School!]!
+  getAllSchoolService(whereSearchInput: WhereSchoolServiceSearchInput!): [SchoolService!]!
   getAllSchoolWithCounts: [SchoolWithCounts!]!
   getAllService(whereSearchInput: WhereServiceSearchInput!): [Service!]!
   getAllSyllabus(whereSearchInput: SearchSyllabusInput!): [Syllabus!]!
@@ -751,6 +800,7 @@ type Query {
   getBookingById(id: Int!): Booking!
   getBookingServiceById(id: Int!): BookingService!
   getBookingSessionById(id: Int!): BookingSession!
+  getCarAdminById(id: Int!): CarAdmin!
   getCarById(id: Int!): Car!
   getCarCourseById(id: Int!): CarCourse!
   getCourseById(id: Int!): Course!
@@ -761,6 +811,7 @@ type Query {
   getPaginatedBookingService(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereBookingServiceSearchInput!): BookingServicePagination!
   getPaginatedBookingSession(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereBookingSessionSearchInput!): BookingSessionPagination!
   getPaginatedCar(searchPaginationInput: SearchPaginationInput!, whereSearchInput: SearchCarInput!): CarPagination!
+  getPaginatedCarAdmin(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereCarAdminSearchInput!): CarAdminPagination!
   getPaginatedCarCourse(searchPaginationInput: SearchPaginationInput!, whereSearchInput: SearchCarCourseInput!): CarCoursePagination!
   getPaginatedCourse(searchPaginationInput: SearchPaginationInput!, whereSearchInput: SearchCourseInput!): CoursePagination!
   getPaginatedDriver(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereDriverSearchInput!): DriverPagination!
@@ -769,6 +820,7 @@ type Query {
   getPaginatedPayment(searchPaginationInput: SearchPaginationInput!, whereSearchInput: SearchPaymentInput!): PaymentPagination!
   getPaginatedSalaryHistory(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereSalaryHistorySearchInput!): SalaryHistoryPagination!
   getPaginatedSchool(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereSchoolSearchInput!): SchoolPagination!
+  getPaginatedSchoolService(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereSchoolServiceSearchInput!): SchoolServicePagination!
   getPaginatedService(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereServiceSearchInput!): ServicePagination!
   getPaginatedSyllabus(searchPaginationInput: SearchPaginationInput!, whereSearchInput: SearchSyllabusInput!): SyllabusPagination!
   getPaginatedUser(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereUserSearchInput!): UserPagination!
@@ -776,6 +828,7 @@ type Query {
   getSalaryHistoryById(id: Int!): SalaryHistory!
   getSchoolById(id: Int!): School!
   getSchoolDashboardStats(schoolId: Int!): SchoolDashboardStats!
+  getSchoolServiceById(id: Int!): SchoolService!
   getSchoolStatistics: SchoolStatistics!
   getServiceById(id: Int!): Service!
   getSyllabusById(id: Int!): Syllabus!
@@ -785,6 +838,7 @@ type Query {
   searchBookingService(whereSearchInput: WhereBookingServiceSearchInput!): BookingService
   searchBookingSession(whereSearchInput: WhereBookingSessionSearchInput!): BookingSession
   searchCar(whereSearchInput: SearchCarInput!): Car
+  searchCarAdmin(whereSearchInput: WhereCarAdminSearchInput!): CarAdmin
   searchCarCourse(whereSearchInput: SearchCarCourseInput!): CarCourse
   searchCourse(whereSearchInput: SearchCourseInput!): Course
   searchDriver(whereSearchInput: WhereDriverSearchInput!): Driver
@@ -793,6 +847,7 @@ type Query {
   searchPayment(whereSearchInput: SearchPaymentInput!): Payment
   searchSalaryHistory(whereSearchInput: WhereSalaryHistorySearchInput!): SalaryHistory
   searchSchool(whereSearchInput: WhereSchoolSearchInput!): School
+  searchSchoolService(whereSearchInput: WhereSchoolServiceSearchInput!): SchoolService
   searchService(whereSearchInput: WhereServiceSearchInput!): Service
   searchSyllabus(whereSearchInput: SearchSyllabusInput!): Syllabus
   searchUser(whereSearchInput: WhereUserSearchInput!): User
@@ -891,6 +946,28 @@ type SchoolDashboardStats {
 
 type SchoolPagination {
   data: [School!]!
+  skip: Int!
+  take: Int!
+  total: Int!
+}
+
+type SchoolService {
+  addonPrice: Float!
+  createdAt: DateTime!
+  deletedAt: DateTime
+  id: Int!
+  licensePrice: Float!
+  school: School
+  schoolId: Int!
+  schoolServiceId: String!
+  service: Service
+  serviceId: Int!
+  status: String!
+  updatedAt: DateTime!
+}
+
+type SchoolServicePagination {
+  data: [SchoolService!]!
   skip: Int!
   take: Int!
   total: Int!
@@ -1021,7 +1098,6 @@ input SearchSyllabusInput {
 }
 
 type Service {
-  activeUsers: Int!
   category: String!
   createdAt: DateTime!
   deletedAt: DateTime
@@ -1030,16 +1106,11 @@ type Service {
   features: String
   id: Int!
   includedServices: String
-  price: Float!
   requirements: String
-  school: School
-  schoolId: Int!
   serviceId: String!
   serviceName: String!
-  serviceType: ServiceType!
   status: ServiceStatus!
   termsAndConditions: String
-  totalRevenue: Float!
   updatedAt: DateTime!
 }
 
@@ -1155,6 +1226,13 @@ input UpdateBookingSessionInput {
   skillsAssessed: String
   slot: String
   status: BookingSessionStatus = PENDING
+}
+
+input UpdateCarAdminInput {
+  category: CarCategory
+  manufacturer: String
+  name: String
+  status: CarAdminStatus
 }
 
 input UpdateCarCourseInput {
@@ -1346,22 +1424,26 @@ input UpdateSchoolInput {
   weeklyHoliday: String
 }
 
+input UpdateSchoolServiceInput {
+  addonPrice: Float
+  licensePrice: Float
+  schoolId: Int
+  serviceId: Int
+  status: String
+}
+
 input UpdateServiceInput {
-  activeUsers: Int
   category: String
   description: String
   duration: Int
   features: String
   includedServices: String
-  price: Float
   requirements: String
-  schoolId: Int
   serviceId: String
   serviceName: String
   serviceType: ServiceType
   status: ServiceStatus
   termsAndConditions: String
-  totalRevenue: Float
 }
 
 input UpdateSyllabusInput {
@@ -1482,6 +1564,13 @@ input WhereBookingSessionSearchInput {
   status: BookingSessionStatus
 }
 
+input WhereCarAdminSearchInput {
+  category: String
+  manufacturer: String
+  name: String
+  status: String
+}
+
 input WhereDriverSearchInput {
   driverId: String
   email: String
@@ -1535,9 +1624,15 @@ input WhereSchoolSearchInput {
   weeklyHoliday: String
 }
 
+input WhereSchoolServiceSearchInput {
+  schoolId: Int
+  schoolServiceId: String
+  serviceId: Int
+  status: String
+}
+
 input WhereServiceSearchInput {
   schoolId: Int
-  serviceType: ServiceType
   status: ServiceStatus
 }
 

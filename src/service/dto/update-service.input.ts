@@ -1,13 +1,6 @@
 import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
 import { CreateServiceInput } from './create-service.input';
-import {
-  IsOptional,
-  IsString,
-  IsInt,
-  IsNumber,
-  IsEnum,
-  Min,
-} from 'class-validator';
+import { IsOptional, IsString, IsInt, IsEnum, Min } from 'class-validator';
 import { ServiceType, ServiceStatus } from '../entities/service.entity';
 
 @InputType()
@@ -26,12 +19,6 @@ export class UpdateServiceInput extends PartialType(CreateServiceInput) {
   @IsString()
   @Field(() => String, { nullable: true })
   category?: string;
-
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  @Field(() => Number, { nullable: true })
-  price?: number;
 
   @IsOptional()
   @IsInt()
@@ -63,18 +50,6 @@ export class UpdateServiceInput extends PartialType(CreateServiceInput) {
   @IsString()
   @Field(() => String, { nullable: true })
   termsAndConditions?: string;
-
-  @IsOptional()
-  @IsInt()
-  @Min(0)
-  @Field(() => Int, { nullable: true })
-  activeUsers?: number;
-
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  @Field(() => Number, { nullable: true })
-  totalRevenue?: number;
 
   @IsOptional()
   @IsEnum(ServiceStatus)

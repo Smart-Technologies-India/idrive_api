@@ -24,6 +24,18 @@ export enum BookingStatus {
     PENDING = "PENDING"
 }
 
+export enum CarAdminStatus {
+    ACTIVE = "ACTIVE",
+    INACTIVE = "INACTIVE"
+}
+
+export enum CarCategory {
+    HATCHBACK = "HATCHBACK",
+    MUV = "MUV",
+    SEDAN = "SEDAN",
+    SUV = "SUV"
+}
+
 export enum CarStatus {
     AVAILABLE = "AVAILABLE",
     INACTIVE = "INACTIVE",
@@ -174,6 +186,13 @@ export interface CreateBookingSessionInput {
     skillsAssessed?: Nullable<string>;
     slot: string;
     status?: Nullable<BookingSessionStatus>;
+}
+
+export interface CreateCarAdminInput {
+    category: CarCategory;
+    manufacturer: string;
+    name: string;
+    status?: Nullable<CarAdminStatus>;
 }
 
 export interface CreateCarCourseInput {
@@ -339,22 +358,24 @@ export interface CreateSchoolInput {
     weeklyHoliday?: Nullable<string>;
 }
 
+export interface CreateSchoolServiceInput {
+    addonPrice: number;
+    licensePrice: number;
+    schoolId: number;
+    serviceId: number;
+}
+
 export interface CreateServiceInput {
-    activeUsers?: Nullable<number>;
     category: string;
     description: string;
     duration: number;
     features?: Nullable<string>;
     includedServices?: Nullable<string>;
-    price: number;
     requirements?: Nullable<string>;
-    schoolId: number;
     serviceId: string;
     serviceName: string;
-    serviceType: ServiceType;
     status?: Nullable<ServiceStatus>;
     termsAndConditions?: Nullable<string>;
-    totalRevenue?: Nullable<number>;
 }
 
 export interface CreateSyllabusInput {
@@ -498,6 +519,13 @@ export interface UpdateBookingSessionInput {
     skillsAssessed?: Nullable<string>;
     slot?: Nullable<string>;
     status?: Nullable<BookingSessionStatus>;
+}
+
+export interface UpdateCarAdminInput {
+    category?: Nullable<CarCategory>;
+    manufacturer?: Nullable<string>;
+    name?: Nullable<string>;
+    status?: Nullable<CarAdminStatus>;
 }
 
 export interface UpdateCarCourseInput {
@@ -673,22 +701,26 @@ export interface UpdateSchoolInput {
     weeklyHoliday?: Nullable<string>;
 }
 
+export interface UpdateSchoolServiceInput {
+    addonPrice?: Nullable<number>;
+    licensePrice?: Nullable<number>;
+    schoolId?: Nullable<number>;
+    serviceId?: Nullable<number>;
+    status?: Nullable<string>;
+}
+
 export interface UpdateServiceInput {
-    activeUsers?: Nullable<number>;
     category?: Nullable<string>;
     description?: Nullable<string>;
     duration?: Nullable<number>;
     features?: Nullable<string>;
     includedServices?: Nullable<string>;
-    price?: Nullable<number>;
     requirements?: Nullable<string>;
-    schoolId?: Nullable<number>;
     serviceId?: Nullable<string>;
     serviceName?: Nullable<string>;
     serviceType?: Nullable<ServiceType>;
     status?: Nullable<ServiceStatus>;
     termsAndConditions?: Nullable<string>;
-    totalRevenue?: Nullable<number>;
 }
 
 export interface UpdateSyllabusInput {
@@ -776,6 +808,13 @@ export interface WhereBookingSessionSearchInput {
     status?: Nullable<BookingSessionStatus>;
 }
 
+export interface WhereCarAdminSearchInput {
+    category?: Nullable<string>;
+    manufacturer?: Nullable<string>;
+    name?: Nullable<string>;
+    status?: Nullable<string>;
+}
+
 export interface WhereDriverSearchInput {
     driverId?: Nullable<string>;
     email?: Nullable<string>;
@@ -829,9 +868,15 @@ export interface WhereSchoolSearchInput {
     weeklyHoliday?: Nullable<string>;
 }
 
+export interface WhereSchoolServiceSearchInput {
+    schoolId?: Nullable<number>;
+    schoolServiceId?: Nullable<string>;
+    serviceId?: Nullable<number>;
+    status?: Nullable<string>;
+}
+
 export interface WhereServiceSearchInput {
     schoolId?: Nullable<number>;
-    serviceType?: Nullable<ServiceType>;
     status?: Nullable<ServiceStatus>;
 }
 
@@ -964,6 +1009,8 @@ export interface BookingSessionPagination {
 export interface Car {
     assignedDriver?: Nullable<Driver>;
     assignedDriverId?: Nullable<number>;
+    carAdmin?: Nullable<CarAdmin>;
+    carAdminId?: Nullable<number>;
     carId: string;
     carName: string;
     chassisNumber?: Nullable<string>;
@@ -993,6 +1040,24 @@ export interface Car {
     transmission: TransmissionType;
     updatedAt: DateTime;
     year: number;
+}
+
+export interface CarAdmin {
+    category: CarCategory;
+    createdAt: DateTime;
+    deletedAt?: Nullable<DateTime>;
+    id: number;
+    manufacturer: string;
+    name: string;
+    status: CarAdminStatus;
+    updatedAt: DateTime;
+}
+
+export interface CarAdminPagination {
+    data: CarAdmin[];
+    skip: number;
+    take: number;
+    total: number;
 }
 
 export interface CarCourse {
@@ -1149,6 +1214,7 @@ export interface IMutation {
     createBookingService(inputType: CreateBookingServiceInput): BookingService | Promise<BookingService>;
     createBookingSession(inputType: CreateBookingSessionInput): BookingSession | Promise<BookingSession>;
     createCar(inputType: CreateCarInput): Car | Promise<Car>;
+    createCarAdmin(inputType: CreateCarAdminInput): CarAdmin | Promise<CarAdmin>;
     createCarCourse(inputType: CreateCarCourseInput): CarCourse | Promise<CarCourse>;
     createCourse(inputType: CreateCourseInput): Course | Promise<Course>;
     createDriver(inputType: CreateDriverInput): Driver | Promise<Driver>;
@@ -1157,6 +1223,7 @@ export interface IMutation {
     createPayment(inputType: CreatePaymentInput): Payment | Promise<Payment>;
     createSalaryHistory(inputType: CreateSalaryHistoryInput): SalaryHistory | Promise<SalaryHistory>;
     createSchool(inputType: CreateSchoolInput): School | Promise<School>;
+    createSchoolService(inputType: CreateSchoolServiceInput): SchoolService | Promise<SchoolService>;
     createService(inputType: CreateServiceInput): Service | Promise<Service>;
     createSyllabus(inputType: CreateSyllabusInput): Syllabus | Promise<Syllabus>;
     createUser(inputType: CreateUserInput): User | Promise<User>;
@@ -1164,6 +1231,7 @@ export interface IMutation {
     deleteBookingService(id: number, userid: number): BookingService | Promise<BookingService>;
     deleteBookingSession(id: number, userid: number): BookingSession | Promise<BookingSession>;
     deleteCar(id: number, userid: number): Car | Promise<Car>;
+    deleteCarAdmin(id: number, userid: number): CarAdmin | Promise<CarAdmin>;
     deleteCarCourse(id: number, userid: number): CarCourse | Promise<CarCourse>;
     deleteCourse(id: number, userid: number): Course | Promise<Course>;
     deleteDriver(id: number, userid: number): Driver | Promise<Driver>;
@@ -1172,6 +1240,7 @@ export interface IMutation {
     deletePayment(id: number, userid: number): Payment | Promise<Payment>;
     deleteSalaryHistory(id: number, userid: number): SalaryHistory | Promise<SalaryHistory>;
     deleteSchool(id: number, userid: number): School | Promise<School>;
+    deleteSchoolService(id: number, userid: number): SchoolService | Promise<SchoolService>;
     deleteService(id: number, userid: number): Service | Promise<Service>;
     deleteSyllabus(id: number, userid: number): Syllabus | Promise<Syllabus>;
     deleteUser(id: number, userid: number): User | Promise<User>;
@@ -1181,6 +1250,7 @@ export interface IMutation {
     updateBookingService(id: number, updateType: UpdateBookingServiceInput): BookingService | Promise<BookingService>;
     updateBookingSession(id: number, updateType: UpdateBookingSessionInput): BookingSession | Promise<BookingSession>;
     updateCar(id: number, updateType: UpdateCarInput): Car | Promise<Car>;
+    updateCarAdmin(id: number, updateType: UpdateCarAdminInput): CarAdmin | Promise<CarAdmin>;
     updateCarCourse(id: number, updateType: UpdateCarCourseInput): CarCourse | Promise<CarCourse>;
     updateCourse(id: number, updateType: UpdateCourseInput): Course | Promise<Course>;
     updateDriver(id: number, updateType: UpdateDriverInput): Driver | Promise<Driver>;
@@ -1189,6 +1259,7 @@ export interface IMutation {
     updatePayment(id: number, updateType: UpdatePaymentInput): Payment | Promise<Payment>;
     updateSalaryHistory(id: number, updateType: UpdateSalaryHistoryInput): SalaryHistory | Promise<SalaryHistory>;
     updateSchool(id: number, updateType: UpdateSchoolInput): School | Promise<School>;
+    updateSchoolService(id: number, updateType: UpdateSchoolServiceInput): SchoolService | Promise<SchoolService>;
     updateService(id: number, updateType: UpdateServiceInput): Service | Promise<Service>;
     updateSyllabus(id: number, updateType: UpdateSyllabusInput): Syllabus | Promise<Syllabus>;
     updateUser(id: number, updateType: UpdateUserInput): User | Promise<User>;
@@ -1225,6 +1296,7 @@ export interface IQuery {
     getAllBookingService(whereSearchInput: WhereBookingServiceSearchInput): BookingService[] | Promise<BookingService[]>;
     getAllBookingSession(whereSearchInput: WhereBookingSessionSearchInput): BookingSession[] | Promise<BookingSession[]>;
     getAllCar(whereSearchInput: SearchCarInput): Car[] | Promise<Car[]>;
+    getAllCarAdmin(whereSearchInput: WhereCarAdminSearchInput): CarAdmin[] | Promise<CarAdmin[]>;
     getAllCarCourse(whereSearchInput: SearchCarCourseInput): CarCourse[] | Promise<CarCourse[]>;
     getAllCourse(whereSearchInput: SearchCourseInput): Course[] | Promise<Course[]>;
     getAllDriver(whereSearchInput: WhereDriverSearchInput): Driver[] | Promise<Driver[]>;
@@ -1233,6 +1305,7 @@ export interface IQuery {
     getAllPayment(whereSearchInput: SearchPaymentInput): Payment[] | Promise<Payment[]>;
     getAllSalaryHistory(whereSearchInput: WhereSalaryHistorySearchInput): SalaryHistory[] | Promise<SalaryHistory[]>;
     getAllSchool(whereSearchInput: WhereSchoolSearchInput): School[] | Promise<School[]>;
+    getAllSchoolService(whereSearchInput: WhereSchoolServiceSearchInput): SchoolService[] | Promise<SchoolService[]>;
     getAllSchoolWithCounts(): SchoolWithCounts[] | Promise<SchoolWithCounts[]>;
     getAllService(whereSearchInput: WhereServiceSearchInput): Service[] | Promise<Service[]>;
     getAllSyllabus(whereSearchInput: SearchSyllabusInput): Syllabus[] | Promise<Syllabus[]>;
@@ -1240,6 +1313,7 @@ export interface IQuery {
     getBookingById(id: number): Booking | Promise<Booking>;
     getBookingServiceById(id: number): BookingService | Promise<BookingService>;
     getBookingSessionById(id: number): BookingSession | Promise<BookingSession>;
+    getCarAdminById(id: number): CarAdmin | Promise<CarAdmin>;
     getCarById(id: number): Car | Promise<Car>;
     getCarCourseById(id: number): CarCourse | Promise<CarCourse>;
     getCourseById(id: number): Course | Promise<Course>;
@@ -1250,6 +1324,7 @@ export interface IQuery {
     getPaginatedBookingService(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereBookingServiceSearchInput): BookingServicePagination | Promise<BookingServicePagination>;
     getPaginatedBookingSession(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereBookingSessionSearchInput): BookingSessionPagination | Promise<BookingSessionPagination>;
     getPaginatedCar(searchPaginationInput: SearchPaginationInput, whereSearchInput: SearchCarInput): CarPagination | Promise<CarPagination>;
+    getPaginatedCarAdmin(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereCarAdminSearchInput): CarAdminPagination | Promise<CarAdminPagination>;
     getPaginatedCarCourse(searchPaginationInput: SearchPaginationInput, whereSearchInput: SearchCarCourseInput): CarCoursePagination | Promise<CarCoursePagination>;
     getPaginatedCourse(searchPaginationInput: SearchPaginationInput, whereSearchInput: SearchCourseInput): CoursePagination | Promise<CoursePagination>;
     getPaginatedDriver(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereDriverSearchInput): DriverPagination | Promise<DriverPagination>;
@@ -1258,6 +1333,7 @@ export interface IQuery {
     getPaginatedPayment(searchPaginationInput: SearchPaginationInput, whereSearchInput: SearchPaymentInput): PaymentPagination | Promise<PaymentPagination>;
     getPaginatedSalaryHistory(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereSalaryHistorySearchInput): SalaryHistoryPagination | Promise<SalaryHistoryPagination>;
     getPaginatedSchool(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereSchoolSearchInput): SchoolPagination | Promise<SchoolPagination>;
+    getPaginatedSchoolService(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereSchoolServiceSearchInput): SchoolServicePagination | Promise<SchoolServicePagination>;
     getPaginatedService(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereServiceSearchInput): ServicePagination | Promise<ServicePagination>;
     getPaginatedSyllabus(searchPaginationInput: SearchPaginationInput, whereSearchInput: SearchSyllabusInput): SyllabusPagination | Promise<SyllabusPagination>;
     getPaginatedUser(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereUserSearchInput): UserPagination | Promise<UserPagination>;
@@ -1265,6 +1341,7 @@ export interface IQuery {
     getSalaryHistoryById(id: number): SalaryHistory | Promise<SalaryHistory>;
     getSchoolById(id: number): School | Promise<School>;
     getSchoolDashboardStats(schoolId: number): SchoolDashboardStats | Promise<SchoolDashboardStats>;
+    getSchoolServiceById(id: number): SchoolService | Promise<SchoolService>;
     getSchoolStatistics(): SchoolStatistics | Promise<SchoolStatistics>;
     getServiceById(id: number): Service | Promise<Service>;
     getSyllabusById(id: number): Syllabus | Promise<Syllabus>;
@@ -1274,6 +1351,7 @@ export interface IQuery {
     searchBookingService(whereSearchInput: WhereBookingServiceSearchInput): Nullable<BookingService> | Promise<Nullable<BookingService>>;
     searchBookingSession(whereSearchInput: WhereBookingSessionSearchInput): Nullable<BookingSession> | Promise<Nullable<BookingSession>>;
     searchCar(whereSearchInput: SearchCarInput): Nullable<Car> | Promise<Nullable<Car>>;
+    searchCarAdmin(whereSearchInput: WhereCarAdminSearchInput): Nullable<CarAdmin> | Promise<Nullable<CarAdmin>>;
     searchCarCourse(whereSearchInput: SearchCarCourseInput): Nullable<CarCourse> | Promise<Nullable<CarCourse>>;
     searchCourse(whereSearchInput: SearchCourseInput): Nullable<Course> | Promise<Nullable<Course>>;
     searchDriver(whereSearchInput: WhereDriverSearchInput): Nullable<Driver> | Promise<Nullable<Driver>>;
@@ -1282,6 +1360,7 @@ export interface IQuery {
     searchPayment(whereSearchInput: SearchPaymentInput): Nullable<Payment> | Promise<Nullable<Payment>>;
     searchSalaryHistory(whereSearchInput: WhereSalaryHistorySearchInput): Nullable<SalaryHistory> | Promise<Nullable<SalaryHistory>>;
     searchSchool(whereSearchInput: WhereSchoolSearchInput): Nullable<School> | Promise<Nullable<School>>;
+    searchSchoolService(whereSearchInput: WhereSchoolServiceSearchInput): Nullable<SchoolService> | Promise<Nullable<SchoolService>>;
     searchService(whereSearchInput: WhereServiceSearchInput): Nullable<Service> | Promise<Nullable<Service>>;
     searchSyllabus(whereSearchInput: SearchSyllabusInput): Nullable<Syllabus> | Promise<Nullable<Syllabus>>;
     searchUser(whereSearchInput: WhereUserSearchInput): Nullable<User> | Promise<Nullable<User>>;
@@ -1369,6 +1448,28 @@ export interface SchoolPagination {
     total: number;
 }
 
+export interface SchoolService {
+    addonPrice: number;
+    createdAt: DateTime;
+    deletedAt?: Nullable<DateTime>;
+    id: number;
+    licensePrice: number;
+    school?: Nullable<School>;
+    schoolId: number;
+    schoolServiceId: string;
+    service?: Nullable<Service>;
+    serviceId: number;
+    status: string;
+    updatedAt: DateTime;
+}
+
+export interface SchoolServicePagination {
+    data: SchoolService[];
+    skip: number;
+    take: number;
+    total: number;
+}
+
 export interface SchoolStatistics {
     activeSchools: number;
     inactiveSchools: number;
@@ -1424,7 +1525,6 @@ export interface SchoolWithCounts {
 }
 
 export interface Service {
-    activeUsers: number;
     category: string;
     createdAt: DateTime;
     deletedAt?: Nullable<DateTime>;
@@ -1433,16 +1533,11 @@ export interface Service {
     features?: Nullable<string>;
     id: number;
     includedServices?: Nullable<string>;
-    price: number;
     requirements?: Nullable<string>;
-    school?: Nullable<School>;
-    schoolId: number;
     serviceId: string;
     serviceName: string;
-    serviceType: ServiceType;
     status: ServiceStatus;
     termsAndConditions?: Nullable<string>;
-    totalRevenue: number;
     updatedAt: DateTime;
 }
 

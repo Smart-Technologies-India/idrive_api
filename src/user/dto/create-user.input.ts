@@ -9,6 +9,20 @@ export class CreateUserInput {
   @Field(() => String)
   name: string;
 
+  @IsOptional()
+  @IsString()
+  @Field(() => String, {
+    nullable: true,
+  })
+  surname: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, {
+    nullable: true,
+  })
+  fatherName: string;
+
   @IsNotEmpty()
   @IsString()
   @Field(() => String)
@@ -27,6 +41,20 @@ export class CreateUserInput {
     nullable: true,
   })
   address: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, {
+    nullable: true,
+  })
+  permanentAddress: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, {
+    nullable: true,
+  })
+  bloodGroup: string;
 
   @IsOptional()
   @IsEnum(Role)

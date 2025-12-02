@@ -71,27 +71,31 @@ enum TransmissionType {
 }
 
 model user {
-  id        Int       @id @default(autoincrement())
-  name      String
-  contact1  String    @unique
-  contact2  String?
-  address   String?   @db.LongText
-  role      Role      @default(USER)
-  email     String?   @unique
-  password  String?
-  otp       String?
-  dob       DateTime?
-  profile   String?
-  status    Status    @default(ACTIVE)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
-  schoolId  Int?
-  school          school?          @relation(fields: [schoolId], references: [id])
-  driver          driver?          @relation("UserDriver")
-  bookings        booking[]        @relation("BookingCustomer")
-  bookingServices bookingService[] @relation("UserBookingServices")
-  payments        payment[]        @relation("PaymentUser")
+  id               Int              @id @default(autoincrement())
+  name             String
+  surname          String?
+  fatherName       String?
+  contact1         String           @unique
+  contact2         String?
+  address          String?          @db.LongText
+  permanentAddress String?          @db.LongText
+  bloodGroup       String?
+  role             Role             @default(USER)
+  email            String?          @unique
+  password         String?
+  otp              String?
+  dob              DateTime?
+  profile          String?
+  status           Status           @default(ACTIVE)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  deletedAt        DateTime?
+  schoolId         Int?
+  school           school?          @relation(fields: [schoolId], references: [id])
+  driver           driver?          @relation("UserDriver")
+  bookings         booking[]        @relation("BookingCustomer")
+  bookingServices  bookingService[] @relation("UserBookingServices")
+  payments         payment[]        @relation("PaymentUser")
 }
 
 model driver {
@@ -295,7 +299,7 @@ enum CarAdminStatus {
 }
 
 model carAdmin {
-  id        Int    @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
   // Basic Information
   name         String
@@ -319,9 +323,9 @@ model carAdmin {
 }
 
 model car {
-  id       Int    @id @default(autoincrement())
-  schoolId Int
-  carId    String @unique
+  id         Int    @id @default(autoincrement())
+  schoolId   Int
+  carId      String @unique
   carAdminId Int?
 
   // Basic Information
@@ -446,10 +450,10 @@ model course {
   deletedAt DateTime?
 
   // Relations
-  school        school       @relation(fields: [schoolId], references: [id])
+  school        school      @relation(fields: [schoolId], references: [id])
   syllabusItems syllabus[]
   bookings      booking[]
-  courseCars    carCourse[]  @relation("CourseToCar")
+  courseCars    carCourse[] @relation("CourseToCar")
 
   @@index([schoolId])
   @@index([status])
@@ -491,9 +495,11 @@ model syllabus {
   @@index([dayNumber])
 }
 
-enum ServiceType {
-  LICENSE
-  ADDON
+enum ServiceCategory {
+  NEW_LICENSE
+  I_HOLD_LICENSE
+  TRANSPORT
+  IDP
 }
 
 enum ServiceStatus {
@@ -509,7 +515,7 @@ model service {
 
   // Basic Information
   serviceName String
-  category    String
+  category    ServiceCategory
 
   // Pricing & Duration
   duration Int // Duration in days (validity period)
@@ -530,7 +536,6 @@ model service {
   deletedAt DateTime?
 
   // Relations
-  bookingServices bookingService[]
   schoolServices  schoolService[]
 
   @@index([status])
@@ -560,8 +565,9 @@ model schoolService {
   deletedAt DateTime?
 
   // Relations
-  school  school  @relation(fields: [schoolId], references: [id])
-  service service @relation(fields: [serviceId], references: [id])
+  school          school           @relation(fields: [schoolId], references: [id])
+  service         service          @relation(fields: [serviceId], references: [id])
+  bookingServices bookingService[]
 
   @@unique([schoolId, serviceId])
   @@index([schoolId])
@@ -636,6 +642,11 @@ enum BookingSessionStatus {
   NO_SHOW
 }
 
+enum BookingServiceType {
+  LICENSE
+  ADDON
+}
+
 model booking {
   id        Int    @id @default(autoincrement())
   schoolId  Int
@@ -691,18 +702,18 @@ model booking {
 }
 
 model bookingService {
-  id        Int @id @default(autoincrement())
-  bookingId Int? // Optional - for service bookings without car/course
-  serviceId Int
-  schoolId  Int
-  userId    Int
+  id               Int                @id @default(autoincrement())
+  bookingId        Int? // Optional - for service bookings without car/course
+  schoolServiceId  Int
+  schoolId         Int
+  userId           Int
 
   // Service Details (denormalized for historical reference)
   serviceName        String
-  serviceType        String
+  serviceType        BookingServiceType // LICENSE or ADDON
   price              Float
-  description        String? @db.LongText
-  confirmationNumber String? @unique
+  description        String?            @db.LongText
+  confirmationNumber String?            @unique
 
   // Timestamps
   createdAt DateTime  @default(now())
@@ -710,13 +721,13 @@ model bookingService {
   deletedAt DateTime?
 
   // Relations
-  booking booking? @relation("BookingServices", fields: [bookingId], references: [id], onDelete: Cascade)
-  service service  @relation(fields: [serviceId], references: [id])
-  school  school   @relation(fields: [schoolId], references: [id])
-  user    user     @relation("UserBookingServices", fields: [userId], references: [id])
+  booking       booking?       @relation("BookingServices", fields: [bookingId], references: [id], onDelete: Cascade)
+  schoolService schoolService  @relation(fields: [schoolServiceId], references: [id])
+  school        school         @relation(fields: [schoolId], references: [id])
+  user          user           @relation("UserBookingServices", fields: [userId], references: [id])
 
   @@index([bookingId])
-  @@index([serviceId])
+  @@index([schoolServiceId])
   @@index([schoolId])
   @@index([userId])
   @@index([confirmationNumber])
@@ -769,34 +780,34 @@ model bookingSession {
 }
 
 model payment {
-  id        Int      @id @default(autoincrement())
+  id        Int   @id @default(autoincrement())
   bookingId Int
   userId    Int
   amount    Float
-  
+
   // Payment tracking
   paymentNumber String   @unique // Unique identifier for this payment
   paymentDate   DateTime @default(now())
-  paymentMethod String?  // CASH, CARD, UPI, BANK_TRANSFER, etc.
-  transactionId String?  // Bank/UPI transaction ID
-  
+  paymentMethod String? // CASH, CARD, UPI, BANK_TRANSFER, etc.
+  transactionId String? // Bank/UPI transaction ID
+
   // Installment tracking
   installmentNumber Int // 1, 2, 3, etc.
   totalInstallments Int // Total planned installments for this booking
-  
+
   // Notes and status
-  notes     String?  @db.LongText
-  status    PaymentStatus @default(COMPLETED)
-  
+  notes  String?       @db.LongText
+  status PaymentStatus @default(COMPLETED)
+
   // Timestamps
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
-  
+
   // Relations
   booking booking @relation("BookingPayments", fields: [bookingId], references: [id], onDelete: Cascade)
   user    user    @relation("PaymentUser", fields: [userId], references: [id])
-  
+
   @@index([bookingId])
   @@index([userId])
   @@index([paymentDate])

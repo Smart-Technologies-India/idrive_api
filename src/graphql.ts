@@ -8,6 +8,11 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export enum BookingServiceType {
+    ADDON = "ADDON",
+    LICENSE = "LICENSE"
+}
+
 export enum BookingSessionStatus {
     CANCELLED = "CANCELLED",
     COMPLETED = "COMPLETED",
@@ -115,16 +120,18 @@ export enum SchoolStatus {
     SUSPENDED = "SUSPENDED"
 }
 
+export enum ServiceCategory {
+    IDP = "IDP",
+    I_HOLD_LICENSE = "I_HOLD_LICENSE",
+    NEW_LICENSE = "NEW_LICENSE",
+    TRANSPORT = "TRANSPORT"
+}
+
 export enum ServiceStatus {
     ACTIVE = "ACTIVE",
     DISCONTINUED = "DISCONTINUED",
     INACTIVE = "INACTIVE",
     UPCOMING = "UPCOMING"
-}
-
-export enum ServiceType {
-    ADDON = "ADDON",
-    LICENSE = "LICENSE"
 }
 
 export enum Status {
@@ -164,7 +171,7 @@ export interface CreateBookingServiceInput {
     description?: Nullable<string>;
     price: number;
     schoolId: number;
-    serviceId: number;
+    schoolServiceId: number;
     serviceName: string;
     serviceType: string;
     userId: number;
@@ -202,6 +209,7 @@ export interface CreateCarCourseInput {
 
 export interface CreateCarInput {
     assignedDriverId?: Nullable<number>;
+    carAdminId: number;
     carId: string;
     carName: string;
     chassisNumber?: Nullable<string>;
@@ -366,7 +374,7 @@ export interface CreateSchoolServiceInput {
 }
 
 export interface CreateServiceInput {
-    category: string;
+    category: ServiceCategory;
     description: string;
     duration: number;
     features?: Nullable<string>;
@@ -392,17 +400,21 @@ export interface CreateSyllabusInput {
 
 export interface CreateUserInput {
     address?: Nullable<string>;
+    bloodGroup?: Nullable<string>;
     contact1: string;
     contact2?: Nullable<string>;
     dob?: Nullable<DateTime>;
     email?: Nullable<string>;
+    fatherName?: Nullable<string>;
     name: string;
     otp?: Nullable<string>;
     password?: Nullable<string>;
+    permanentAddress?: Nullable<string>;
     profile?: Nullable<string>;
     role?: Nullable<Role>;
     schoolId?: Nullable<number>;
     status?: Nullable<Status>;
+    surname?: Nullable<string>;
 }
 
 export interface LoginUserInput {
@@ -495,7 +507,7 @@ export interface UpdateBookingServiceInput {
     id: number;
     price?: Nullable<number>;
     schoolId?: Nullable<number>;
-    serviceId?: Nullable<number>;
+    schoolServiceId?: Nullable<number>;
     serviceName?: Nullable<string>;
     serviceType?: Nullable<string>;
     userId?: Nullable<number>;
@@ -537,6 +549,7 @@ export interface UpdateCarCourseInput {
 
 export interface UpdateCarInput {
     assignedDriverId?: Nullable<number>;
+    carAdminId?: Nullable<number>;
     carId?: Nullable<string>;
     carName?: Nullable<string>;
     chassisNumber?: Nullable<string>;
@@ -710,7 +723,7 @@ export interface UpdateSchoolServiceInput {
 }
 
 export interface UpdateServiceInput {
-    category?: Nullable<string>;
+    category?: Nullable<ServiceCategory>;
     description?: Nullable<string>;
     duration?: Nullable<number>;
     features?: Nullable<string>;
@@ -718,7 +731,6 @@ export interface UpdateServiceInput {
     requirements?: Nullable<string>;
     serviceId?: Nullable<string>;
     serviceName?: Nullable<string>;
-    serviceType?: Nullable<ServiceType>;
     status?: Nullable<ServiceStatus>;
     termsAndConditions?: Nullable<string>;
 }
@@ -738,18 +750,22 @@ export interface UpdateSyllabusInput {
 
 export interface UpdateUserInput {
     address?: Nullable<string>;
+    bloodGroup?: Nullable<string>;
     contact1?: Nullable<string>;
     contact2?: Nullable<string>;
     deletedAt?: Nullable<DateTime>;
     dob?: Nullable<DateTime>;
     email?: Nullable<string>;
+    fatherName?: Nullable<string>;
     name?: Nullable<string>;
     otp?: Nullable<string>;
     password?: Nullable<string>;
+    permanentAddress?: Nullable<string>;
     profile?: Nullable<string>;
     role?: Nullable<Role>;
     schoolId?: Nullable<number>;
     status?: Nullable<Status>;
+    surname?: Nullable<string>;
     updatedAt?: Nullable<DateTime>;
 }
 
@@ -786,7 +802,7 @@ export interface WhereBookingServiceSearchInput {
     deletedAt?: Nullable<DateTime>;
     id?: Nullable<number>;
     schoolId?: Nullable<number>;
-    serviceId?: Nullable<number>;
+    schoolServiceId?: Nullable<number>;
     serviceName?: Nullable<string>;
     serviceType?: Nullable<string>;
     updatedAt?: Nullable<DateTime>;
@@ -876,26 +892,31 @@ export interface WhereSchoolServiceSearchInput {
 }
 
 export interface WhereServiceSearchInput {
+    category?: Nullable<ServiceCategory>;
     schoolId?: Nullable<number>;
     status?: Nullable<ServiceStatus>;
 }
 
 export interface WhereUserSearchInput {
     address?: Nullable<string>;
+    bloodGroup?: Nullable<string>;
     contact1?: Nullable<string>;
     contact2?: Nullable<string>;
     createdAt?: Nullable<DateTime>;
     deletedAt?: Nullable<DateTime>;
     dob?: Nullable<DateTime>;
     email?: Nullable<string>;
+    fatherName?: Nullable<string>;
     id?: Nullable<string>;
     name?: Nullable<string>;
     otp?: Nullable<string>;
     password?: Nullable<string>;
+    permanentAddress?: Nullable<string>;
     profile?: Nullable<string>;
     role?: Nullable<Role>;
     schoolId?: Nullable<number>;
     status?: Nullable<Status>;
+    surname?: Nullable<string>;
     updatedAt?: Nullable<DateTime>;
 }
 
@@ -950,10 +971,10 @@ export interface BookingService {
     price: number;
     school?: Nullable<School>;
     schoolId: number;
-    service?: Nullable<Service>;
-    serviceId: number;
+    schoolService?: Nullable<SchoolService>;
+    schoolServiceId: number;
     serviceName: string;
-    serviceType: string;
+    serviceType: BookingServiceType;
     updatedAt: DateTime;
     user?: Nullable<User>;
     userId: number;
@@ -1525,7 +1546,7 @@ export interface SchoolWithCounts {
 }
 
 export interface Service {
-    category: string;
+    category: ServiceCategory;
     createdAt: DateTime;
     deletedAt?: Nullable<DateTime>;
     description: string;
@@ -1574,6 +1595,7 @@ export interface SyllabusPagination {
 
 export interface User {
     address?: Nullable<string>;
+    bloodGroup?: Nullable<string>;
     contact1: string;
     contact2?: Nullable<string>;
     createdAt: DateTime;
@@ -1584,15 +1606,18 @@ export interface User {
     deletedById?: Nullable<number>;
     dob?: Nullable<DateTime>;
     email?: Nullable<string>;
+    fatherName?: Nullable<string>;
     id: number;
     name: string;
     otp?: Nullable<string>;
     password?: Nullable<string>;
+    permanentAddress?: Nullable<string>;
     profile?: Nullable<string>;
     role: Role;
     school?: Nullable<School>;
     schoolId?: Nullable<number>;
     status: Status;
+    surname?: Nullable<string>;
     updatedAt: DateTime;
     updatedBy?: Nullable<User>;
     updatedById?: Nullable<number>;

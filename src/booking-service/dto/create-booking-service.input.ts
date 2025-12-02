@@ -5,7 +5,9 @@ import {
   IsString,
   IsOptional,
   IsPositive,
+  IsEnum,
 } from 'class-validator';
+import { BookingServiceType } from '@prisma/client';
 
 @InputType()
 export class CreateBookingServiceInput {
@@ -17,7 +19,7 @@ export class CreateBookingServiceInput {
   @IsNotEmpty()
   @IsInt()
   @Field(() => Int)
-  serviceId: number;
+  schoolServiceId: number;
 
   @IsNotEmpty()
   @IsInt()
@@ -36,9 +38,9 @@ export class CreateBookingServiceInput {
   serviceName: string;
 
   @IsNotEmpty()
-  @IsString()
+  @IsEnum(BookingServiceType)
   @Field(() => String)
-  serviceType: string;
+  serviceType: BookingServiceType;
 
   @IsNotEmpty()
   @IsPositive()

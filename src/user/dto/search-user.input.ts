@@ -18,6 +18,16 @@ export class WhereUserSearchInput extends PartialType(CreateUserInput) {
   @IsOptional()
   @IsString()
   @Field(() => String, { nullable: true })
+  surname?: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, { nullable: true })
+  fatherName?: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, { nullable: true })
   contact1?: string;
 
   @IsOptional()
@@ -29,6 +39,16 @@ export class WhereUserSearchInput extends PartialType(CreateUserInput) {
   @IsString()
   @Field(() => String, { nullable: true })
   address?: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, { nullable: true })
+  permanentAddress?: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, { nullable: true })
+  bloodGroup?: string;
 
   @IsOptional()
   @IsEnum(Role)

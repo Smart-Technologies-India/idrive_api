@@ -16,7 +16,7 @@ export class WhereBookingServiceSearchInput {
   @IsOptional()
   @IsInt()
   @Field(() => Int, { nullable: true })
-  serviceId?: number;
+  schoolServiceId?: number;
 
   @IsOptional()
   @IsInt()

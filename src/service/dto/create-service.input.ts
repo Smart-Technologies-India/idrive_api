@@ -4,11 +4,10 @@ import {
   IsOptional,
   IsString,
   IsInt,
-  IsNumber,
   IsEnum,
   Min,
 } from 'class-validator';
-import { ServiceType, ServiceStatus } from '../entities/service.entity';
+import { ServiceCategory, ServiceStatus } from '@prisma/client';
 
 @InputType()
 export class CreateServiceInput {
@@ -23,9 +22,9 @@ export class CreateServiceInput {
   serviceName: string;
 
   @IsNotEmpty()
-  @IsString()
-  @Field(() => String)
-  category: string;
+  @IsEnum(ServiceCategory)
+  @Field(() => ServiceCategory)
+  category: ServiceCategory;
 
   @IsNotEmpty()
   @IsInt()

@@ -16,6 +16,12 @@ export class User {
   @Field(() => String)
   name: string;
 
+  @Field(() => String, { nullable: true })
+  surname?: string;
+
+  @Field(() => String, { nullable: true })
+  fatherName?: string;
+
   @Field(() => String)
   contact1: string;
 
@@ -24,6 +30,12 @@ export class User {
 
   @Field(() => String, { nullable: true })
   address?: string;
+
+  @Field(() => String, { nullable: true })
+  permanentAddress?: string;
+
+  @Field(() => String, { nullable: true })
+  bloodGroup?: string;
 
   @Field(() => Role)
   role: Role;

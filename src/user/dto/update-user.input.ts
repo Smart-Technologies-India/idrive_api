@@ -17,6 +17,20 @@ export class UpdateUserInput extends PartialType(CreateUserInput) {
   @Field(() => String, {
     nullable: true,
   })
+  surname: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, {
+    nullable: true,
+  })
+  fatherName: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, {
+    nullable: true,
+  })
   contact1: string;
 
   @IsOptional()
@@ -32,6 +46,20 @@ export class UpdateUserInput extends PartialType(CreateUserInput) {
     nullable: true,
   })
   address: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, {
+    nullable: true,
+  })
+  permanentAddress: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, {
+    nullable: true,
+  })
+  bloodGroup: string;
 
   @IsOptional()
   @IsEnum(Role)

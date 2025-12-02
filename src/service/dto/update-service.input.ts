@@ -1,7 +1,7 @@
 import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
 import { CreateServiceInput } from './create-service.input';
 import { IsOptional, IsString, IsInt, IsEnum, Min } from 'class-validator';
-import { ServiceType, ServiceStatus } from '../entities/service.entity';
+import { ServiceCategory, ServiceStatus } from '@prisma/client';
 
 @InputType()
 export class UpdateServiceInput extends PartialType(CreateServiceInput) {
@@ -11,14 +11,9 @@ export class UpdateServiceInput extends PartialType(CreateServiceInput) {
   serviceName?: string;
 
   @IsOptional()
-  @IsEnum(ServiceType)
-  @Field(() => ServiceType, { nullable: true })
-  serviceType?: ServiceType;
-
-  @IsOptional()
-  @IsString()
-  @Field(() => String, { nullable: true })
-  category?: string;
+  @IsEnum(ServiceCategory)
+  @Field(() => ServiceCategory, { nullable: true })
+  category?: ServiceCategory;
 
   @IsOptional()
   @IsInt()

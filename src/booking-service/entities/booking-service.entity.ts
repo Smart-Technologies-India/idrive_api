@@ -1,8 +1,20 @@
-import { ObjectType, Field, Int, Float } from '@nestjs/graphql';
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+import {
+  ObjectType,
+  Field,
+  Int,
+  Float,
+  registerEnumType,
+} from '@nestjs/graphql';
+import { BookingServiceType } from '@prisma/client';
 import { Booking } from 'src/booking/entities/booking.entity';
-import { Service } from 'src/service/entities/service.entity';
+import { SchoolService } from 'src/school-service/entities/school-service.entity';
 import { School } from 'src/school/entities/school.entity';
 import { User } from 'src/user/entities/user.entity';
+
+registerEnumType(BookingServiceType, {
+  name: 'BookingServiceType',
+});
 
 @ObjectType()
 export class BookingService {
@@ -13,7 +25,7 @@ export class BookingService {
   bookingId?: number;
 
   @Field(() => Int)
-  serviceId: number;
+  schoolServiceId: number;
 
   @Field(() => Int)
   schoolId: number;
@@ -25,8 +37,8 @@ export class BookingService {
   @Field(() => String)
   serviceName: string;
 
-  @Field(() => String)
-  serviceType: string;
+  @Field(() => BookingServiceType)
+  serviceType: BookingServiceType;
 
   @Field(() => Float)
   price: number;
@@ -51,8 +63,8 @@ export class BookingService {
   @Field(() => Booking, { nullable: true })
   booking?: Booking;
 
-  @Field(() => Service, { nullable: true })
-  service?: Service;
+  @Field(() => SchoolService, { nullable: true })
+  schoolService?: SchoolService;
 
   @Field(() => School, { nullable: true })
   school?: School;

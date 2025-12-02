@@ -53,10 +53,10 @@ type BookingService {
   price: Float!
   school: School
   schoolId: Int!
-  service: Service
-  serviceId: Int!
+  schoolService: SchoolService
+  schoolServiceId: Int!
   serviceName: String!
-  serviceType: String!
+  serviceType: BookingServiceType!
   updatedAt: DateTime!
   user: User
   userId: Int!
@@ -75,6 +75,11 @@ type BookingServicePagination {
   skip: Int!
   take: Int!
   total: Int!
+}
+
+enum BookingServiceType {
+  ADDON
+  LICENSE
 }
 
 type BookingSession {
@@ -292,7 +297,7 @@ input CreateBookingServiceInput {
   description: String
   price: Float!
   schoolId: Int!
-  serviceId: Int!
+  schoolServiceId: Int!
   serviceName: String!
   serviceType: String!
   userId: Int!
@@ -333,6 +338,7 @@ input CreateCarCourseInput {
 
 input CreateCarInput {
   assignedDriverId: Int
+  carAdminId: Int!
   carId: String!
   carName: String!
   chassisNumber: String
@@ -517,7 +523,7 @@ input CreateSchoolServiceInput {
 }
 
 input CreateServiceInput {
-  category: String!
+  category: ServiceCategory!
   description: String!
   duration: Int!
   features: String
@@ -543,17 +549,21 @@ input CreateSyllabusInput {
 
 input CreateUserInput {
   address: String
+  bloodGroup: String
   contact1: String!
   contact2: String
   dob: DateTime
   email: String
+  fatherName: String
   name: String!
   otp: String
   password: String
+  permanentAddress: String
   profile: String
   role: Role
   schoolId: Float
   status: Status
+  surname: String
 }
 
 """
@@ -1098,7 +1108,7 @@ input SearchSyllabusInput {
 }
 
 type Service {
-  category: String!
+  category: ServiceCategory!
   createdAt: DateTime!
   deletedAt: DateTime
   description: String!
@@ -1114,6 +1124,13 @@ type Service {
   updatedAt: DateTime!
 }
 
+enum ServiceCategory {
+  IDP
+  I_HOLD_LICENSE
+  NEW_LICENSE
+  TRANSPORT
+}
+
 type ServicePagination {
   data: [Service!]!
   skip: Int!
@@ -1126,11 +1143,6 @@ enum ServiceStatus {
   DISCONTINUED
   INACTIVE
   UPCOMING
-}
-
-enum ServiceType {
-  ADDON
-  LICENSE
 }
 
 input SignUpUserInput {
@@ -1202,7 +1214,7 @@ input UpdateBookingServiceInput {
   id: Int!
   price: Float
   schoolId: Int
-  serviceId: Int
+  schoolServiceId: Int
   serviceName: String
   serviceType: String
   userId: Int
@@ -1246,6 +1258,7 @@ input UpdateCarCourseInput {
 
 input UpdateCarInput {
   assignedDriverId: Int
+  carAdminId: Int
   carId: String
   carName: String
   chassisNumber: String
@@ -1433,7 +1446,7 @@ input UpdateSchoolServiceInput {
 }
 
 input UpdateServiceInput {
-  category: String
+  category: ServiceCategory
   description: String
   duration: Int
   features: String
@@ -1441,7 +1454,6 @@ input UpdateServiceInput {
   requirements: String
   serviceId: String
   serviceName: String
-  serviceType: ServiceType
   status: ServiceStatus
   termsAndConditions: String
 }
@@ -1461,23 +1473,28 @@ input UpdateSyllabusInput {
 
 input UpdateUserInput {
   address: String
+  bloodGroup: String
   contact1: String
   contact2: String
   deletedAt: DateTime
   dob: DateTime
   email: String
+  fatherName: String
   name: String
   otp: String
   password: String
+  permanentAddress: String
   profile: String
   role: Role
   schoolId: Float
   status: Status
+  surname: String
   updatedAt: DateTime
 }
 
 type User {
   address: String
+  bloodGroup: String
   contact1: String!
   contact2: String
   createdAt: DateTime!
@@ -1488,15 +1505,18 @@ type User {
   deletedById: Int
   dob: DateTime
   email: String
+  fatherName: String
   id: Int!
   name: String!
   otp: String
   password: String
+  permanentAddress: String
   profile: String
   role: Role!
   school: School
   schoolId: Int
   status: Status!
+  surname: String
   updatedAt: DateTime!
   updatedBy: User
   updatedById: Int
@@ -1542,7 +1562,7 @@ input WhereBookingServiceSearchInput {
   deletedAt: DateTime
   id: Int
   schoolId: Int
-  serviceId: Int
+  schoolServiceId: Int
   serviceName: String
   serviceType: String
   updatedAt: DateTime
@@ -1632,25 +1652,30 @@ input WhereSchoolServiceSearchInput {
 }
 
 input WhereServiceSearchInput {
+  category: ServiceCategory
   schoolId: Int
   status: ServiceStatus
 }
 
 input WhereUserSearchInput {
   address: String
+  bloodGroup: String
   contact1: String
   contact2: String
   createdAt: DateTime
   deletedAt: DateTime
   dob: DateTime
   email: String
+  fatherName: String
   id: String
   name: String
   otp: String
   password: String
+  permanentAddress: String
   profile: String
   role: Role
   schoolId: Float
   status: Status
+  surname: String
   updatedAt: DateTime
 }

@@ -1,23 +1,12 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
-
-export enum ServiceType {
-  LICENSE = 'LICENSE',
-  ADDON = 'ADDON',
-}
-
-export enum ServiceStatus {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
-  UPCOMING = 'UPCOMING',
-  DISCONTINUED = 'DISCONTINUED',
-}
-
-registerEnumType(ServiceType, {
-  name: 'ServiceType',
-});
+import { ServiceCategory, ServiceStatus } from '@prisma/client';
 
 registerEnumType(ServiceStatus, {
   name: 'ServiceStatus',
+});
+
+registerEnumType(ServiceCategory, {
+  name: 'ServiceCategory',
 });
 
 @ObjectType()
@@ -32,8 +21,8 @@ export class Service {
   @Field(() => String)
   serviceName: string;
 
-  @Field(() => String)
-  category: string;
+  @Field(() => ServiceCategory)
+  category: ServiceCategory;
 
   // Pricing & Duration
   @Field(() => Int)

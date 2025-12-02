@@ -9,6 +9,9 @@ export class CreateCarInput {
   @Field(() => String)
   carId: string;
 
+  @Field(() => Int)
+  carAdminId: number;
+
   // Basic Information
   @Field(() => String)
   carName: string;

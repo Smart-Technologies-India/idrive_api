@@ -1,6 +1,6 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
 import { IsOptional, IsInt, IsEnum } from 'class-validator';
-import { ServiceStatus } from '../entities/service.entity';
+import { ServiceCategory, ServiceStatus } from '@prisma/client';
 
 @InputType()
 export class WhereServiceSearchInput {
@@ -13,4 +13,9 @@ export class WhereServiceSearchInput {
   @IsEnum(ServiceStatus)
   @Field(() => ServiceStatus, { nullable: true })
   status?: ServiceStatus;
+
+  @IsOptional()
+  @IsEnum(ServiceCategory)
+  @Field(() => ServiceCategory, { nullable: true })
+  category?: ServiceCategory;
 }

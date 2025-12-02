@@ -27,7 +27,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const contextType = host.getType<GqlContextType>();
 
     // Handle GraphQL context
-    if (contextType === 'graphql') {
+    if (contextType == 'graphql') {
       return this.handleGraphQLException(exception, host);
     }
 
@@ -47,7 +47,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       status = exception.getStatus();
       const response = exception.getResponse();
 
-      if (typeof response === 'object' && response !== null) {
+      if (typeof response == 'object' && response !== null) {
         const responseObj = response as any;
         message = responseObj.message || exception.message;
         error = responseObj.error || exception.name;
@@ -80,9 +80,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const request = ctx.getRequest();
 
     // Ignore favicon.ico 404 errors (browser automatically requests this)
-    if (request.url === '/favicon.ico' && exception instanceof HttpException) {
+    if (request.url == '/favicon.ico' && exception instanceof HttpException) {
       const status = exception.getStatus();
-      if (status === 404) {
+      if (status == 404) {
         return response.status(status).end();
       }
     }
@@ -95,7 +95,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       status = exception.getStatus();
       const exceptionResponse = exception.getResponse();
 
-      if (typeof exceptionResponse === 'object' && exceptionResponse !== null) {
+      if (typeof exceptionResponse == 'object' && exceptionResponse !== null) {
         const responseObj = exceptionResponse as any;
         message = responseObj.message || exception.message;
         error = responseObj.error || exception.name;

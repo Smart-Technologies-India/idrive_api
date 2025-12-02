@@ -19,7 +19,7 @@ export class LoggingInterceptor implements NestInterceptor {
     const contextType = context.getType<GqlContextType>();
     const now = Date.now();
 
-    if (contextType === 'graphql') {
+    if (contextType == 'graphql') {
       const gqlContext = GqlExecutionContext.create(context);
       const info = gqlContext.getInfo();
 

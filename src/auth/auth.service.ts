@@ -142,7 +142,7 @@ export class AuthService {
       const otp_response = await axios.post<string>(smsUrl);
 
       if (
-        typeof otp_response.data === 'string' &&
+        typeof otp_response.data == 'string' &&
         otp_response.data.startsWith('SUBMIT_SUCCESS')
       ) {
         await this.prisma.user.update({

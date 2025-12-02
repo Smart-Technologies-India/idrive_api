@@ -20,7 +20,7 @@ function collectFields(node: FieldNode): SelectedFields {
   const selections = node.selectionSet?.selections ?? [];
 
   for (const selection of selections) {
-    if (selection.kind === Kind.FIELD) {
+    if (selection.kind == Kind.FIELD) {
       const fieldName = selection.name.value;
 
       if (selection.selectionSet) {

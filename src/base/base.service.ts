@@ -44,7 +44,7 @@ export class BaseService<
   async search(whereSearchInput: WhereSearchInput, fields: SelectedFields) {
     try {
       const sample = await this.delegate.findMany({ take: 1 });
-      if (!sample || sample.length === 0) {
+      if (!sample || sample.length == 0) {
         throw new BadRequestException(`Could not find ${this.modelName}`);
       }
       const firstRecord = sample[0] as Record<string, any>;
@@ -80,7 +80,7 @@ export class BaseService<
         where: nestedWhere,
         select: fields,
       });
-      if (item.length === 0) {
+      if (item.length == 0) {
         return [];
       }
       // if (!item) {
@@ -114,7 +114,7 @@ export class BaseService<
   async update(id: number, update: UpdateType, fields: SelectedFields) {
     try {
       const sample = await this.delegate.findMany({ take: 1 });
-      if (!sample || sample.length === 0) {
+      if (!sample || sample.length == 0) {
         throw new BadRequestException(`Could not find ${this.modelName}`);
       }
       const firstRecord = sample[0] as Record<string, any>;
@@ -165,7 +165,7 @@ export class BaseService<
   async delete(id: number, userid: number, fields: SelectedFields) {
     try {
       const sample = await this.delegate.findMany({ take: 1 });
-      if (!sample || sample.length === 0) {
+      if (!sample || sample.length == 0) {
         throw new BadRequestException(`Could not find ${this.modelName}`);
       }
       const firstRecord = sample[0] as Record<string, any>;
@@ -216,7 +216,7 @@ export class BaseService<
   ) {
     try {
       const sample = await this.delegate.findMany({ take: 1 });
-      if (!sample || sample.length === 0) {
+      if (!sample || sample.length == 0) {
         return {
           data: [],
           total: 0,
@@ -252,7 +252,7 @@ export class BaseService<
           where,
           select:
             'data' in fields &&
-            typeof fields.data === 'object' &&
+            typeof fields.data == 'object' &&
             fields.data !== null &&
             'select' in fields.data
               ? (fields.data as { select: SelectedFields }).select
@@ -286,7 +286,7 @@ export class BaseService<
           if (value !== undefined && value !== null) {
             // Handle nested objects (like product, subcategory, etc.)
             if (
-              typeof value === 'object' &&
+              typeof value == 'object' &&
               !Array.isArray(value) &&
               !(value instanceof Date)
             ) {
@@ -310,7 +310,7 @@ export class BaseService<
     const processedInput: Record<string, unknown> = { ...input };
 
     const passwordValue = processedInput.password;
-    if (typeof passwordValue === 'string') {
+    if (typeof passwordValue == 'string') {
       // Check if password is already hashed (argon2 hashes start with $argon2)
       if (!passwordValue.startsWith('$argon2')) {
         const hashed = await argon2.hash(passwordValue);

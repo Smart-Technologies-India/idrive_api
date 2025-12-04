@@ -13,10 +13,6 @@ import { DriverStatus } from '../entities/driver.entity';
 
 @InputType()
 export class UpdateDriverInput {
-  @IsInt()
-  @Field(() => Int)
-  id: number;
-
   @IsOptional()
   @IsString()
   @Field(() => String, { nullable: true })

@@ -504,7 +504,6 @@ export interface UpdateBookingServiceInput {
     bookingId?: Nullable<number>;
     confirmationNumber?: Nullable<string>;
     description?: Nullable<string>;
-    id: number;
     price?: Nullable<number>;
     schoolId?: Nullable<number>;
     schoolServiceId?: Nullable<number>;
@@ -522,7 +521,6 @@ export interface UpdateBookingSessionInput {
     dayNumber?: Nullable<number>;
     deletedAt?: Nullable<DateTime>;
     driverId?: Nullable<number>;
-    id: number;
     instructorNotes?: Nullable<string>;
     internalNotes?: Nullable<string>;
     performanceRating?: Nullable<number>;
@@ -544,7 +542,6 @@ export interface UpdateCarCourseInput {
     carId?: Nullable<number>;
     courseId?: Nullable<number>;
     deletedAt?: Nullable<DateTime>;
-    id: number;
 }
 
 export interface UpdateCarInput {
@@ -559,7 +556,6 @@ export interface UpdateCarInput {
     engineNumber?: Nullable<string>;
     fitnessExpiry?: Nullable<DateTime>;
     fuelType?: Nullable<FuelType>;
-    id: number;
     insuranceExpiry?: Nullable<DateTime>;
     insuranceNumber?: Nullable<string>;
     lastServiceDate?: Nullable<DateTime>;
@@ -610,7 +606,6 @@ export interface UpdateDriverInput {
     emergencyContactRelation?: Nullable<string>;
     experience?: Nullable<number>;
     gender?: Nullable<string>;
-    id: number;
     joiningDate?: Nullable<DateTime>;
     licenseExpiryDate?: Nullable<DateTime>;
     licenseIssueDate?: Nullable<DateTime>;
@@ -639,7 +634,6 @@ export interface UpdateLeaveHistoryInput {
     approvedAt?: Nullable<DateTime>;
     approvedBy?: Nullable<number>;
     fromDate?: Nullable<DateTime>;
-    id: number;
     leaveType?: Nullable<string>;
     reason?: Nullable<string>;
     rejectionReason?: Nullable<string>;
@@ -651,7 +645,6 @@ export interface UpdateLeaveHistoryInput {
 export interface UpdatePaymentInput {
     amount?: Nullable<number>;
     bookingId?: Nullable<number>;
-    id: number;
     installmentNumber?: Nullable<number>;
     notes?: Nullable<string>;
     paymentMethod?: Nullable<string>;
@@ -666,7 +659,6 @@ export interface UpdateSalaryHistoryInput {
     basicSalary?: Nullable<number>;
     bonus?: Nullable<number>;
     deductions?: Nullable<number>;
-    id: number;
     month?: Nullable<string>;
     monthNumber?: Nullable<number>;
     netSalary?: Nullable<number>;
@@ -691,7 +683,6 @@ export interface UpdateSchoolInput {
     establishedYear?: Nullable<string>;
     facebook?: Nullable<string>;
     gstNumber?: Nullable<string>;
-    id: number;
     ifscCode?: Nullable<string>;
     instagram?: Nullable<string>;
     insuranceExpiry?: Nullable<DateTime>;
@@ -739,7 +730,6 @@ export interface UpdateSyllabusInput {
     assessmentCriteria?: Nullable<string>;
     courseId?: Nullable<number>;
     dayNumber?: Nullable<number>;
-    id: number;
     notes?: Nullable<string>;
     objectives?: Nullable<string>;
     practicalActivities?: Nullable<string>;

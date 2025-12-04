@@ -1,5 +1,11 @@
 import { InputType, Field, Int, Float } from '@nestjs/graphql';
-import { IsEnum, IsInt, IsNumber, IsOptional, IsPositive } from 'class-validator';
+import {
+  IsEnum,
+  IsInt,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+} from 'class-validator';
 import { SchoolServiceStatus } from '@prisma/client';
 
 @InputType()

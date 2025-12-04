@@ -1211,7 +1211,6 @@ input UpdateBookingServiceInput {
   bookingId: Int
   confirmationNumber: String
   description: String
-  id: Int!
   price: Float
   schoolId: Int
   schoolServiceId: Int
@@ -1229,7 +1228,6 @@ input UpdateBookingSessionInput {
   dayNumber: Int
   deletedAt: DateTime
   driverId: Int
-  id: Int!
   instructorNotes: String
   internalNotes: String
   performanceRating: Int
@@ -1253,7 +1251,6 @@ input UpdateCarCourseInput {
 
   """Soft delete timestamp"""
   deletedAt: DateTime
-  id: Int!
 }
 
 input UpdateCarInput {
@@ -1270,7 +1267,6 @@ input UpdateCarInput {
   engineNumber: String
   fitnessExpiry: DateTime
   fuelType: FuelType
-  id: Int!
   insuranceExpiry: DateTime
   insuranceNumber: String
   lastServiceDate: DateTime
@@ -1322,7 +1318,6 @@ input UpdateDriverInput {
   emergencyContactRelation: String
   experience: Int
   gender: String
-  id: Int!
   joiningDate: DateTime
   licenseExpiryDate: DateTime
   licenseIssueDate: DateTime
@@ -1351,7 +1346,6 @@ input UpdateLeaveHistoryInput {
   approvedAt: DateTime
   approvedBy: Int
   fromDate: DateTime
-  id: Int!
   leaveType: String
   reason: String
   rejectionReason: String
@@ -1366,7 +1360,6 @@ input UpdatePaymentInput {
 
   """Booking ID"""
   bookingId: Int
-  id: Int!
 
   """Current installment number"""
   installmentNumber: Int
@@ -1389,7 +1382,6 @@ input UpdateSalaryHistoryInput {
   basicSalary: Float
   bonus: Float
   deductions: Float
-  id: Int!
   month: String
   monthNumber: Int
   netSalary: Float
@@ -1414,7 +1406,6 @@ input UpdateSchoolInput {
   establishedYear: String
   facebook: String
   gstNumber: String
-  id: Int!
   ifscCode: String
   instagram: String
   insuranceExpiry: DateTime
@@ -1462,7 +1453,6 @@ input UpdateSyllabusInput {
   assessmentCriteria: String
   courseId: Int
   dayNumber: Int
-  id: Int!
   notes: String
   objectives: String
   practicalActivities: String

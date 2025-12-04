@@ -1,13 +1,9 @@
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
+import { InputType, Field, PartialType } from '@nestjs/graphql';
 import { CreatePaymentInput } from './create-payment.input';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 @InputType()
 export class UpdatePaymentInput extends PartialType(CreatePaymentInput) {
-  @IsNumber()
-  @Field(() => Int)
-  id: number;
-
   @IsOptional()
   @IsString()
   @Field(() => String, { nullable: true })

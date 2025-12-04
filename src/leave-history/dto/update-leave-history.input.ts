@@ -11,10 +11,6 @@ import { LeaveStatus } from '../entities/leave-history.entity';
 
 @InputType()
 export class UpdateLeaveHistoryInput {
-  @IsInt()
-  @Field(() => Int)
-  id: number;
-
   @IsOptional()
   @IsDateString()
   @Field(() => Date, { nullable: true })

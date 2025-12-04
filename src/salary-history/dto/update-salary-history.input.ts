@@ -12,10 +12,6 @@ import { SalaryStatus } from '../entities/salary-history.entity';
 
 @InputType()
 export class UpdateSalaryHistoryInput {
-  @IsInt()
-  @Field(() => Int)
-  id: number;
-
   @IsOptional()
   @IsString()
   @Field(() => String, { nullable: true })

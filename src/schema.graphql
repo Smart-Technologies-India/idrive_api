@@ -1294,7 +1294,6 @@ input UpdateCourseInput {
   description: String
   enrolledStudents: Int
   hoursPerDay: Int
-  id: Int!
   minsPerDay: Int
   price: Float
   requirements: String

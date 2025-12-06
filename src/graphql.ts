@@ -582,7 +582,6 @@ export interface UpdateCourseInput {
     description?: Nullable<string>;
     enrolledStudents?: Nullable<number>;
     hoursPerDay?: Nullable<number>;
-    id: number;
     minsPerDay?: Nullable<number>;
     price?: Nullable<number>;
     requirements?: Nullable<string>;

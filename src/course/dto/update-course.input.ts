@@ -3,7 +3,6 @@ import { CreateCourseInput } from './create-course.input';
 import { CourseType, CourseStatus } from '../entities/course.entity';
 import {
   IsEnum,
-  IsNotEmpty,
   IsOptional,
   IsString,
   IsInt,
@@ -14,11 +13,6 @@ import {
 
 @InputType()
 export class UpdateCourseInput extends PartialType(CreateCourseInput) {
-  @IsNotEmpty()
-  @IsInt()
-  @Field(() => Int)
-  id: number;
-
   @IsOptional()
   @IsInt()
   @Field(() => Int, { nullable: true })

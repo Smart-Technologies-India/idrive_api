@@ -87,6 +87,10 @@ export class CreateBookingInput {
   @Field(() => Float)
   totalAmount: number;
 
+  @IsOptional()
+  @Field(() => Float, { nullable: true })
+  discount?: number;
+
   // Additional Information
   @IsOptional()
   @IsString()

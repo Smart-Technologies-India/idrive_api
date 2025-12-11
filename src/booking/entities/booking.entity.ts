@@ -103,6 +103,9 @@ export class Booking {
   @Field(() => Float)
   totalAmount: number;
 
+  @Field(() => Float, { nullable: true })
+  discount?: number;
+
   // Additional Information
   @Field(() => String, { nullable: true })
   notes?: string;

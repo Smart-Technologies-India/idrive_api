@@ -21,6 +21,7 @@ type Booking {
   customerMobile: String!
   customerName: String
   deletedAt: DateTime
+  discount: Float
   id: Int!
   notes: String
   parsedServices: [BookingServiceInfo!]
@@ -49,6 +50,7 @@ type BookingService {
   createdAt: DateTime!
   deletedAt: DateTime
   description: String
+  discount: Float
   id: Int!
   price: Float!
   school: School
@@ -285,6 +287,7 @@ input CreateBookingInput {
   customerId: Int
   customerMobile: String!
   customerName: String
+  discount: Float
   notes: String
   schoolId: Int!
   slot: String!
@@ -295,6 +298,7 @@ input CreateBookingServiceInput {
   bookingId: Int
   confirmationNumber: String
   description: String
+  discount: Float
   price: Float!
   schoolId: Int!
   schoolServiceId: Int!
@@ -1200,6 +1204,7 @@ input UpdateBookingInput {
   customerId: Int
   customerMobile: String
   customerName: String
+  discount: Float
   notes: String
   schoolId: Int
   slot: String
@@ -1211,6 +1216,7 @@ input UpdateBookingServiceInput {
   bookingId: Int
   confirmationNumber: String
   description: String
+  discount: Float
   price: Float
   schoolId: Int
   schoolServiceId: Int
@@ -1535,6 +1541,7 @@ input WhereBookingSearchInput {
   customerMobile: String
   customerName: String
   deletedAt: DateTime
+  discount: Float
   id: Int
   notes: String
   schoolId: Int

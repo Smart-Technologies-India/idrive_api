@@ -48,6 +48,10 @@ export class CreateBookingServiceInput {
   price: number;
 
   @IsOptional()
+  @Field(() => Float, { nullable: true })
+  discount?: number;
+
+  @IsOptional()
   @IsString()
   @Field(() => String, { nullable: true })
   description?: string;

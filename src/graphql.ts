@@ -159,6 +159,7 @@ export interface CreateBookingInput {
     customerId?: Nullable<number>;
     customerMobile: string;
     customerName?: Nullable<string>;
+    discount?: Nullable<number>;
     notes?: Nullable<string>;
     schoolId: number;
     slot: string;
@@ -169,6 +170,7 @@ export interface CreateBookingServiceInput {
     bookingId?: Nullable<number>;
     confirmationNumber?: Nullable<string>;
     description?: Nullable<string>;
+    discount?: Nullable<number>;
     price: number;
     schoolId: number;
     schoolServiceId: number;
@@ -493,6 +495,7 @@ export interface UpdateBookingInput {
     customerId?: Nullable<number>;
     customerMobile?: Nullable<string>;
     customerName?: Nullable<string>;
+    discount?: Nullable<number>;
     notes?: Nullable<string>;
     schoolId?: Nullable<number>;
     slot?: Nullable<string>;
@@ -504,6 +507,7 @@ export interface UpdateBookingServiceInput {
     bookingId?: Nullable<number>;
     confirmationNumber?: Nullable<string>;
     description?: Nullable<string>;
+    discount?: Nullable<number>;
     price?: Nullable<number>;
     schoolId?: Nullable<number>;
     schoolServiceId?: Nullable<number>;
@@ -775,6 +779,7 @@ export interface WhereBookingSearchInput {
     customerMobile?: Nullable<string>;
     customerName?: Nullable<string>;
     deletedAt?: Nullable<DateTime>;
+    discount?: Nullable<number>;
     id?: Nullable<number>;
     notes?: Nullable<string>;
     schoolId?: Nullable<number>;
@@ -928,6 +933,7 @@ export interface Booking {
     customerMobile: string;
     customerName?: Nullable<string>;
     deletedAt?: Nullable<DateTime>;
+    discount?: Nullable<number>;
     id: number;
     notes?: Nullable<string>;
     parsedServices?: Nullable<BookingServiceInfo[]>;
@@ -956,6 +962,7 @@ export interface BookingService {
     createdAt: DateTime;
     deletedAt?: Nullable<DateTime>;
     description?: Nullable<string>;
+    discount?: Nullable<number>;
     id: number;
     price: number;
     school?: Nullable<School>;

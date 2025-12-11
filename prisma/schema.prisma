@@ -536,7 +536,7 @@ model service {
   deletedAt DateTime?
 
   // Relations
-  schoolServices  schoolService[]
+  schoolServices schoolService[]
 
   @@index([status])
 }
@@ -671,6 +671,7 @@ model booking {
 
   // Pricing
   totalAmount Float
+  discount    Float?
 
   // Additional Information
   notes String? @db.LongText
@@ -702,16 +703,17 @@ model booking {
 }
 
 model bookingService {
-  id               Int                @id @default(autoincrement())
-  bookingId        Int? // Optional - for service bookings without car/course
-  schoolServiceId  Int
-  schoolId         Int
-  userId           Int
+  id              Int  @id @default(autoincrement())
+  bookingId       Int? // Optional - for service bookings without car/course
+  schoolServiceId Int
+  schoolId        Int
+  userId          Int
 
   // Service Details (denormalized for historical reference)
   serviceName        String
   serviceType        BookingServiceType // LICENSE or ADDON
   price              Float
+  discount           Float?
   description        String?            @db.LongText
   confirmationNumber String?            @unique
 
@@ -721,10 +723,10 @@ model bookingService {
   deletedAt DateTime?
 
   // Relations
-  booking       booking?       @relation("BookingServices", fields: [bookingId], references: [id], onDelete: Cascade)
-  schoolService schoolService  @relation(fields: [schoolServiceId], references: [id])
-  school        school         @relation(fields: [schoolId], references: [id])
-  user          user           @relation("UserBookingServices", fields: [userId], references: [id])
+  booking       booking?      @relation("BookingServices", fields: [bookingId], references: [id], onDelete: Cascade)
+  schoolService schoolService @relation(fields: [schoolServiceId], references: [id])
+  school        school        @relation(fields: [schoolId], references: [id])
+  user          user          @relation("UserBookingServices", fields: [userId], references: [id])
 
   @@index([bookingId])
   @@index([schoolServiceId])

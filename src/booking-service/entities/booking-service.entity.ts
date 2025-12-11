@@ -43,6 +43,9 @@ export class BookingService {
   @Field(() => Float)
   price: number;
 
+  @Field(() => Float, { nullable: true })
+  discount?: number;
+
   @Field(() => String, { nullable: true })
   description?: string;
 

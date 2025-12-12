@@ -674,7 +674,6 @@ export interface UpdateLeaveHistoryInput {
 export interface UpdateLicenseApplicationInput {
     bookingServiceId?: Nullable<number>;
     dlApplicationNumber?: Nullable<string>;
-    id: number;
     issuedDate?: Nullable<DateTime>;
     llNumber?: Nullable<string>;
     status?: Nullable<LicenseApplicationStatus>;
@@ -1010,6 +1009,7 @@ export interface BookingService {
     description?: Nullable<string>;
     discount?: Nullable<number>;
     id: number;
+    licenseApplications?: Nullable<LicenseApplication[]>;
     price: number;
     school?: Nullable<School>;
     schoolId: number;
@@ -1431,6 +1431,7 @@ export interface IQuery {
     getSchoolDashboardStats(schoolId: number): SchoolDashboardStats | Promise<SchoolDashboardStats>;
     getSchoolServiceById(id: number): SchoolService | Promise<SchoolService>;
     getSchoolStatistics(): SchoolStatistics | Promise<SchoolStatistics>;
+    getServerDateTime(): Util | Promise<Util>;
     getServiceById(id: number): Service | Promise<Service>;
     getSyllabusById(id: number): Syllabus | Promise<Syllabus>;
     getUserById(id: number): User | Promise<User>;
@@ -1696,6 +1697,10 @@ export interface UserPagination {
     skip: number;
     take: number;
     total: number;
+}
+
+export interface Util {
+    serverDateTime: DateTime;
 }
 
 export type DateTime = any;

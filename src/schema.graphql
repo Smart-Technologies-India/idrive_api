@@ -52,6 +52,7 @@ type BookingService {
   description: String
   discount: Float
   id: Int!
+  licenseApplications: [LicenseApplication!]
   price: Float!
   school: School
   schoolId: Int!
@@ -888,6 +889,7 @@ type Query {
   getSchoolDashboardStats(schoolId: Int!): SchoolDashboardStats!
   getSchoolServiceById(id: Int!): SchoolService!
   getSchoolStatistics: SchoolStatistics!
+  getServerDateTime: Util!
   getServiceById(id: Int!): Service!
   getSyllabusById(id: Int!): Syllabus!
   getUserById(id: Int!): User!
@@ -1414,7 +1416,6 @@ input UpdateLeaveHistoryInput {
 input UpdateLicenseApplicationInput {
   bookingServiceId: Int
   dlApplicationNumber: String
-  id: Int!
   issuedDate: DateTime
   llNumber: String
   status: LicenseApplicationStatus = PENDING
@@ -1585,6 +1586,11 @@ type UserPagination {
   skip: Int!
   take: Int!
   total: Int!
+}
+
+type Util {
+  """Server date and time"""
+  serverDateTime: DateTime!
 }
 
 input WhereBookingSearchInput {

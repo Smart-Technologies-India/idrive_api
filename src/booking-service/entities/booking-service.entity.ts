@@ -11,6 +11,7 @@ import { Booking } from 'src/booking/entities/booking.entity';
 import { SchoolService } from 'src/school-service/entities/school-service.entity';
 import { School } from 'src/school/entities/school.entity';
 import { User } from 'src/user/entities/user.entity';
+import { LicenseApplication } from 'src/license-application/entities/license-application.entity';
 
 registerEnumType(BookingServiceType, {
   name: 'BookingServiceType',
@@ -74,4 +75,7 @@ export class BookingService {
 
   @Field(() => User, { nullable: true })
   user?: User;
+
+  @Field(() => [LicenseApplication], { nullable: true })
+  licenseApplications?: LicenseApplication[];
 }

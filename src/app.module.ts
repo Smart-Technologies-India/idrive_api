@@ -27,6 +27,7 @@ import { PaymentModule } from './payment/payment.module';
 import { CarAdminModule } from './car-admin/car-admin.module';
 import { SchoolServiceModule } from './school-service/school-service.module';
 import { LicenseApplicationModule } from './license-application/license-application.module';
+import { UtilsModule } from './utils/utils.module';
 
 @Module({
   imports: [
@@ -66,6 +67,7 @@ import { LicenseApplicationModule } from './license-application/license-applicat
     CarAdminModule,
     SchoolServiceModule,
     LicenseApplicationModule,
+    UtilsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

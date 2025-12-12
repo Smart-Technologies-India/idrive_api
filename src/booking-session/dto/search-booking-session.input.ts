@@ -1,4 +1,5 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
+import { BookingSessionStatus } from '@prisma/client';
 import {
   IsOptional,
   IsInt,
@@ -6,7 +7,6 @@ import {
   IsEnum,
   IsBoolean,
 } from 'class-validator';
-import { BookingSessionStatus } from '../entities/booking-session.entity';
 
 @InputType()
 export class WhereBookingSessionSearchInput {

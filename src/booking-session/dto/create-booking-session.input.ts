@@ -1,4 +1,5 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
+import { BookingSessionStatus } from '@prisma/client';
 import {
   IsNotEmpty,
   IsOptional,
@@ -8,7 +9,6 @@ import {
   Min,
   Max,
 } from 'class-validator';
-import { BookingSessionStatus } from '../entities/booking-session.entity';
 
 @InputType()
 export class CreateBookingSessionInput {

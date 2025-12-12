@@ -640,6 +640,7 @@ enum BookingSessionStatus {
   COMPLETED
   CANCELLED
   NO_SHOW
+  HOLD
 }
 
 enum BookingServiceType {
@@ -723,10 +724,11 @@ model bookingService {
   deletedAt DateTime?
 
   // Relations
-  booking       booking?      @relation("BookingServices", fields: [bookingId], references: [id], onDelete: Cascade)
-  schoolService schoolService @relation(fields: [schoolServiceId], references: [id])
-  school        school        @relation(fields: [schoolId], references: [id])
-  user          user          @relation("UserBookingServices", fields: [userId], references: [id])
+  booking             booking?             @relation("BookingServices", fields: [bookingId], references: [id], onDelete: Cascade)
+  schoolService       schoolService        @relation(fields: [schoolServiceId], references: [id])
+  school              school               @relation(fields: [schoolId], references: [id])
+  user                user                 @relation("UserBookingServices", fields: [userId], references: [id])
+  licenseApplications licenseApplication[]
 
   @@index([bookingId])
   @@index([schoolServiceId])
@@ -822,4 +824,31 @@ enum PaymentStatus {
   FAILED
   REFUNDED
   CANCELLED
+}
+
+enum LicenseApplicationStatus {
+  PENDING
+  CLOSED
+  LL_APPLIED
+  DL_PENDING
+  DL_APPLIED
+}
+
+enum TestStatus {
+  NONE
+  PASSED
+  FAILED
+  ABSENT
+}
+
+model licenseApplication {
+  id                  Int                      @id @default(autoincrement())
+  bookingService      bookingService           @relation(fields: [bookingServiceId], references: [id])
+  bookingServiceId    Int
+  llNumber            String?
+  issuedDate          DateTime?
+  dlApplicationNumber String?
+  testDate            DateTime?
+  testStatus          TestStatus               @default(NONE)
+  status              LicenseApplicationStatus @default(PENDING)
 }

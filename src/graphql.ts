@@ -17,6 +17,7 @@ export enum BookingSessionStatus {
     CANCELLED = "CANCELLED",
     COMPLETED = "COMPLETED",
     CONFIRMED = "CONFIRMED",
+    HOLD = "HOLD",
     NO_SHOW = "NO_SHOW",
     PENDING = "PENDING"
 }
@@ -98,6 +99,14 @@ export enum LeaveStatus {
     REJECTED = "REJECTED"
 }
 
+export enum LicenseApplicationStatus {
+    CLOSED = "CLOSED",
+    DL_APPLIED = "DL_APPLIED",
+    DL_PENDING = "DL_PENDING",
+    LL_APPLIED = "LL_APPLIED",
+    PENDING = "PENDING"
+}
+
 export enum Role {
     ADMIN = "ADMIN",
     DRIVER = "DRIVER",
@@ -137,6 +146,13 @@ export enum ServiceStatus {
 export enum Status {
     ACTIVE = "ACTIVE",
     INACTIVE = "INACTIVE"
+}
+
+export enum TestStatus {
+    ABSENT = "ABSENT",
+    FAILED = "FAILED",
+    NONE = "NONE",
+    PASSED = "PASSED"
 }
 
 export enum TransmissionType {
@@ -304,6 +320,16 @@ export interface CreateLeaveHistoryInput {
     rejectionReason?: Nullable<string>;
     toDate: DateTime;
     totalDays: number;
+}
+
+export interface CreateLicenseApplicationInput {
+    bookingServiceId: number;
+    dlApplicationNumber?: Nullable<string>;
+    issuedDate?: Nullable<DateTime>;
+    llNumber?: Nullable<string>;
+    status?: Nullable<LicenseApplicationStatus>;
+    testDate?: Nullable<DateTime>;
+    testStatus?: Nullable<TestStatus>;
 }
 
 export interface CreatePaymentInput {
@@ -645,6 +671,17 @@ export interface UpdateLeaveHistoryInput {
     totalDays?: Nullable<number>;
 }
 
+export interface UpdateLicenseApplicationInput {
+    bookingServiceId?: Nullable<number>;
+    dlApplicationNumber?: Nullable<string>;
+    id: number;
+    issuedDate?: Nullable<DateTime>;
+    llNumber?: Nullable<string>;
+    status?: Nullable<LicenseApplicationStatus>;
+    testDate?: Nullable<DateTime>;
+    testStatus?: Nullable<TestStatus>;
+}
+
 export interface UpdatePaymentInput {
     amount?: Nullable<number>;
     bookingId?: Nullable<number>;
@@ -845,6 +882,15 @@ export interface WhereLeaveHistorySearchInput {
     leaveType?: Nullable<string>;
     search?: Nullable<string>;
     status?: Nullable<LeaveStatus>;
+}
+
+export interface WhereLicenseApplicationSearchInput {
+    bookingServiceId?: Nullable<number>;
+    dlApplicationNumber?: Nullable<string>;
+    id?: Nullable<number>;
+    llNumber?: Nullable<string>;
+    status?: Nullable<LicenseApplicationStatus>;
+    testStatus?: Nullable<TestStatus>;
 }
 
 export interface WhereSalaryHistorySearchInput {
@@ -1226,6 +1272,25 @@ export interface LeaveHistoryPagination {
     total: number;
 }
 
+export interface LicenseApplication {
+    bookingService?: Nullable<BookingService>;
+    bookingServiceId: number;
+    dlApplicationNumber?: Nullable<string>;
+    id: number;
+    issuedDate?: Nullable<DateTime>;
+    llNumber?: Nullable<string>;
+    status: LicenseApplicationStatus;
+    testDate?: Nullable<DateTime>;
+    testStatus: TestStatus;
+}
+
+export interface LicenseApplicationPagination {
+    data: LicenseApplication[];
+    skip: number;
+    take: number;
+    total: number;
+}
+
 export interface IMutation {
     createBooking(inputType: CreateBookingInput): Booking | Promise<Booking>;
     createBookingService(inputType: CreateBookingServiceInput): BookingService | Promise<BookingService>;
@@ -1237,6 +1302,7 @@ export interface IMutation {
     createDriver(inputType: CreateDriverInput): Driver | Promise<Driver>;
     createHoliday(inputType: CreateHolidayInput): Holiday | Promise<Holiday>;
     createLeaveHistory(inputType: CreateLeaveHistoryInput): LeaveHistory | Promise<LeaveHistory>;
+    createLicenseApplication(inputType: CreateLicenseApplicationInput): LicenseApplication | Promise<LicenseApplication>;
     createPayment(inputType: CreatePaymentInput): Payment | Promise<Payment>;
     createSalaryHistory(inputType: CreateSalaryHistoryInput): SalaryHistory | Promise<SalaryHistory>;
     createSchool(inputType: CreateSchoolInput): School | Promise<School>;
@@ -1254,6 +1320,7 @@ export interface IMutation {
     deleteDriver(id: number, userid: number): Driver | Promise<Driver>;
     deleteHoliday(id: number, userid: number): Holiday | Promise<Holiday>;
     deleteLeaveHistory(id: number, userid: number): LeaveHistory | Promise<LeaveHistory>;
+    deleteLicenseApplication(id: number, userid: number): LicenseApplication | Promise<LicenseApplication>;
     deletePayment(id: number, userid: number): Payment | Promise<Payment>;
     deleteSalaryHistory(id: number, userid: number): SalaryHistory | Promise<SalaryHistory>;
     deleteSchool(id: number, userid: number): School | Promise<School>;
@@ -1273,6 +1340,7 @@ export interface IMutation {
     updateDriver(id: number, updateType: UpdateDriverInput): Driver | Promise<Driver>;
     updateHoliday(id: number, updateType: UpdateHolidayInput): Holiday | Promise<Holiday>;
     updateLeaveHistory(id: number, updateType: UpdateLeaveHistoryInput): LeaveHistory | Promise<LeaveHistory>;
+    updateLicenseApplication(id: number, updateType: UpdateLicenseApplicationInput): LicenseApplication | Promise<LicenseApplication>;
     updatePayment(id: number, updateType: UpdatePaymentInput): Payment | Promise<Payment>;
     updateSalaryHistory(id: number, updateType: UpdateSalaryHistoryInput): SalaryHistory | Promise<SalaryHistory>;
     updateSchool(id: number, updateType: UpdateSchoolInput): School | Promise<School>;
@@ -1319,6 +1387,7 @@ export interface IQuery {
     getAllDriver(whereSearchInput: WhereDriverSearchInput): Driver[] | Promise<Driver[]>;
     getAllHoliday(whereSearchInput: SearchHolidayInput): Holiday[] | Promise<Holiday[]>;
     getAllLeaveHistory(whereSearchInput: WhereLeaveHistorySearchInput): LeaveHistory[] | Promise<LeaveHistory[]>;
+    getAllLicenseApplication(whereSearchInput: WhereLicenseApplicationSearchInput): LicenseApplication[] | Promise<LicenseApplication[]>;
     getAllPayment(whereSearchInput: SearchPaymentInput): Payment[] | Promise<Payment[]>;
     getAllSalaryHistory(whereSearchInput: WhereSalaryHistorySearchInput): SalaryHistory[] | Promise<SalaryHistory[]>;
     getAllSchool(whereSearchInput: WhereSchoolSearchInput): School[] | Promise<School[]>;
@@ -1337,6 +1406,7 @@ export interface IQuery {
     getDriverById(id: number): Driver | Promise<Driver>;
     getHolidayById(id: number): Holiday | Promise<Holiday>;
     getLeaveHistoryById(id: number): LeaveHistory | Promise<LeaveHistory>;
+    getLicenseApplicationById(id: number): LicenseApplication | Promise<LicenseApplication>;
     getPaginatedBooking(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereBookingSearchInput): BookingPagination | Promise<BookingPagination>;
     getPaginatedBookingService(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereBookingServiceSearchInput): BookingServicePagination | Promise<BookingServicePagination>;
     getPaginatedBookingSession(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereBookingSessionSearchInput): BookingSessionPagination | Promise<BookingSessionPagination>;
@@ -1347,6 +1417,7 @@ export interface IQuery {
     getPaginatedDriver(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereDriverSearchInput): DriverPagination | Promise<DriverPagination>;
     getPaginatedHoliday(searchPaginationInput: SearchPaginationInput, whereSearchInput: SearchHolidayInput): HolidayPagination | Promise<HolidayPagination>;
     getPaginatedLeaveHistory(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereLeaveHistorySearchInput): LeaveHistoryPagination | Promise<LeaveHistoryPagination>;
+    getPaginatedLicenseApplication(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereLicenseApplicationSearchInput): LicenseApplicationPagination | Promise<LicenseApplicationPagination>;
     getPaginatedPayment(searchPaginationInput: SearchPaginationInput, whereSearchInput: SearchPaymentInput): PaymentPagination | Promise<PaymentPagination>;
     getPaginatedSalaryHistory(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereSalaryHistorySearchInput): SalaryHistoryPagination | Promise<SalaryHistoryPagination>;
     getPaginatedSchool(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereSchoolSearchInput): SchoolPagination | Promise<SchoolPagination>;
@@ -1374,6 +1445,7 @@ export interface IQuery {
     searchDriver(whereSearchInput: WhereDriverSearchInput): Nullable<Driver> | Promise<Nullable<Driver>>;
     searchHoliday(whereSearchInput: SearchHolidayInput): Nullable<Holiday> | Promise<Nullable<Holiday>>;
     searchLeaveHistory(whereSearchInput: WhereLeaveHistorySearchInput): Nullable<LeaveHistory> | Promise<Nullable<LeaveHistory>>;
+    searchLicenseApplication(whereSearchInput: WhereLicenseApplicationSearchInput): Nullable<LicenseApplication> | Promise<Nullable<LicenseApplication>>;
     searchPayment(whereSearchInput: SearchPaymentInput): Nullable<Payment> | Promise<Nullable<Payment>>;
     searchSalaryHistory(whereSearchInput: WhereSalaryHistorySearchInput): Nullable<SalaryHistory> | Promise<Nullable<SalaryHistory>>;
     searchSchool(whereSearchInput: WhereSchoolSearchInput): Nullable<School> | Promise<Nullable<School>>;

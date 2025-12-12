@@ -1,15 +1,8 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
+import { BookingSessionStatus } from '@prisma/client';
 import { Booking } from 'src/booking/entities/booking.entity';
 import { Car } from 'src/car/entities/car.entity';
 import { Driver } from 'src/driver/entities/driver.entity';
-
-export enum BookingSessionStatus {
-  PENDING = 'PENDING',
-  CONFIRMED = 'CONFIRMED',
-  COMPLETED = 'COMPLETED',
-  CANCELLED = 'CANCELLED',
-  NO_SHOW = 'NO_SHOW',
-}
 
 registerEnumType(BookingSessionStatus, {
   name: 'BookingSessionStatus',

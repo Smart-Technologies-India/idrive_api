@@ -120,6 +120,7 @@ enum BookingSessionStatus {
   CANCELLED
   COMPLETED
   CONFIRMED
+  HOLD
   NO_SHOW
   PENDING
 }
@@ -440,6 +441,16 @@ input CreateLeaveHistoryInput {
   totalDays: Int!
 }
 
+input CreateLicenseApplicationInput {
+  bookingServiceId: Int!
+  dlApplicationNumber: String
+  issuedDate: DateTime
+  llNumber: String
+  status: LicenseApplicationStatus = PENDING
+  testDate: DateTime
+  testStatus: TestStatus = NONE
+}
+
 input CreatePaymentInput {
   """Payment amount"""
   amount: Float!
@@ -705,6 +716,33 @@ enum LeaveStatus {
   REJECTED
 }
 
+type LicenseApplication {
+  bookingService: BookingService
+  bookingServiceId: Int!
+  dlApplicationNumber: String
+  id: Int!
+  issuedDate: DateTime
+  llNumber: String
+  status: LicenseApplicationStatus!
+  testDate: DateTime
+  testStatus: TestStatus!
+}
+
+type LicenseApplicationPagination {
+  data: [LicenseApplication!]!
+  skip: Int!
+  take: Int!
+  total: Int!
+}
+
+enum LicenseApplicationStatus {
+  CLOSED
+  DL_APPLIED
+  DL_PENDING
+  LL_APPLIED
+  PENDING
+}
+
 input LoginUserInput {
   contact: String!
   password: String!
@@ -721,6 +759,7 @@ type Mutation {
   createDriver(inputType: CreateDriverInput!): Driver!
   createHoliday(inputType: CreateHolidayInput!): Holiday!
   createLeaveHistory(inputType: CreateLeaveHistoryInput!): LeaveHistory!
+  createLicenseApplication(inputType: CreateLicenseApplicationInput!): LicenseApplication!
   createPayment(inputType: CreatePaymentInput!): Payment!
   createSalaryHistory(inputType: CreateSalaryHistoryInput!): SalaryHistory!
   createSchool(inputType: CreateSchoolInput!): School!
@@ -738,6 +777,7 @@ type Mutation {
   deleteDriver(id: Int!, userid: Int!): Driver!
   deleteHoliday(id: Int!, userid: Int!): Holiday!
   deleteLeaveHistory(id: Int!, userid: Int!): LeaveHistory!
+  deleteLicenseApplication(id: Int!, userid: Int!): LicenseApplication!
   deletePayment(id: Int!, userid: Int!): Payment!
   deleteSalaryHistory(id: Int!, userid: Int!): SalaryHistory!
   deleteSchool(id: Int!, userid: Int!): School!
@@ -757,6 +797,7 @@ type Mutation {
   updateDriver(id: Int!, updateType: UpdateDriverInput!): Driver!
   updateHoliday(id: Int!, updateType: UpdateHolidayInput!): Holiday!
   updateLeaveHistory(id: Int!, updateType: UpdateLeaveHistoryInput!): LeaveHistory!
+  updateLicenseApplication(id: Int!, updateType: UpdateLicenseApplicationInput!): LicenseApplication!
   updatePayment(id: Int!, updateType: UpdatePaymentInput!): Payment!
   updateSalaryHistory(id: Int!, updateType: UpdateSalaryHistoryInput!): SalaryHistory!
   updateSchool(id: Int!, updateType: UpdateSchoolInput!): School!
@@ -803,6 +844,7 @@ type Query {
   getAllDriver(whereSearchInput: WhereDriverSearchInput!): [Driver!]!
   getAllHoliday(whereSearchInput: SearchHolidayInput!): [Holiday!]!
   getAllLeaveHistory(whereSearchInput: WhereLeaveHistorySearchInput!): [LeaveHistory!]!
+  getAllLicenseApplication(whereSearchInput: WhereLicenseApplicationSearchInput!): [LicenseApplication!]!
   getAllPayment(whereSearchInput: SearchPaymentInput!): [Payment!]!
   getAllSalaryHistory(whereSearchInput: WhereSalaryHistorySearchInput!): [SalaryHistory!]!
   getAllSchool(whereSearchInput: WhereSchoolSearchInput!): [School!]!
@@ -821,6 +863,7 @@ type Query {
   getDriverById(id: Int!): Driver!
   getHolidayById(id: Int!): Holiday!
   getLeaveHistoryById(id: Int!): LeaveHistory!
+  getLicenseApplicationById(id: Int!): LicenseApplication!
   getPaginatedBooking(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereBookingSearchInput!): BookingPagination!
   getPaginatedBookingService(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereBookingServiceSearchInput!): BookingServicePagination!
   getPaginatedBookingSession(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereBookingSessionSearchInput!): BookingSessionPagination!
@@ -831,6 +874,7 @@ type Query {
   getPaginatedDriver(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereDriverSearchInput!): DriverPagination!
   getPaginatedHoliday(searchPaginationInput: SearchPaginationInput!, whereSearchInput: SearchHolidayInput!): HolidayPagination!
   getPaginatedLeaveHistory(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereLeaveHistorySearchInput!): LeaveHistoryPagination!
+  getPaginatedLicenseApplication(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereLicenseApplicationSearchInput!): LicenseApplicationPagination!
   getPaginatedPayment(searchPaginationInput: SearchPaginationInput!, whereSearchInput: SearchPaymentInput!): PaymentPagination!
   getPaginatedSalaryHistory(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereSalaryHistorySearchInput!): SalaryHistoryPagination!
   getPaginatedSchool(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereSchoolSearchInput!): SchoolPagination!
@@ -858,6 +902,7 @@ type Query {
   searchDriver(whereSearchInput: WhereDriverSearchInput!): Driver
   searchHoliday(whereSearchInput: SearchHolidayInput!): Holiday
   searchLeaveHistory(whereSearchInput: WhereLeaveHistorySearchInput!): LeaveHistory
+  searchLicenseApplication(whereSearchInput: WhereLicenseApplicationSearchInput!): LicenseApplication
   searchPayment(whereSearchInput: SearchPaymentInput!): Payment
   searchSalaryHistory(whereSearchInput: WhereSalaryHistorySearchInput!): SalaryHistory
   searchSchool(whereSearchInput: WhereSchoolSearchInput!): School
@@ -1184,6 +1229,13 @@ type SyllabusPagination {
   total: Int!
 }
 
+enum TestStatus {
+  ABSENT
+  FAILED
+  NONE
+  PASSED
+}
+
 enum TransmissionType {
   AMT
   AUTOMATIC
@@ -1357,6 +1409,17 @@ input UpdateLeaveHistoryInput {
   status: LeaveStatus
   toDate: DateTime
   totalDays: Int
+}
+
+input UpdateLicenseApplicationInput {
+  bookingServiceId: Int
+  dlApplicationNumber: String
+  id: Int!
+  issuedDate: DateTime
+  llNumber: String
+  status: LicenseApplicationStatus = PENDING
+  testDate: DateTime
+  testStatus: TestStatus = NONE
 }
 
 input UpdatePaymentInput {
@@ -1607,6 +1670,15 @@ input WhereLeaveHistorySearchInput {
   leaveType: String
   search: String
   status: LeaveStatus
+}
+
+input WhereLicenseApplicationSearchInput {
+  bookingServiceId: Int
+  dlApplicationNumber: String
+  id: Int
+  llNumber: String
+  status: LicenseApplicationStatus
+  testStatus: TestStatus
 }
 
 input WhereSalaryHistorySearchInput {

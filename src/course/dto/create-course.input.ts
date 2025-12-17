@@ -52,6 +52,12 @@ export class CreateCourseInput {
   @Field(() => Float)
   price: number;
 
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  @Field(() => Float, { nullable: true })
+  automaticPrice?: number;
+
   // Enrollment
   @IsOptional()
   @IsInt()

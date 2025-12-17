@@ -121,6 +121,7 @@ enum BookingSessionStatus {
   CANCELLED
   COMPLETED
   CONFIRMED
+  EDITED
   HOLD
   NO_SHOW
   PENDING
@@ -233,6 +234,7 @@ enum CarStatus {
 }
 
 type Course {
+  automaticPrice: Float
   cars: [Car!]
   courseDays: Int!
   courseId: String!
@@ -373,6 +375,8 @@ input CreateCarInput {
 }
 
 input CreateCourseInput {
+  automaticPrice: Float
+
   """Array of car IDs to associate with this course"""
   carIds: [Int!]
   courseDays: Int!
@@ -549,6 +553,35 @@ input CreateServiceInput {
   serviceName: String!
   status: ServiceStatus
   termsAndConditions: String
+}
+
+input CreateServicePaymentInput {
+  """Payment amount"""
+  amount: Float!
+
+  """Booking Service ID"""
+  bookingServiceId: Int!
+
+  """Current installment number"""
+  installmentNumber: Int!
+
+  """Additional notes"""
+  notes: String
+
+  """Payment method (CASH, CARD, UPI, etc.)"""
+  paymentMethod: String
+
+  """Unique payment number"""
+  paymentNumber: String!
+
+  """Total number of installments planned"""
+  totalInstallments: Int!
+
+  """Bank/UPI transaction ID"""
+  transactionId: String
+
+  """User ID"""
+  userId: Int!
 }
 
 input CreateSyllabusInput {
@@ -766,6 +799,7 @@ type Mutation {
   createSchool(inputType: CreateSchoolInput!): School!
   createSchoolService(inputType: CreateSchoolServiceInput!): SchoolService!
   createService(inputType: CreateServiceInput!): Service!
+  createServicePayment(inputType: CreateServicePaymentInput!): ServicePayment!
   createSyllabus(inputType: CreateSyllabusInput!): Syllabus!
   createUser(inputType: CreateUserInput!): User!
   deleteBooking(id: Int!, userid: Int!): Booking!
@@ -784,6 +818,7 @@ type Mutation {
   deleteSchool(id: Int!, userid: Int!): School!
   deleteSchoolService(id: Int!, userid: Int!): SchoolService!
   deleteService(id: Int!, userid: Int!): Service!
+  deleteServicePayment(id: Int!, userid: Int!): ServicePayment!
   deleteSyllabus(id: Int!, userid: Int!): Syllabus!
   deleteUser(id: Int!, userid: Int!): User!
   optLogin(contact: String!): User!
@@ -804,6 +839,7 @@ type Mutation {
   updateSchool(id: Int!, updateType: UpdateSchoolInput!): School!
   updateSchoolService(id: Int!, updateType: UpdateSchoolServiceInput!): SchoolService!
   updateService(id: Int!, updateType: UpdateServiceInput!): Service!
+  updateServicePayment(id: Int!, updateType: UpdateServicePaymentInput!): ServicePayment!
   updateSyllabus(id: Int!, updateType: UpdateSyllabusInput!): Syllabus!
   updateUser(id: Int!, updateType: UpdateUserInput!): User!
   verifyOtp(contact: String!, otp: String!): User!
@@ -852,6 +888,7 @@ type Query {
   getAllSchoolService(whereSearchInput: WhereSchoolServiceSearchInput!): [SchoolService!]!
   getAllSchoolWithCounts: [SchoolWithCounts!]!
   getAllService(whereSearchInput: WhereServiceSearchInput!): [Service!]!
+  getAllServicePayment(whereSearchInput: SearchServicePaymentInput!): [ServicePayment!]!
   getAllSyllabus(whereSearchInput: SearchSyllabusInput!): [Syllabus!]!
   getAllUser(whereSearchInput: WhereUserSearchInput!): [User!]!
   getBookingById(id: Int!): Booking!
@@ -881,6 +918,7 @@ type Query {
   getPaginatedSchool(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereSchoolSearchInput!): SchoolPagination!
   getPaginatedSchoolService(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereSchoolServiceSearchInput!): SchoolServicePagination!
   getPaginatedService(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereServiceSearchInput!): ServicePagination!
+  getPaginatedServicePayment(searchPaginationInput: SearchPaginationInput!, whereSearchInput: SearchServicePaymentInput!): ServicePaymentPagination!
   getPaginatedSyllabus(searchPaginationInput: SearchPaginationInput!, whereSearchInput: SearchSyllabusInput!): SyllabusPagination!
   getPaginatedUser(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereUserSearchInput!): UserPagination!
   getPaymentById(id: Int!): Payment!
@@ -891,6 +929,7 @@ type Query {
   getSchoolStatistics: SchoolStatistics!
   getServerDateTime: Util!
   getServiceById(id: Int!): Service!
+  getServicePaymentById(id: Int!): ServicePayment!
   getSyllabusById(id: Int!): Syllabus!
   getUserById(id: Int!): User!
   login(loginUserInput: LoginUserInput!): User!
@@ -910,6 +949,7 @@ type Query {
   searchSchool(whereSearchInput: WhereSchoolSearchInput!): School
   searchSchoolService(whereSearchInput: WhereSchoolServiceSearchInput!): SchoolService
   searchService(whereSearchInput: WhereServiceSearchInput!): Service
+  searchServicePayment(whereSearchInput: SearchServicePaymentInput!): ServicePayment
   searchSyllabus(whereSearchInput: SearchSyllabusInput!): Syllabus
   searchUser(whereSearchInput: WhereUserSearchInput!): User
 }
@@ -1151,6 +1191,23 @@ input SearchPaymentInput {
   userId: Int
 }
 
+input SearchServicePaymentInput {
+  """Filter by booking service ID"""
+  bookingServiceId: Int
+
+  """Filter by payment method"""
+  paymentMethod: String
+
+  """Filter by payment number"""
+  paymentNumber: String
+
+  """Filter by status"""
+  status: String
+
+  """Filter by user ID"""
+  userId: Int
+}
+
 input SearchSyllabusInput {
   courseId: Int
   dayNumber: Int
@@ -1184,6 +1241,31 @@ enum ServiceCategory {
 
 type ServicePagination {
   data: [Service!]!
+  skip: Int!
+  take: Int!
+  total: Int!
+}
+
+type ServicePayment {
+  amount: Float!
+  bookingServiceId: Int!
+  createdAt: DateTime!
+  deletedAt: DateTime
+  id: Int!
+  installmentNumber: Int!
+  notes: String
+  paymentDate: DateTime!
+  paymentMethod: String
+  paymentNumber: String!
+  status: String!
+  totalInstallments: Int!
+  transactionId: String
+  updatedAt: DateTime!
+  userId: Int!
+}
+
+type ServicePaymentPagination {
+  data: [ServicePayment!]!
   skip: Int!
   take: Int!
   total: Int!
@@ -1345,6 +1427,8 @@ input UpdateCarInput {
 }
 
 input UpdateCourseInput {
+  automaticPrice: Float
+
   """Array of car IDs to associate with this course"""
   carIds: [Int!]
   courseDays: Int
@@ -1516,6 +1600,30 @@ input UpdateServiceInput {
   serviceName: String
   status: ServiceStatus
   termsAndConditions: String
+}
+
+input UpdateServicePaymentInput {
+  """Payment amount"""
+  amount: Float
+
+  """Booking Service ID"""
+  bookingServiceId: Int
+
+  """Current installment number"""
+  installmentNumber: Int
+  notes: String
+  paymentMethod: String
+
+  """Unique payment number"""
+  paymentNumber: String
+  status: String
+
+  """Total number of installments planned"""
+  totalInstallments: Int
+  transactionId: String
+
+  """User ID"""
+  userId: Int
 }
 
 input UpdateSyllabusInput {

@@ -96,6 +96,7 @@ model user {
   bookings         booking[]        @relation("BookingCustomer")
   bookingServices  bookingService[] @relation("UserBookingServices")
   payments         payment[]        @relation("PaymentUser")
+  servicePayments  servicePayment[] @relation("ServicePaymentUser")
 }
 
 model driver {
@@ -427,7 +428,8 @@ model course {
   courseType CourseType
   minsPerDay Int // Minutes per day (e.g., 30, 60, 90)
   courseDays Int // Number of days
-  price      Float
+  price      Float // Price for manual car
+  automaticPrice Float? // Price for automatic car
 
   // Enrollment
   enrolledStudents Int @default(0)
@@ -641,6 +643,7 @@ enum BookingSessionStatus {
   CANCELLED
   NO_SHOW
   HOLD
+  EDITED
 }
 
 enum BookingServiceType {
@@ -729,6 +732,7 @@ model bookingService {
   school              school               @relation(fields: [schoolId], references: [id])
   user                user                 @relation("UserBookingServices", fields: [userId], references: [id])
   licenseApplications licenseApplication[]
+  servicePayments     servicePayment[]     @relation("BookingServicePayments")
 
   @@index([bookingId])
   @@index([schoolServiceId])
@@ -813,6 +817,41 @@ model payment {
   user    user    @relation("PaymentUser", fields: [userId], references: [id])
 
   @@index([bookingId])
+  @@index([userId])
+  @@index([paymentDate])
+  @@index([status])
+}
+
+model servicePayment {
+  id               Int   @id @default(autoincrement())
+  bookingServiceId Int
+  userId           Int
+  amount           Float
+
+  // Payment tracking
+  paymentNumber String   @unique // Unique identifier for this payment
+  paymentDate   DateTime @default(now())
+  paymentMethod String? // CASH, CARD, UPI, BANK_TRANSFER, etc.
+  transactionId String? // Bank/UPI transaction ID
+
+  // Installment tracking
+  installmentNumber Int // 1, 2, 3, etc.
+  totalInstallments Int // Total planned installments for this service booking
+
+  // Notes and status
+  notes  String?       @db.LongText
+  status PaymentStatus @default(COMPLETED)
+
+  // Timestamps
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  // Relations
+  bookingService bookingService @relation("BookingServicePayments", fields: [bookingServiceId], references: [id], onDelete: Cascade)
+  user           user           @relation("ServicePaymentUser", fields: [userId], references: [id])
+
+  @@index([bookingServiceId])
   @@index([userId])
   @@index([paymentDate])
   @@index([status])

@@ -57,6 +57,9 @@ export class Course {
   @Field(() => Float)
   price: number;
 
+  @Field(() => Float, { nullable: true })
+  automaticPrice?: number;
+
   // Enrollment
   @Field(() => Int)
   enrolledStudents: number;

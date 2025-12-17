@@ -17,6 +17,7 @@ export enum BookingSessionStatus {
     CANCELLED = "CANCELLED",
     COMPLETED = "COMPLETED",
     CONFIRMED = "CONFIRMED",
+    EDITED = "EDITED",
     HOLD = "HOLD",
     NO_SHOW = "NO_SHOW",
     PENDING = "PENDING"
@@ -254,6 +255,7 @@ export interface CreateCarInput {
 }
 
 export interface CreateCourseInput {
+    automaticPrice?: Nullable<number>;
     carIds?: Nullable<number[]>;
     courseDays: number;
     courseId: string;
@@ -414,6 +416,18 @@ export interface CreateServiceInput {
     termsAndConditions?: Nullable<string>;
 }
 
+export interface CreateServicePaymentInput {
+    amount: number;
+    bookingServiceId: number;
+    installmentNumber: number;
+    notes?: Nullable<string>;
+    paymentMethod?: Nullable<string>;
+    paymentNumber: string;
+    totalInstallments: number;
+    transactionId?: Nullable<string>;
+    userId: number;
+}
+
 export interface CreateSyllabusInput {
     assessmentCriteria?: Nullable<string>;
     courseId: number;
@@ -489,6 +503,14 @@ export interface SearchPaginationInput {
 
 export interface SearchPaymentInput {
     bookingId?: Nullable<number>;
+    paymentMethod?: Nullable<string>;
+    paymentNumber?: Nullable<string>;
+    status?: Nullable<string>;
+    userId?: Nullable<number>;
+}
+
+export interface SearchServicePaymentInput {
+    bookingServiceId?: Nullable<number>;
     paymentMethod?: Nullable<string>;
     paymentNumber?: Nullable<string>;
     status?: Nullable<string>;
@@ -604,6 +626,7 @@ export interface UpdateCarInput {
 }
 
 export interface UpdateCourseInput {
+    automaticPrice?: Nullable<number>;
     carIds?: Nullable<number[]>;
     courseDays?: Nullable<number>;
     courseId?: Nullable<string>;
@@ -763,6 +786,19 @@ export interface UpdateServiceInput {
     serviceName?: Nullable<string>;
     status?: Nullable<ServiceStatus>;
     termsAndConditions?: Nullable<string>;
+}
+
+export interface UpdateServicePaymentInput {
+    amount?: Nullable<number>;
+    bookingServiceId?: Nullable<number>;
+    installmentNumber?: Nullable<number>;
+    notes?: Nullable<string>;
+    paymentMethod?: Nullable<string>;
+    paymentNumber?: Nullable<string>;
+    status?: Nullable<string>;
+    totalInstallments?: Nullable<number>;
+    transactionId?: Nullable<string>;
+    userId?: Nullable<number>;
 }
 
 export interface UpdateSyllabusInput {
@@ -1149,6 +1185,7 @@ export interface CarPagination {
 }
 
 export interface Course {
+    automaticPrice?: Nullable<number>;
     cars?: Nullable<Car[]>;
     courseDays: number;
     courseId: string;
@@ -1308,6 +1345,7 @@ export interface IMutation {
     createSchool(inputType: CreateSchoolInput): School | Promise<School>;
     createSchoolService(inputType: CreateSchoolServiceInput): SchoolService | Promise<SchoolService>;
     createService(inputType: CreateServiceInput): Service | Promise<Service>;
+    createServicePayment(inputType: CreateServicePaymentInput): ServicePayment | Promise<ServicePayment>;
     createSyllabus(inputType: CreateSyllabusInput): Syllabus | Promise<Syllabus>;
     createUser(inputType: CreateUserInput): User | Promise<User>;
     deleteBooking(id: number, userid: number): Booking | Promise<Booking>;
@@ -1326,6 +1364,7 @@ export interface IMutation {
     deleteSchool(id: number, userid: number): School | Promise<School>;
     deleteSchoolService(id: number, userid: number): SchoolService | Promise<SchoolService>;
     deleteService(id: number, userid: number): Service | Promise<Service>;
+    deleteServicePayment(id: number, userid: number): ServicePayment | Promise<ServicePayment>;
     deleteSyllabus(id: number, userid: number): Syllabus | Promise<Syllabus>;
     deleteUser(id: number, userid: number): User | Promise<User>;
     optLogin(contact: string): User | Promise<User>;
@@ -1346,6 +1385,7 @@ export interface IMutation {
     updateSchool(id: number, updateType: UpdateSchoolInput): School | Promise<School>;
     updateSchoolService(id: number, updateType: UpdateSchoolServiceInput): SchoolService | Promise<SchoolService>;
     updateService(id: number, updateType: UpdateServiceInput): Service | Promise<Service>;
+    updateServicePayment(id: number, updateType: UpdateServicePaymentInput): ServicePayment | Promise<ServicePayment>;
     updateSyllabus(id: number, updateType: UpdateSyllabusInput): Syllabus | Promise<Syllabus>;
     updateUser(id: number, updateType: UpdateUserInput): User | Promise<User>;
     verifyOtp(contact: string, otp: string): User | Promise<User>;
@@ -1394,6 +1434,7 @@ export interface IQuery {
     getAllSchoolService(whereSearchInput: WhereSchoolServiceSearchInput): SchoolService[] | Promise<SchoolService[]>;
     getAllSchoolWithCounts(): SchoolWithCounts[] | Promise<SchoolWithCounts[]>;
     getAllService(whereSearchInput: WhereServiceSearchInput): Service[] | Promise<Service[]>;
+    getAllServicePayment(whereSearchInput: SearchServicePaymentInput): ServicePayment[] | Promise<ServicePayment[]>;
     getAllSyllabus(whereSearchInput: SearchSyllabusInput): Syllabus[] | Promise<Syllabus[]>;
     getAllUser(whereSearchInput: WhereUserSearchInput): User[] | Promise<User[]>;
     getBookingById(id: number): Booking | Promise<Booking>;
@@ -1423,6 +1464,7 @@ export interface IQuery {
     getPaginatedSchool(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereSchoolSearchInput): SchoolPagination | Promise<SchoolPagination>;
     getPaginatedSchoolService(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereSchoolServiceSearchInput): SchoolServicePagination | Promise<SchoolServicePagination>;
     getPaginatedService(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereServiceSearchInput): ServicePagination | Promise<ServicePagination>;
+    getPaginatedServicePayment(searchPaginationInput: SearchPaginationInput, whereSearchInput: SearchServicePaymentInput): ServicePaymentPagination | Promise<ServicePaymentPagination>;
     getPaginatedSyllabus(searchPaginationInput: SearchPaginationInput, whereSearchInput: SearchSyllabusInput): SyllabusPagination | Promise<SyllabusPagination>;
     getPaginatedUser(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereUserSearchInput): UserPagination | Promise<UserPagination>;
     getPaymentById(id: number): Payment | Promise<Payment>;
@@ -1433,6 +1475,7 @@ export interface IQuery {
     getSchoolStatistics(): SchoolStatistics | Promise<SchoolStatistics>;
     getServerDateTime(): Util | Promise<Util>;
     getServiceById(id: number): Service | Promise<Service>;
+    getServicePaymentById(id: number): ServicePayment | Promise<ServicePayment>;
     getSyllabusById(id: number): Syllabus | Promise<Syllabus>;
     getUserById(id: number): User | Promise<User>;
     login(loginUserInput: LoginUserInput): User | Promise<User>;
@@ -1452,6 +1495,7 @@ export interface IQuery {
     searchSchool(whereSearchInput: WhereSchoolSearchInput): Nullable<School> | Promise<Nullable<School>>;
     searchSchoolService(whereSearchInput: WhereSchoolServiceSearchInput): Nullable<SchoolService> | Promise<Nullable<SchoolService>>;
     searchService(whereSearchInput: WhereServiceSearchInput): Nullable<Service> | Promise<Nullable<Service>>;
+    searchServicePayment(whereSearchInput: SearchServicePaymentInput): Nullable<ServicePayment> | Promise<Nullable<ServicePayment>>;
     searchSyllabus(whereSearchInput: SearchSyllabusInput): Nullable<Syllabus> | Promise<Nullable<Syllabus>>;
     searchUser(whereSearchInput: WhereUserSearchInput): Nullable<User> | Promise<Nullable<User>>;
 }
@@ -1633,6 +1677,31 @@ export interface Service {
 
 export interface ServicePagination {
     data: Service[];
+    skip: number;
+    take: number;
+    total: number;
+}
+
+export interface ServicePayment {
+    amount: number;
+    bookingServiceId: number;
+    createdAt: DateTime;
+    deletedAt?: Nullable<DateTime>;
+    id: number;
+    installmentNumber: number;
+    notes?: Nullable<string>;
+    paymentDate: DateTime;
+    paymentMethod?: Nullable<string>;
+    paymentNumber: string;
+    status: string;
+    totalInstallments: number;
+    transactionId?: Nullable<string>;
+    updatedAt: DateTime;
+    userId: number;
+}
+
+export interface ServicePaymentPagination {
+    data: ServicePayment[];
     skip: number;
     take: number;
     total: number;

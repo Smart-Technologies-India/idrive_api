@@ -28,6 +28,7 @@ import { CarAdminModule } from './car-admin/car-admin.module';
 import { SchoolServiceModule } from './school-service/school-service.module';
 import { LicenseApplicationModule } from './license-application/license-application.module';
 import { UtilsModule } from './utils/utils.module';
+import { ServicePaymentModule } from './service-payment/service-payment.module';
 
 @Module({
   imports: [
@@ -64,6 +65,7 @@ import { UtilsModule } from './utils/utils.module';
     BookingServiceModule,
     CarCourseModule,
     PaymentModule,
+    ServicePaymentModule,
     CarAdminModule,
     SchoolServiceModule,
     LicenseApplicationModule,

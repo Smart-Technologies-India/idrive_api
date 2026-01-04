@@ -25,6 +25,7 @@ type Booking {
   id: Int!
   notes: String
   parsedServices: [BookingServiceInfo!]
+  payments: [Payment!]
   school: School
   schoolId: Int!
   selectedServices: String
@@ -847,6 +848,7 @@ type Mutation {
 
 type Payment {
   amount: Float!
+  booking: Booking
   bookingId: Int!
   createdAt: DateTime!
   deletedAt: DateTime
@@ -860,6 +862,7 @@ type Payment {
   totalInstallments: Int!
   transactionId: String
   updatedAt: DateTime!
+  user: User
   userId: Int!
 }
 

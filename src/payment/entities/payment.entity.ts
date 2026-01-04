@@ -6,6 +6,8 @@ import {
   registerEnumType,
 } from '@nestjs/graphql';
 import { PaymentStatus } from '@prisma/client';
+import { Booking } from 'src/booking/entities/booking.entity';
+import { User } from 'src/user/entities/user.entity';
 
 registerEnumType(PaymentStatus, {
   name: 'PaymentStatus',
@@ -22,6 +24,12 @@ export class Payment {
 
   @Field(() => Int)
   userId: number;
+
+  @Field(() => Booking, { nullable: true })
+  booking?: Booking;
+
+  @Field(() => User, { nullable: true })
+  user?: User;
 
   @Field(() => Float)
   amount: number;

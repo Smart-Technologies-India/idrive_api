@@ -1018,6 +1018,7 @@ export interface Booking {
     id: number;
     notes?: Nullable<string>;
     parsedServices?: Nullable<BookingServiceInfo[]>;
+    payments?: Nullable<Payment[]>;
     school?: Nullable<School>;
     schoolId: number;
     selectedServices?: Nullable<string>;
@@ -1393,6 +1394,7 @@ export interface IMutation {
 
 export interface Payment {
     amount: number;
+    booking?: Nullable<Booking>;
     bookingId: number;
     createdAt: DateTime;
     deletedAt?: Nullable<DateTime>;
@@ -1406,6 +1408,7 @@ export interface Payment {
     totalInstallments: number;
     transactionId?: Nullable<string>;
     updatedAt: DateTime;
+    user?: Nullable<User>;
     userId: number;
 }
 

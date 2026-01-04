@@ -11,6 +11,7 @@ import { Car } from 'src/car/entities/car.entity';
 import { Course } from 'src/course/entities/course.entity';
 import { BookingSession } from 'src/booking-session/entities/booking-session.entity';
 import { BookingService as BookingServiceEntity } from 'src/booking-service/entities/booking-service.entity';
+import { Payment } from 'src/payment/entities/payment.entity';
 
 export enum BookingStatus {
   PENDING = 'PENDING',
@@ -145,4 +146,7 @@ export class Booking {
 
   @Field(() => [BookingServiceEntity], { nullable: true })
   bookingServices?: BookingServiceEntity[];
+
+  @Field(() => [Payment], { nullable: true })
+  payments?: Payment[];
 }

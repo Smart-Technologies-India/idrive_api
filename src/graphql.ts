@@ -464,6 +464,11 @@ export interface LoginUserInput {
     password: string;
 }
 
+export interface OrderBy {
+    direction?: Nullable<string>;
+    field?: Nullable<string>;
+}
+
 export interface SearchCarCourseInput {
     carId?: Nullable<number>;
     courseId?: Nullable<number>;
@@ -496,6 +501,8 @@ export interface SearchHolidayInput {
 }
 
 export interface SearchPaginationInput {
+    filters?: Nullable<string[]>;
+    orderBy?: Nullable<OrderBy[]>;
     search?: Nullable<string>;
     skip: number;
     take: number;

@@ -846,6 +846,11 @@ type Mutation {
   verifyOtp(contact: String!, otp: String!): User!
 }
 
+input OrderBy {
+  direction: String
+  field: String
+}
+
 type Payment {
   amount: Float!
   booking: Booking
@@ -1172,6 +1177,8 @@ input SearchHolidayInput {
 }
 
 input SearchPaginationInput {
+  filters: [String!]
+  orderBy: [OrderBy!]
   search: String
   skip: Int!
   take: Int!

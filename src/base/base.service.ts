@@ -228,16 +228,54 @@ export class BaseService<
 
       const hasDeletedAt = 'deletedAt' in firstRecord;
       const hasDeletedById = 'deletedById' in firstRecord;
-      const hasName = 'name' in firstRecord;
+
+      const filters: string[] = searchPaginationInput.filters || [];
 
       const where: Record<string, any> = {};
       if (hasDeletedAt) where.deletedAt = null;
       if (hasDeletedById) where.deletedById = null;
+
       if (searchPaginationInput.search) {
-        if (hasName) {
-          where.name = {
-            contains: searchPaginationInput.search,
-          };
+        if (filters.length > 0) {
+          // If filters are provided, search across those fields
+          const orConditions: Array<Record<string, any>> = [];
+          for (const filter of filters) {
+            // Check if it's a nested field (e.g., "user.name")
+            if (filter.includes('.')) {
+              const parts = filter.split('.');
+              const relation = parts[0];
+              const field = parts[1];
+
+              // Add nested field search (relation won't be in firstRecord, so trust the filter)
+              orConditions.push({
+                [relation]: {
+                  [field]: {
+                    contains: searchPaginationInput.search,
+                  },
+                },
+              });
+            } else {
+              // Direct field search
+              if (filter in firstRecord) {
+                orConditions.push({
+                  [filter]: {
+                    contains: searchPaginationInput.search,
+                  },
+                });
+              }
+            }
+          }
+          if (orConditions.length > 0) {
+            where.OR = orConditions;
+          }
+        } else {
+          // If no filters, fallback to name field
+          const hasName = 'name' in firstRecord;
+          if (hasName) {
+            where.name = {
+              contains: searchPaginationInput.search,
+            };
+          }
         }
       }
 
@@ -245,11 +283,28 @@ export class BaseService<
       const nestedWhere = this.processWhereSearchInput(whereSearchInput);
       Object.assign(where, nestedWhere);
 
+      // Process orderBy
+      const orderBy: Record<string, any> = {};
+      if (
+        searchPaginationInput.orderBy &&
+        searchPaginationInput.orderBy.length > 0
+      ) {
+        searchPaginationInput.orderBy.forEach((order) => {
+          if (order.field && order.direction) {
+            // Check if the field exists in the table
+            if (order.field in firstRecord) {
+              orderBy[order.field] = order.direction;
+            }
+          }
+        });
+      }
+
       const [data, total] = await Promise.all([
         this.delegate.findMany({
           skip: searchPaginationInput.skip,
           take: searchPaginationInput.take,
           where,
+          orderBy: Object.keys(orderBy).length > 0 ? orderBy : undefined,
           select:
             'data' in fields &&
             typeof fields.data == 'object' &&

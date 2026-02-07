@@ -424,11 +424,11 @@ model course {
   courseId String @unique
 
   // Basic Information
-  courseName String
-  courseType CourseType
-  minsPerDay Int // Minutes per day (e.g., 30, 60, 90)
-  courseDays Int // Number of days
-  price      Float // Price for manual car
+  courseName     String
+  courseType     CourseType
+  minsPerDay     Int // Minutes per day (e.g., 30, 60, 90)
+  courseDays     Int // Number of days
+  price          Float // Price for manual car
   automaticPrice Float? // Price for automatic car
 
   // Enrollment
@@ -798,6 +798,7 @@ model payment {
   paymentDate   DateTime @default(now())
   paymentMethod String? // CASH, CARD, UPI, BANK_TRANSFER, etc.
   transactionId String? // Bank/UPI transaction ID
+  bankName      String?
 
   // Installment tracking
   installmentNumber Int // 1, 2, 3, etc.
@@ -833,6 +834,7 @@ model servicePayment {
   paymentDate   DateTime @default(now())
   paymentMethod String? // CASH, CARD, UPI, BANK_TRANSFER, etc.
   transactionId String? // Bank/UPI transaction ID
+  bankName      String?
 
   // Installment tracking
   installmentNumber Int // 1, 2, 3, etc.
@@ -885,6 +887,7 @@ model licenseApplication {
   bookingService      bookingService           @relation(fields: [bookingServiceId], references: [id])
   bookingServiceId    Int
   llNumber            String?
+  applicationNumber   String?
   issuedDate          DateTime?
   dlApplicationNumber String?
   testDate            DateTime?

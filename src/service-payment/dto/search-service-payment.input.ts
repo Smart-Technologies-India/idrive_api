@@ -36,4 +36,9 @@ export class SearchServicePaymentInput {
     description: 'Filter by payment number',
   })
   paymentNumber?: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, { nullable: true, description: 'Filter by bank name' })
+  bankName?: string;
 }

@@ -25,6 +25,11 @@ export class WhereLicenseApplicationSearchInput {
   @IsOptional()
   @IsString()
   @Field(() => String, { nullable: true })
+  applicationNumber?: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, { nullable: true })
   dlApplicationNumber?: string;
 
   @IsOptional()

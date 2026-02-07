@@ -325,6 +325,7 @@ export interface CreateLeaveHistoryInput {
 }
 
 export interface CreateLicenseApplicationInput {
+    applicationNumber?: Nullable<string>;
     bookingServiceId: number;
     dlApplicationNumber?: Nullable<string>;
     issuedDate?: Nullable<DateTime>;
@@ -336,6 +337,7 @@ export interface CreateLicenseApplicationInput {
 
 export interface CreatePaymentInput {
     amount: number;
+    bankName?: Nullable<string>;
     bookingId: number;
     installmentNumber: number;
     notes?: Nullable<string>;
@@ -418,6 +420,7 @@ export interface CreateServiceInput {
 
 export interface CreateServicePaymentInput {
     amount: number;
+    bankName?: Nullable<string>;
     bookingServiceId: number;
     installmentNumber: number;
     notes?: Nullable<string>;
@@ -509,6 +512,7 @@ export interface SearchPaginationInput {
 }
 
 export interface SearchPaymentInput {
+    bankName?: Nullable<string>;
     bookingId?: Nullable<number>;
     paymentMethod?: Nullable<string>;
     paymentNumber?: Nullable<string>;
@@ -517,6 +521,7 @@ export interface SearchPaymentInput {
 }
 
 export interface SearchServicePaymentInput {
+    bankName?: Nullable<string>;
     bookingServiceId?: Nullable<number>;
     paymentMethod?: Nullable<string>;
     paymentNumber?: Nullable<string>;
@@ -702,6 +707,7 @@ export interface UpdateLeaveHistoryInput {
 }
 
 export interface UpdateLicenseApplicationInput {
+    applicationNumber?: Nullable<string>;
     bookingServiceId?: Nullable<number>;
     dlApplicationNumber?: Nullable<string>;
     issuedDate?: Nullable<DateTime>;
@@ -713,6 +719,7 @@ export interface UpdateLicenseApplicationInput {
 
 export interface UpdatePaymentInput {
     amount?: Nullable<number>;
+    bankName?: Nullable<string>;
     bookingId?: Nullable<number>;
     installmentNumber?: Nullable<number>;
     notes?: Nullable<string>;
@@ -797,6 +804,7 @@ export interface UpdateServiceInput {
 
 export interface UpdateServicePaymentInput {
     amount?: Nullable<number>;
+    bankName?: Nullable<string>;
     bookingServiceId?: Nullable<number>;
     installmentNumber?: Nullable<number>;
     notes?: Nullable<string>;
@@ -927,6 +935,7 @@ export interface WhereLeaveHistorySearchInput {
 }
 
 export interface WhereLicenseApplicationSearchInput {
+    applicationNumber?: Nullable<string>;
     bookingServiceId?: Nullable<number>;
     dlApplicationNumber?: Nullable<string>;
     id?: Nullable<number>;
@@ -1318,6 +1327,7 @@ export interface LeaveHistoryPagination {
 }
 
 export interface LicenseApplication {
+    applicationNumber?: Nullable<string>;
     bookingService?: Nullable<BookingService>;
     bookingServiceId: number;
     dlApplicationNumber?: Nullable<string>;
@@ -1401,6 +1411,7 @@ export interface IMutation {
 
 export interface Payment {
     amount: number;
+    bankName?: Nullable<string>;
     booking?: Nullable<Booking>;
     bookingId: number;
     createdAt: DateTime;
@@ -1694,6 +1705,7 @@ export interface ServicePagination {
 
 export interface ServicePayment {
     amount: number;
+    bankName?: Nullable<string>;
     bookingServiceId: number;
     createdAt: DateTime;
     deletedAt?: Nullable<DateTime>;

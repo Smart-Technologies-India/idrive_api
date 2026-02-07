@@ -448,6 +448,7 @@ input CreateLeaveHistoryInput {
 }
 
 input CreateLicenseApplicationInput {
+  applicationNumber: String
   bookingServiceId: Int!
   dlApplicationNumber: String
   issuedDate: DateTime
@@ -460,6 +461,9 @@ input CreateLicenseApplicationInput {
 input CreatePaymentInput {
   """Payment amount"""
   amount: Float!
+
+  """Bank name"""
+  bankName: String
 
   """Booking ID"""
   bookingId: Int!
@@ -559,6 +563,9 @@ input CreateServiceInput {
 input CreateServicePaymentInput {
   """Payment amount"""
   amount: Float!
+
+  """Bank name"""
+  bankName: String
 
   """Booking Service ID"""
   bookingServiceId: Int!
@@ -752,6 +759,7 @@ enum LeaveStatus {
 }
 
 type LicenseApplication {
+  applicationNumber: String
   bookingService: BookingService
   bookingServiceId: Int!
   dlApplicationNumber: String
@@ -853,6 +861,7 @@ input OrderBy {
 
 type Payment {
   amount: Float!
+  bankName: String
   booking: Booking
   bookingId: Int!
   createdAt: DateTime!
@@ -1185,6 +1194,9 @@ input SearchPaginationInput {
 }
 
 input SearchPaymentInput {
+  """Filter by bank name"""
+  bankName: String
+
   """Filter by booking ID"""
   bookingId: Int
 
@@ -1202,6 +1214,9 @@ input SearchPaymentInput {
 }
 
 input SearchServicePaymentInput {
+  """Filter by bank name"""
+  bankName: String
+
   """Filter by booking service ID"""
   bookingServiceId: Int
 
@@ -1258,6 +1273,7 @@ type ServicePagination {
 
 type ServicePayment {
   amount: Float!
+  bankName: String
   bookingServiceId: Int!
   createdAt: DateTime!
   deletedAt: DateTime
@@ -1508,6 +1524,7 @@ input UpdateLeaveHistoryInput {
 }
 
 input UpdateLicenseApplicationInput {
+  applicationNumber: String
   bookingServiceId: Int
   dlApplicationNumber: String
   issuedDate: DateTime
@@ -1520,6 +1537,7 @@ input UpdateLicenseApplicationInput {
 input UpdatePaymentInput {
   """Payment amount"""
   amount: Float
+  bankName: String
 
   """Booking ID"""
   bookingId: Int
@@ -1615,6 +1633,7 @@ input UpdateServiceInput {
 input UpdateServicePaymentInput {
   """Payment amount"""
   amount: Float
+  bankName: String
 
   """Booking Service ID"""
   bookingServiceId: Int
@@ -1797,6 +1816,7 @@ input WhereLeaveHistorySearchInput {
 }
 
 input WhereLicenseApplicationSearchInput {
+  applicationNumber: String
   bookingServiceId: Int
   dlApplicationNumber: String
   id: Int

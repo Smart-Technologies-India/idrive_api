@@ -19,6 +19,11 @@ export class UpdateServicePaymentInput extends PartialType(
   @IsOptional()
   @IsString()
   @Field(() => String, { nullable: true })
+  bankName?: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, { nullable: true })
   notes?: string;
 
   @IsOptional()

@@ -41,6 +41,14 @@ export class CreateServicePaymentInput {
   })
   transactionId?: string;
 
+  @IsOptional()
+  @IsString()
+  @Field(() => String, {
+    nullable: true,
+    description: 'Bank name',
+  })
+  bankName?: string;
+
   @IsNotEmpty()
   @IsNumber()
   @Min(1)

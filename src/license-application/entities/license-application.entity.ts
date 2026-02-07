@@ -35,6 +35,9 @@ export class LicenseApplication {
   @Field(() => String, { nullable: true })
   llNumber?: string;
 
+  @Field(() => String, { nullable: true })
+  applicationNumber?: string;
+
   @Field(() => Date, { nullable: true })
   issuedDate?: Date;
 

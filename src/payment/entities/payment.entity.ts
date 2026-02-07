@@ -46,6 +46,9 @@ export class Payment {
   @Field(() => String, { nullable: true })
   transactionId?: string;
 
+  @Field(() => String, { nullable: true })
+  bankName?: string;
+
   @Field(() => Int)
   installmentNumber: number;
 

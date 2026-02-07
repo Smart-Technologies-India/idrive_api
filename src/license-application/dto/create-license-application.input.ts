@@ -25,6 +25,11 @@ export class CreateLicenseApplicationInput {
   llNumber?: string;
 
   @IsOptional()
+  @IsString()
+  @Field(() => String, { nullable: true })
+  applicationNumber?: string;
+
+  @IsOptional()
   @IsDateString()
   @Field(() => Date, { nullable: true })
   issuedDate?: Date;

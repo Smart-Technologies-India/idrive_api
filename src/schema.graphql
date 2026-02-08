@@ -784,6 +784,7 @@ enum LicenseApplicationStatus {
   DL_PENDING
   LL_APPLIED
   PENDING
+  SUBMIT
 }
 
 input LoginUserInput {

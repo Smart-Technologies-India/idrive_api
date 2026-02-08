@@ -105,7 +105,8 @@ export enum LicenseApplicationStatus {
     DL_APPLIED = "DL_APPLIED",
     DL_PENDING = "DL_PENDING",
     LL_APPLIED = "LL_APPLIED",
-    PENDING = "PENDING"
+    PENDING = "PENDING",
+    SUBMIT = "SUBMIT"
 }
 
 export enum Role {

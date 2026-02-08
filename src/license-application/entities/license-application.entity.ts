@@ -4,6 +4,7 @@ import { BookingService } from 'src/booking-service/entities/booking-service.ent
 export enum LicenseApplicationStatus {
   PENDING = 'PENDING',
   CLOSED = 'CLOSED',
+  SUBMIT = 'SUBMIT',
   LL_APPLIED = 'LL_APPLIED',
   DL_PENDING = 'DL_PENDING',
   DL_APPLIED = 'DL_APPLIED',

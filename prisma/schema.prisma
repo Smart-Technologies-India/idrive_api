@@ -870,6 +870,7 @@ enum PaymentStatus {
 enum LicenseApplicationStatus {
   PENDING
   CLOSED
+  SUBMIT
   LL_APPLIED
   DL_PENDING
   DL_APPLIED

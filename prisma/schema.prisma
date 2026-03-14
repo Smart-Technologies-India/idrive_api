@@ -6,6 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -116,7 +117,7 @@ model driver {
   gender         String
 
   // License Information
-  licenseNumber     String   @unique
+  licenseNumber     String?
   licenseType       String
   licenseIssueDate  DateTime
   licenseExpiryDate DateTime
@@ -247,6 +248,7 @@ model school {
   lunchStartTime String?
   lunchEndTime   String?
   weeklyHoliday  String?
+  testHoliday    String?
 
   // Owner/Contact Person
   ownerName  String?

@@ -62,8 +62,8 @@ export class Driver {
   gender: string;
 
   // License Information
-  @Field(() => String)
-  licenseNumber: string;
+  @Field(() => String, { nullable: true })
+  licenseNumber?: string;
 
   @Field(() => String)
   licenseType: string;

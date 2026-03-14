@@ -85,6 +85,11 @@ export class CreateSchoolInput {
   @Field(() => String, { nullable: true })
   weeklyHoliday?: string;
 
+  @IsOptional()
+  @IsString()
+  @Field(() => String, { nullable: true })
+  testHoliday?: string;
+
   // Owner/Contact Person
   @IsOptional()
   @IsString()

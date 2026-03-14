@@ -61,6 +61,11 @@ export class WhereSchoolSearchInput {
   @IsOptional()
   @IsString()
   @Field(() => String, { nullable: true })
+  testHoliday?: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, { nullable: true })
   ownerName?: string;
 
   @IsOptional()

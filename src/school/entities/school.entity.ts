@@ -57,6 +57,9 @@ export class School {
   @Field(() => String, { nullable: true })
   weeklyHoliday?: string;
 
+  @Field(() => String, { nullable: true })
+  testHoliday?: string;
+
   // Owner/Contact Person
   @Field(() => String, { nullable: true })
   ownerName?: string;

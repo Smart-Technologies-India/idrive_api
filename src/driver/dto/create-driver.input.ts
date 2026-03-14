@@ -69,10 +69,10 @@ export class CreateDriverInput {
   gender: string;
 
   // License Information
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  @Field(() => String)
-  licenseNumber: string;
+  @Field(() => String, { nullable: true })
+  licenseNumber?: string;
 
   @IsNotEmpty()
   @IsString()

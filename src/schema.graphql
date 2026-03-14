@@ -413,7 +413,7 @@ input CreateDriverInput {
   joiningDate: DateTime
   licenseExpiryDate: DateTime!
   licenseIssueDate: DateTime!
-  licenseNumber: String!
+  licenseNumber: String
   licenseType: String!
   mobile: String!
   name: String!
@@ -535,6 +535,7 @@ input CreateSchoolInput {
   registrationNumber: String!
   rtoLicenseExpiry: DateTime
   rtoLicenseNumber: String
+  testHoliday: String
   twitter: String
   website: String
   weeklyHoliday: String
@@ -650,7 +651,7 @@ type Driver {
   leaveHistory: [LeaveHistory!]
   licenseExpiryDate: DateTime!
   licenseIssueDate: DateTime!
-  licenseNumber: String!
+  licenseNumber: String
   licenseType: String!
   mobile: String!
   name: String!
@@ -1049,6 +1050,7 @@ type School {
   rtoLicenseExpiry: DateTime
   rtoLicenseNumber: String
   status: SchoolStatus!
+  testHoliday: String
   twitter: String
   updatedAt: DateTime!
   users: [User!]
@@ -1144,6 +1146,7 @@ type SchoolWithCounts {
   rtoLicenseExpiry: DateTime
   rtoLicenseNumber: String
   status: SchoolStatus!
+  testHoliday: String
   twitter: String
   updatedAt: DateTime!
   userCount: Int
@@ -1605,6 +1608,7 @@ input UpdateSchoolInput {
   rtoLicenseExpiry: DateTime
   rtoLicenseNumber: String
   status: String
+  testHoliday: String
   twitter: String
   website: String
   weeklyHoliday: String
@@ -1853,6 +1857,7 @@ input WhereSchoolSearchInput {
   registrationNumber: String
   rtoLicenseNumber: String
   status: String
+  testHoliday: String
   website: String
   weeklyHoliday: String
 }

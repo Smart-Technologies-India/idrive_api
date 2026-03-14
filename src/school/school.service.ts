@@ -91,6 +91,7 @@ export class SchoolService extends BaseService<
           lunchStartTime: school.lunchStartTime ?? undefined,
           lunchEndTime: school.lunchEndTime ?? undefined,
           weeklyHoliday: school.weeklyHoliday ?? undefined,
+          testHoliday: school.testHoliday ?? undefined,
           ownerName: school.ownerName ?? undefined,
           ownerPhone: school.ownerPhone ?? undefined,
           ownerEmail: school.ownerEmail ?? undefined,

@@ -291,7 +291,7 @@ export interface CreateDriverInput {
     joiningDate?: Nullable<DateTime>;
     licenseExpiryDate: DateTime;
     licenseIssueDate: DateTime;
-    licenseNumber: string;
+    licenseNumber?: Nullable<string>;
     licenseType: string;
     mobile: string;
     name: string;
@@ -394,6 +394,7 @@ export interface CreateSchoolInput {
     registrationNumber: string;
     rtoLicenseExpiry?: Nullable<DateTime>;
     rtoLicenseNumber?: Nullable<string>;
+    testHoliday?: Nullable<string>;
     twitter?: Nullable<string>;
     website?: Nullable<string>;
     weeklyHoliday?: Nullable<string>;
@@ -777,6 +778,7 @@ export interface UpdateSchoolInput {
     rtoLicenseExpiry?: Nullable<DateTime>;
     rtoLicenseNumber?: Nullable<string>;
     status?: Nullable<string>;
+    testHoliday?: Nullable<string>;
     twitter?: Nullable<string>;
     website?: Nullable<string>;
     weeklyHoliday?: Nullable<string>;
@@ -972,6 +974,7 @@ export interface WhereSchoolSearchInput {
     registrationNumber?: Nullable<string>;
     rtoLicenseNumber?: Nullable<string>;
     status?: Nullable<string>;
+    testHoliday?: Nullable<string>;
     website?: Nullable<string>;
     weeklyHoliday?: Nullable<string>;
 }
@@ -1255,7 +1258,7 @@ export interface Driver {
     leaveHistory?: Nullable<LeaveHistory[]>;
     licenseExpiryDate: DateTime;
     licenseIssueDate: DateTime;
-    licenseNumber: string;
+    licenseNumber?: Nullable<string>;
     licenseType: string;
     mobile: string;
     name: string;
@@ -1583,6 +1586,7 @@ export interface School {
     rtoLicenseExpiry?: Nullable<DateTime>;
     rtoLicenseNumber?: Nullable<string>;
     status: SchoolStatus;
+    testHoliday?: Nullable<string>;
     twitter?: Nullable<string>;
     updatedAt: DateTime;
     users?: Nullable<User[]>;
@@ -1672,6 +1676,7 @@ export interface SchoolWithCounts {
     rtoLicenseExpiry?: Nullable<DateTime>;
     rtoLicenseNumber?: Nullable<string>;
     status: SchoolStatus;
+    testHoliday?: Nullable<string>;
     twitter?: Nullable<string>;
     updatedAt: DateTime;
     userCount?: Nullable<number>;

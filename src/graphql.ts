@@ -178,6 +178,7 @@ export interface CreateBookingInput {
     customerMobile: string;
     customerName?: Nullable<string>;
     discount?: Nullable<number>;
+    location?: Nullable<string>;
     notes?: Nullable<string>;
     schoolId: number;
     slot: string;
@@ -445,6 +446,18 @@ export interface CreateSyllabusInput {
     topics: string;
 }
 
+export interface CreateTraingRulesInput {
+    rule1?: Nullable<string>;
+    rule2?: Nullable<string>;
+    rule3?: Nullable<string>;
+    rule4?: Nullable<string>;
+    rule5?: Nullable<string>;
+    rule6?: Nullable<string>;
+    rule7?: Nullable<string>;
+    rule8?: Nullable<string>;
+    schoolId: number;
+}
+
 export interface CreateUserInput {
     address?: Nullable<string>;
     bloodGroup?: Nullable<string>;
@@ -538,6 +551,10 @@ export interface SearchSyllabusInput {
     title?: Nullable<string>;
 }
 
+export interface SearchTraingRulesInput {
+    schoolId?: Nullable<number>;
+}
+
 export interface SignUpUserInput {
     mobile: string;
     name: string;
@@ -558,6 +575,7 @@ export interface UpdateBookingInput {
     customerMobile?: Nullable<string>;
     customerName?: Nullable<string>;
     discount?: Nullable<number>;
+    location?: Nullable<string>;
     notes?: Nullable<string>;
     schoolId?: Nullable<number>;
     slot?: Nullable<string>;
@@ -831,6 +849,18 @@ export interface UpdateSyllabusInput {
     topics?: Nullable<string>;
 }
 
+export interface UpdateTraingRulesInput {
+    rule1?: Nullable<string>;
+    rule2?: Nullable<string>;
+    rule3?: Nullable<string>;
+    rule4?: Nullable<string>;
+    rule5?: Nullable<string>;
+    rule6?: Nullable<string>;
+    rule7?: Nullable<string>;
+    rule8?: Nullable<string>;
+    schoolId?: Nullable<number>;
+}
+
 export interface UpdateUserInput {
     address?: Nullable<string>;
     bloodGroup?: Nullable<string>;
@@ -871,6 +901,7 @@ export interface WhereBookingSearchInput {
     deletedAt?: Nullable<DateTime>;
     discount?: Nullable<number>;
     id?: Nullable<number>;
+    location?: Nullable<string>;
     notes?: Nullable<string>;
     schoolId?: Nullable<number>;
     slot?: Nullable<string>;
@@ -1036,6 +1067,7 @@ export interface Booking {
     deletedAt?: Nullable<DateTime>;
     discount?: Nullable<number>;
     id: number;
+    location?: Nullable<string>;
     notes?: Nullable<string>;
     parsedServices?: Nullable<BookingServiceInfo[]>;
     payments?: Nullable<Payment[]>;
@@ -1369,6 +1401,7 @@ export interface IMutation {
     createService(inputType: CreateServiceInput): Service | Promise<Service>;
     createServicePayment(inputType: CreateServicePaymentInput): ServicePayment | Promise<ServicePayment>;
     createSyllabus(inputType: CreateSyllabusInput): Syllabus | Promise<Syllabus>;
+    createTraingRules(inputType: CreateTraingRulesInput): TraingRules | Promise<TraingRules>;
     createUser(inputType: CreateUserInput): User | Promise<User>;
     deleteBooking(id: number, userid: number): Booking | Promise<Booking>;
     deleteBookingService(id: number, userid: number): BookingService | Promise<BookingService>;
@@ -1388,6 +1421,7 @@ export interface IMutation {
     deleteService(id: number, userid: number): Service | Promise<Service>;
     deleteServicePayment(id: number, userid: number): ServicePayment | Promise<ServicePayment>;
     deleteSyllabus(id: number, userid: number): Syllabus | Promise<Syllabus>;
+    deleteTraingRules(id: number, userid: number): TraingRules | Promise<TraingRules>;
     deleteUser(id: number, userid: number): User | Promise<User>;
     optLogin(contact: string): User | Promise<User>;
     signup(signUpUserInput: SignUpUserInput): User | Promise<User>;
@@ -1409,6 +1443,7 @@ export interface IMutation {
     updateService(id: number, updateType: UpdateServiceInput): Service | Promise<Service>;
     updateServicePayment(id: number, updateType: UpdateServicePaymentInput): ServicePayment | Promise<ServicePayment>;
     updateSyllabus(id: number, updateType: UpdateSyllabusInput): Syllabus | Promise<Syllabus>;
+    updateTraingRules(id: number, updateType: UpdateTraingRulesInput): TraingRules | Promise<TraingRules>;
     updateUser(id: number, updateType: UpdateUserInput): User | Promise<User>;
     verifyOtp(contact: string, otp: string): User | Promise<User>;
 }
@@ -1461,6 +1496,7 @@ export interface IQuery {
     getAllService(whereSearchInput: WhereServiceSearchInput): Service[] | Promise<Service[]>;
     getAllServicePayment(whereSearchInput: SearchServicePaymentInput): ServicePayment[] | Promise<ServicePayment[]>;
     getAllSyllabus(whereSearchInput: SearchSyllabusInput): Syllabus[] | Promise<Syllabus[]>;
+    getAllTraingRules(whereSearchInput: SearchTraingRulesInput): TraingRules[] | Promise<TraingRules[]>;
     getAllUser(whereSearchInput: WhereUserSearchInput): User[] | Promise<User[]>;
     getBookingById(id: number): Booking | Promise<Booking>;
     getBookingServiceById(id: number): BookingService | Promise<BookingService>;
@@ -1491,6 +1527,7 @@ export interface IQuery {
     getPaginatedService(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereServiceSearchInput): ServicePagination | Promise<ServicePagination>;
     getPaginatedServicePayment(searchPaginationInput: SearchPaginationInput, whereSearchInput: SearchServicePaymentInput): ServicePaymentPagination | Promise<ServicePaymentPagination>;
     getPaginatedSyllabus(searchPaginationInput: SearchPaginationInput, whereSearchInput: SearchSyllabusInput): SyllabusPagination | Promise<SyllabusPagination>;
+    getPaginatedTraingRules(searchPaginationInput: SearchPaginationInput, whereSearchInput: SearchTraingRulesInput): TraingRulesPagination | Promise<TraingRulesPagination>;
     getPaginatedUser(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereUserSearchInput): UserPagination | Promise<UserPagination>;
     getPaymentById(id: number): Payment | Promise<Payment>;
     getSalaryHistoryById(id: number): SalaryHistory | Promise<SalaryHistory>;
@@ -1502,6 +1539,7 @@ export interface IQuery {
     getServiceById(id: number): Service | Promise<Service>;
     getServicePaymentById(id: number): ServicePayment | Promise<ServicePayment>;
     getSyllabusById(id: number): Syllabus | Promise<Syllabus>;
+    getTraingRulesById(id: number): TraingRules | Promise<TraingRules>;
     getUserById(id: number): User | Promise<User>;
     login(loginUserInput: LoginUserInput): User | Promise<User>;
     searchBooking(whereSearchInput: WhereBookingSearchInput): Nullable<Booking> | Promise<Nullable<Booking>>;
@@ -1522,6 +1560,7 @@ export interface IQuery {
     searchService(whereSearchInput: WhereServiceSearchInput): Nullable<Service> | Promise<Nullable<Service>>;
     searchServicePayment(whereSearchInput: SearchServicePaymentInput): Nullable<ServicePayment> | Promise<Nullable<ServicePayment>>;
     searchSyllabus(whereSearchInput: SearchSyllabusInput): Nullable<Syllabus> | Promise<Nullable<Syllabus>>;
+    searchTraingRules(whereSearchInput: SearchTraingRulesInput): Nullable<TraingRules> | Promise<Nullable<TraingRules>>;
     searchUser(whereSearchInput: WhereUserSearchInput): Nullable<User> | Promise<Nullable<User>>;
 }
 
@@ -1587,6 +1626,7 @@ export interface School {
     rtoLicenseNumber?: Nullable<string>;
     status: SchoolStatus;
     testHoliday?: Nullable<string>;
+    traingRules?: Nullable<TraingRules[]>;
     twitter?: Nullable<string>;
     updatedAt: DateTime;
     users?: Nullable<User[]>;
@@ -1677,6 +1717,7 @@ export interface SchoolWithCounts {
     rtoLicenseNumber?: Nullable<string>;
     status: SchoolStatus;
     testHoliday?: Nullable<string>;
+    traingRules?: Nullable<TraingRules[]>;
     twitter?: Nullable<string>;
     updatedAt: DateTime;
     userCount?: Nullable<number>;
@@ -1754,6 +1795,30 @@ export interface Syllabus {
 
 export interface SyllabusPagination {
     data: Syllabus[];
+    skip: number;
+    take: number;
+    total: number;
+}
+
+export interface TraingRules {
+    createdAt: DateTime;
+    deletedAt?: Nullable<DateTime>;
+    id: number;
+    rule1?: Nullable<string>;
+    rule2?: Nullable<string>;
+    rule3?: Nullable<string>;
+    rule4?: Nullable<string>;
+    rule5?: Nullable<string>;
+    rule6?: Nullable<string>;
+    rule7?: Nullable<string>;
+    rule8?: Nullable<string>;
+    school?: Nullable<School>;
+    schoolId: number;
+    updatedAt: DateTime;
+}
+
+export interface TraingRulesPagination {
+    data: TraingRules[];
     skip: number;
     take: number;
     total: number;

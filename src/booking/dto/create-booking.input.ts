@@ -100,5 +100,10 @@ export class CreateBookingInput {
   @IsOptional()
   @IsString()
   @Field(() => String, { nullable: true })
+  location?: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, { nullable: true })
   confirmationNumber?: string;
 }

@@ -23,6 +23,7 @@ type Booking {
   deletedAt: DateTime
   discount: Float
   id: Int!
+  location: String
   notes: String
   parsedServices: [BookingServiceInfo!]
   payments: [Payment!]
@@ -293,6 +294,7 @@ input CreateBookingInput {
   customerMobile: String!
   customerName: String
   discount: Float
+  location: String
   notes: String
   schoolId: Int!
   slot: String!
@@ -605,6 +607,18 @@ input CreateSyllabusInput {
   topics: String!
 }
 
+input CreateTraingRulesInput {
+  rule1: String
+  rule2: String
+  rule3: String
+  rule4: String
+  rule5: String
+  rule6: String
+  rule7: String
+  rule8: String
+  schoolId: Int!
+}
+
 input CreateUserInput {
   address: String
   bloodGroup: String
@@ -812,6 +826,7 @@ type Mutation {
   createService(inputType: CreateServiceInput!): Service!
   createServicePayment(inputType: CreateServicePaymentInput!): ServicePayment!
   createSyllabus(inputType: CreateSyllabusInput!): Syllabus!
+  createTraingRules(inputType: CreateTraingRulesInput!): TraingRules!
   createUser(inputType: CreateUserInput!): User!
   deleteBooking(id: Int!, userid: Int!): Booking!
   deleteBookingService(id: Int!, userid: Int!): BookingService!
@@ -831,6 +846,7 @@ type Mutation {
   deleteService(id: Int!, userid: Int!): Service!
   deleteServicePayment(id: Int!, userid: Int!): ServicePayment!
   deleteSyllabus(id: Int!, userid: Int!): Syllabus!
+  deleteTraingRules(id: Int!, userid: Int!): TraingRules!
   deleteUser(id: Int!, userid: Int!): User!
   optLogin(contact: String!): User!
   signup(signUpUserInput: SignUpUserInput!): User!
@@ -852,6 +868,7 @@ type Mutation {
   updateService(id: Int!, updateType: UpdateServiceInput!): Service!
   updateServicePayment(id: Int!, updateType: UpdateServicePaymentInput!): ServicePayment!
   updateSyllabus(id: Int!, updateType: UpdateSyllabusInput!): Syllabus!
+  updateTraingRules(id: Int!, updateType: UpdateTraingRulesInput!): TraingRules!
   updateUser(id: Int!, updateType: UpdateUserInput!): User!
   verifyOtp(contact: String!, otp: String!): User!
 }
@@ -909,6 +926,7 @@ type Query {
   getAllService(whereSearchInput: WhereServiceSearchInput!): [Service!]!
   getAllServicePayment(whereSearchInput: SearchServicePaymentInput!): [ServicePayment!]!
   getAllSyllabus(whereSearchInput: SearchSyllabusInput!): [Syllabus!]!
+  getAllTraingRules(whereSearchInput: SearchTraingRulesInput!): [TraingRules!]!
   getAllUser(whereSearchInput: WhereUserSearchInput!): [User!]!
   getBookingById(id: Int!): Booking!
   getBookingServiceById(id: Int!): BookingService!
@@ -939,6 +957,7 @@ type Query {
   getPaginatedService(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereServiceSearchInput!): ServicePagination!
   getPaginatedServicePayment(searchPaginationInput: SearchPaginationInput!, whereSearchInput: SearchServicePaymentInput!): ServicePaymentPagination!
   getPaginatedSyllabus(searchPaginationInput: SearchPaginationInput!, whereSearchInput: SearchSyllabusInput!): SyllabusPagination!
+  getPaginatedTraingRules(searchPaginationInput: SearchPaginationInput!, whereSearchInput: SearchTraingRulesInput!): TraingRulesPagination!
   getPaginatedUser(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereUserSearchInput!): UserPagination!
   getPaymentById(id: Int!): Payment!
   getSalaryHistoryById(id: Int!): SalaryHistory!
@@ -950,6 +969,7 @@ type Query {
   getServiceById(id: Int!): Service!
   getServicePaymentById(id: Int!): ServicePayment!
   getSyllabusById(id: Int!): Syllabus!
+  getTraingRulesById(id: Int!): TraingRules!
   getUserById(id: Int!): User!
   login(loginUserInput: LoginUserInput!): User!
   searchBooking(whereSearchInput: WhereBookingSearchInput!): Booking
@@ -970,6 +990,7 @@ type Query {
   searchService(whereSearchInput: WhereServiceSearchInput!): Service
   searchServicePayment(whereSearchInput: SearchServicePaymentInput!): ServicePayment
   searchSyllabus(whereSearchInput: SearchSyllabusInput!): Syllabus
+  searchTraingRules(whereSearchInput: SearchTraingRulesInput!): TraingRules
   searchUser(whereSearchInput: WhereUserSearchInput!): User
 }
 
@@ -1051,6 +1072,7 @@ type School {
   rtoLicenseNumber: String
   status: SchoolStatus!
   testHoliday: String
+  traingRules: [TraingRules!]
   twitter: String
   updatedAt: DateTime!
   users: [User!]
@@ -1147,6 +1169,7 @@ type SchoolWithCounts {
   rtoLicenseNumber: String
   status: SchoolStatus!
   testHoliday: String
+  traingRules: [TraingRules!]
   twitter: String
   updatedAt: DateTime!
   userCount: Int
@@ -1242,6 +1265,10 @@ input SearchSyllabusInput {
   dayNumber: Int
   syllabusId: String
   title: String
+}
+
+input SearchTraingRulesInput {
+  schoolId: Int
 }
 
 type Service {
@@ -1350,6 +1377,30 @@ enum TestStatus {
   PASSED
 }
 
+type TraingRules {
+  createdAt: DateTime!
+  deletedAt: DateTime
+  id: Int!
+  rule1: String
+  rule2: String
+  rule3: String
+  rule4: String
+  rule5: String
+  rule6: String
+  rule7: String
+  rule8: String
+  school: School
+  schoolId: Int!
+  updatedAt: DateTime!
+}
+
+type TraingRulesPagination {
+  data: [TraingRules!]!
+  skip: Int!
+  take: Int!
+  total: Int!
+}
+
 enum TransmissionType {
   AMT
   AUTOMATIC
@@ -1371,6 +1422,7 @@ input UpdateBookingInput {
   customerMobile: String
   customerName: String
   discount: Float
+  location: String
   notes: String
   schoolId: Int
   slot: String
@@ -1672,6 +1724,18 @@ input UpdateSyllabusInput {
   topics: String
 }
 
+input UpdateTraingRulesInput {
+  rule1: String
+  rule2: String
+  rule3: String
+  rule4: String
+  rule5: String
+  rule6: String
+  rule7: String
+  rule8: String
+  schoolId: Int
+}
+
 input UpdateUserInput {
   address: String
   bloodGroup: String
@@ -1754,6 +1818,7 @@ input WhereBookingSearchInput {
   deletedAt: DateTime
   discount: Float
   id: Int
+  location: String
   notes: String
   schoolId: Int
   slot: String

@@ -1,6 +1,7 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
 import { SchoolStatus } from '@prisma/client';
 import { User } from 'src/user/entities/user.entity';
+import { TraingRules } from 'src/traing-rules/entities/traing-rules.entity';
 
 registerEnumType(SchoolStatus, {
   name: 'SchoolStatus',
@@ -124,4 +125,7 @@ export class School {
   // Relations
   @Field(() => [User], { nullable: true })
   users?: User[];
+
+  @Field(() => [TraingRules], { nullable: true })
+  traingRules?: TraingRules[];
 }

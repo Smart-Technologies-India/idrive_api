@@ -111,6 +111,9 @@ export class Booking {
   @Field(() => String, { nullable: true })
   notes?: string;
 
+  @Field(() => String, { nullable: true })
+  location?: string;
+
   // Status & Tracking
   @Field(() => BookingStatus)
   status: BookingStatus;

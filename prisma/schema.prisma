@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -287,6 +286,7 @@ model school {
   bookings        booking[]
   bookingServices bookingService[]
   schoolServices  schoolService[]
+  traingRules     traingRules[]
 }
 
 enum CarCategory {
@@ -682,6 +682,8 @@ model booking {
   // Additional Information
   notes String? @db.LongText
 
+  location String? @db.MediumText
+
   // Status & Tracking
   status             BookingStatus @default(PENDING)
   confirmationNumber String?
@@ -896,4 +898,26 @@ model licenseApplication {
   testDate            DateTime?
   testStatus          TestStatus               @default(NONE)
   status              LicenseApplicationStatus @default(PENDING)
+}
+
+model traingRules {
+  id        Int       @id @default(autoincrement())
+  schoolId  Int
+  rule1     String?   @db.MediumText
+  rule2     String?   @db.MediumText
+  rule3     String?   @db.MediumText
+  rule4     String?   @db.MediumText
+  rule5     String?   @db.MediumText
+  rule6     String?   @db.MediumText
+  rule7     String?   @db.MediumText
+  rule8     String?   @db.MediumText
+  // Timestamps
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  // Relations
+  school school @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@index([schoolId])
 }

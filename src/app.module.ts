@@ -29,6 +29,7 @@ import { SchoolServiceModule } from './school-service/school-service.module';
 import { LicenseApplicationModule } from './license-application/license-application.module';
 import { UtilsModule } from './utils/utils.module';
 import { ServicePaymentModule } from './service-payment/service-payment.module';
+import { TraingRulesModule } from './traing-rules/traing-rules.module';
 
 @Module({
   imports: [
@@ -69,6 +70,7 @@ import { ServicePaymentModule } from './service-payment/service-payment.module';
     CarAdminModule,
     SchoolServiceModule,
     LicenseApplicationModule,
+    TraingRulesModule,
     UtilsModule,
   ],
   controllers: [AppController],

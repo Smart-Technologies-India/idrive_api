@@ -47,8 +47,8 @@ export class Holiday {
   @Field(() => Date)
   endDate: Date;
 
-  @Field(() => [String], { nullable: true })
-  slots?: string[];
+  @Field(() => String, { nullable: true })
+  slots?: string;
 
   @Field(() => String)
   reason: string;

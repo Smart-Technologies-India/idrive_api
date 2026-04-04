@@ -1,9 +1,29 @@
-import { InputType, Field, PartialType } from '@nestjs/graphql';
-import { CreatePaymentInput } from './create-payment.input';
-import { IsOptional, IsString } from 'class-validator';
+import { InputType, Field, Int, Float } from '@nestjs/graphql';
+import { IsNumber, IsOptional, IsString, Min } from 'class-validator';
 
 @InputType()
-export class UpdatePaymentInput extends PartialType(CreatePaymentInput) {
+export class UpdatePaymentInput {
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  @Field(() => Float, { nullable: true })
+  amount?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Field(() => Int, { nullable: true })
+  bookingId?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Field(() => Int, { nullable: true })
+  userId?: number;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, { nullable: true })
+  paymentNumber?: string;
+
   @IsOptional()
   @IsString()
   @Field(() => String, { nullable: true })
@@ -18,6 +38,18 @@ export class UpdatePaymentInput extends PartialType(CreatePaymentInput) {
   @IsString()
   @Field(() => String, { nullable: true })
   bankName?: string;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(1)
+  @Field(() => Int, { nullable: true })
+  installmentNumber?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(1)
+  @Field(() => Int, { nullable: true })
+  totalInstallments?: number;
 
   @IsOptional()
   @IsString()

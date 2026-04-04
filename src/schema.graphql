@@ -848,6 +848,8 @@ type Mutation {
   deleteSyllabus(id: Int!, userid: Int!): Syllabus!
   deleteTraingRules(id: Int!, userid: Int!): TraingRules!
   deleteUser(id: Int!, userid: Int!): User!
+  forgotPasswordOtp(contact: String!): Boolean!
+  forgotPasswordVerify(contact: String!, newPassword: String!, otp: String!): Boolean!
   optLogin(contact: String!): User!
   signup(signUpUserInput: SignUpUserInput!): User!
   updateBooking(id: Int!, updateType: UpdateBookingInput!): Booking!
@@ -1591,27 +1593,16 @@ input UpdateLicenseApplicationInput {
 }
 
 input UpdatePaymentInput {
-  """Payment amount"""
   amount: Float
   bankName: String
-
-  """Booking ID"""
   bookingId: Int
-
-  """Current installment number"""
   installmentNumber: Int
   notes: String
   paymentMethod: String
-
-  """Unique payment number"""
   paymentNumber: String
   status: String
-
-  """Total number of installments planned"""
   totalInstallments: Int
   transactionId: String
-
-  """User ID"""
   userId: Int
 }
 

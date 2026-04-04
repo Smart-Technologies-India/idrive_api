@@ -1423,6 +1423,8 @@ export interface IMutation {
     deleteSyllabus(id: number, userid: number): Syllabus | Promise<Syllabus>;
     deleteTraingRules(id: number, userid: number): TraingRules | Promise<TraingRules>;
     deleteUser(id: number, userid: number): User | Promise<User>;
+    forgotPasswordOtp(contact: string): boolean | Promise<boolean>;
+    forgotPasswordVerify(contact: string, newPassword: string, otp: string): boolean | Promise<boolean>;
     optLogin(contact: string): User | Promise<User>;
     signup(signUpUserInput: SignUpUserInput): User | Promise<User>;
     updateBooking(id: number, updateType: UpdateBookingInput): Booking | Promise<Booking>;

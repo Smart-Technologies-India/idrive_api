@@ -37,4 +37,18 @@ export class AuthResolver {
   ) {
     return this.authService.verifyOtp(contact, otp);
   }
+
+  @Mutation(() => Boolean)
+  forgotPasswordOtp(@Args('contact', { type: () => String }) contact: string) {
+    return this.authService.forgotPasswordOtp(contact);
+  }
+
+  @Mutation(() => Boolean)
+  forgotPasswordVerify(
+    @Args('contact', { type: () => String }) contact: string,
+    @Args('otp', { type: () => String }) otp: string,
+    @Args('newPassword', { type: () => String }) newPassword: string,
+  ) {
+    return this.authService.forgotPasswordVerify(contact, otp, newPassword);
+  }
 }

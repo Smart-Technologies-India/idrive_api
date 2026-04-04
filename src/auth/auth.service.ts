@@ -14,7 +14,60 @@ import axios from 'axios';
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
 
+  private readonly smsBaseUrl = 'https://mobicomm.dove-sms.com//submitsms.jsp';
+  private readonly smsUser = 'CmotorTS';
+  private readonly smsKey = '0964010cecXX';
+  private readonly smsSenderId = 'chohan';
+  private readonly smsAccUsage = '1';
+  private readonly smsEntityId = '1201159782153333311';
+  private readonly smsTemplateId = '1207161822824681230';
+
   constructor(private readonly prisma: PrismaService) {}
+
+  private formatMobileForSms(contact: string): string {
+    const trimmed = contact.trim();
+    if (trimmed.startsWith('+')) {
+      return trimmed;
+    }
+    if (trimmed.startsWith('91') && trimmed.length === 12) {
+      return `+${trimmed}`;
+    }
+    return `+91${trimmed}`;
+  }
+
+  private async sendOtpSms(contact: string, otp: string): Promise<boolean> {
+    const mobile = this.formatMobileForSms(contact);
+    const message = `Dear User, Your OTP for login to iDrive application is ${otp}. Valid for 5 Minutes. Please do not share this OTP Regards, Team iDrive`;
+
+    const params = new URLSearchParams({
+      user: this.smsUser,
+      key: this.smsKey,
+      mobile,
+      message,
+      senderid: this.smsSenderId,
+      accusage: this.smsAccUsage,
+      entityid: this.smsEntityId,
+      tempid: this.smsTemplateId,
+    });
+
+    const smsUrl = `${this.smsBaseUrl}?${params.toString()}`;
+    const smsResponse = await axios.get<string>(smsUrl);
+    const responseText = String(smsResponse.data || '').trim();
+    const responseParts = responseText.split(',').map((part) => part.trim());
+    const isSuccess =
+      responseParts.length >= 2 &&
+      responseParts[0].toLowerCase() === 'sent' &&
+      responseParts[1].toLowerCase() === 'success';
+
+    if (!isSuccess) {
+      this.logger.error(
+        `SMS API failed for ${contact}. Response: ${responseText}`,
+      );
+      return false;
+    }
+
+    return true;
+  }
 
   async login(contact: string, password: string) {
     try {
@@ -130,30 +183,15 @@ export class AuthService {
       // Generate and send OTP
       const otp = this.generateOTP(4);
 
-      // Get SMS config from environment
+      const isSent = await this.sendOtpSms(contact, otp);
 
-      const apiKey = 'c21hcnRUY2g6NUFiMU9GR2U=';
-      const sender = 'DBAWLA';
-      const peId = '1001424959147859474';
-      const tempId = '1007815568981115610';
-
-      const smsUrl = `https://webpostservice.com/sendsms_v2.0/sendsms.php?apikey=${apiKey}&type=TEXT&sender=${sender}&mobile=${contact}&message=Your%20OTP%20for%20Dabbawala%20App%20Login%20is%20${otp}.The%20OTP%20is%20valid%20for%203%20Mins.&peId=${peId}&tempId=${tempId}`;
-
-      const otp_response = await axios.post<string>(smsUrl);
-
-      if (
-        typeof otp_response.data == 'string' &&
-        otp_response.data.startsWith('SUBMIT_SUCCESS')
-      ) {
+      if (isSent) {
         await this.prisma.user.update({
           where: { id: user.id },
           data: { otp: otp },
         });
         this.logger.log(`OTP sent successfully - ${contact}`);
       } else {
-        this.logger.error(
-          `Failed to send OTP - ${contact}: ${otp_response.data}`,
-        );
         throw new BadRequestException('Failed to send OTP');
       }
 
@@ -211,6 +249,99 @@ export class AuthService {
         `OTP verification error: ${error instanceof Error ? error.message : 'Unknown error'}`,
       );
       throw new BadRequestException('Unable to verify OTP');
+    }
+  }
+
+  async forgotPasswordOtp(contact: string) {
+    try {
+      const user = await this.prisma.user.findFirst({
+        where: {
+          contact1: contact,
+          deletedAt: null,
+          status: 'ACTIVE',
+        },
+      });
+
+      if (!user) {
+        this.logger.warn(
+          `Forgot password OTP: No active account for contact - ${contact}`,
+        );
+        throw new BadRequestException(
+          'No active account found with this contact number',
+        );
+      }
+
+      const otp = this.generateOTP(6);
+
+      const isSent = await this.sendOtpSms(contact, otp);
+
+      if (isSent) {
+        await this.prisma.user.update({
+          where: { id: user.id },
+          data: { otp },
+        });
+        this.logger.log(`Forgot password OTP sent - ${contact}`);
+        return true;
+      } else {
+        throw new BadRequestException('Failed to send OTP. Please try again.');
+      }
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+      this.logger.error(
+        `Forgot password OTP error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
+      throw new BadRequestException('Unable to process OTP request');
+    }
+  }
+
+  async forgotPasswordVerify(
+    contact: string,
+    otp: string,
+    newPassword: string,
+  ) {
+    try {
+      const user = await this.prisma.user.findFirst({
+        where: {
+          contact1: contact,
+          deletedAt: null,
+          status: 'ACTIVE',
+        },
+      });
+
+      if (!user) {
+        this.logger.warn(`Forgot password verify: User not found - ${contact}`);
+        throw new UnauthorizedException('Invalid OTP or user not found');
+      }
+
+      if (!user.otp || user.otp !== otp) {
+        this.logger.warn(
+          `Forgot password verify: Invalid OTP for - ${contact}`,
+        );
+        throw new UnauthorizedException('Invalid OTP. Please try again.');
+      }
+
+      const hashedPassword = await argon2.hash(newPassword);
+
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: { password: hashedPassword, otp: null },
+      });
+
+      this.logger.log(`Password reset successful - ${contact}`);
+      return true;
+    } catch (error) {
+      if (
+        error instanceof UnauthorizedException ||
+        error instanceof BadRequestException
+      ) {
+        throw error;
+      }
+      this.logger.error(
+        `Forgot password verify error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
+      throw new BadRequestException('Unable to reset password');
     }
   }
 

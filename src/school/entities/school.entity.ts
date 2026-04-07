@@ -61,6 +61,10 @@ export class School {
   @Field(() => String, { nullable: true })
   testHoliday?: string;
 
+  // Slot Duration
+  @Field(() => Int)
+  slotDuration: number;
+
   // Owner/Contact Person
   @Field(() => String, { nullable: true })
   ownerName?: string;

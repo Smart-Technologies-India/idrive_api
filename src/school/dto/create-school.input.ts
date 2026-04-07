@@ -1,4 +1,4 @@
-import { InputType, Field } from '@nestjs/graphql';
+import { InputType, Field, Int } from '@nestjs/graphql';
 import {
   IsEmail,
   IsNotEmpty,
@@ -89,6 +89,11 @@ export class CreateSchoolInput {
   @IsString()
   @Field(() => String, { nullable: true })
   testHoliday?: string;
+
+  // Slot Duration
+  @IsNotEmpty()
+  @Field(() => Int)
+  slotDuration: number;
 
   // Owner/Contact Person
   @IsOptional()

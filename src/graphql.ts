@@ -395,6 +395,7 @@ export interface CreateSchoolInput {
     registrationNumber: string;
     rtoLicenseExpiry?: Nullable<DateTime>;
     rtoLicenseNumber?: Nullable<string>;
+    slotDuration: number;
     testHoliday?: Nullable<string>;
     twitter?: Nullable<string>;
     website?: Nullable<string>;
@@ -795,6 +796,7 @@ export interface UpdateSchoolInput {
     registrationNumber?: Nullable<string>;
     rtoLicenseExpiry?: Nullable<DateTime>;
     rtoLicenseNumber?: Nullable<string>;
+    slotDuration?: Nullable<number>;
     status?: Nullable<string>;
     testHoliday?: Nullable<string>;
     twitter?: Nullable<string>;
@@ -1004,6 +1006,7 @@ export interface WhereSchoolSearchInput {
     phone?: Nullable<string>;
     registrationNumber?: Nullable<string>;
     rtoLicenseNumber?: Nullable<string>;
+    slotDuration?: Nullable<number>;
     status?: Nullable<string>;
     testHoliday?: Nullable<string>;
     website?: Nullable<string>;
@@ -1626,6 +1629,7 @@ export interface School {
     registrationNumber: string;
     rtoLicenseExpiry?: Nullable<DateTime>;
     rtoLicenseNumber?: Nullable<string>;
+    slotDuration: number;
     status: SchoolStatus;
     testHoliday?: Nullable<string>;
     traingRules?: Nullable<TraingRules[]>;
@@ -1717,6 +1721,7 @@ export interface SchoolWithCounts {
     registrationNumber: string;
     rtoLicenseExpiry?: Nullable<DateTime>;
     rtoLicenseNumber?: Nullable<string>;
+    slotDuration: number;
     status: SchoolStatus;
     testHoliday?: Nullable<string>;
     traingRules?: Nullable<TraingRules[]>;

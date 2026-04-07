@@ -537,6 +537,7 @@ input CreateSchoolInput {
   registrationNumber: String!
   rtoLicenseExpiry: DateTime
   rtoLicenseNumber: String
+  slotDuration: Int!
   testHoliday: String
   twitter: String
   website: String
@@ -1072,6 +1073,7 @@ type School {
   registrationNumber: String!
   rtoLicenseExpiry: DateTime
   rtoLicenseNumber: String
+  slotDuration: Int!
   status: SchoolStatus!
   testHoliday: String
   traingRules: [TraingRules!]
@@ -1169,6 +1171,7 @@ type SchoolWithCounts {
   registrationNumber: String!
   rtoLicenseExpiry: DateTime
   rtoLicenseNumber: String
+  slotDuration: Int!
   status: SchoolStatus!
   testHoliday: String
   traingRules: [TraingRules!]
@@ -1650,6 +1653,7 @@ input UpdateSchoolInput {
   registrationNumber: String
   rtoLicenseExpiry: DateTime
   rtoLicenseNumber: String
+  slotDuration: Int
   status: String
   testHoliday: String
   twitter: String
@@ -1912,6 +1916,7 @@ input WhereSchoolSearchInput {
   phone: String
   registrationNumber: String
   rtoLicenseNumber: String
+  slotDuration: Int
   status: String
   testHoliday: String
   website: String

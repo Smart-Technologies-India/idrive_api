@@ -248,6 +248,7 @@ model school {
   lunchEndTime   String?
   weeklyHoliday  String?
   testHoliday    String?
+  slotDuration   Int     @default(60) // Duration of each slot in minutes
 
   // Owner/Contact Person
   ownerName  String?

@@ -1,4 +1,4 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 import { IsOptional, IsString } from 'class-validator';
 
 @InputType()
@@ -62,6 +62,11 @@ export class WhereSchoolSearchInput {
   @IsString()
   @Field(() => String, { nullable: true })
   testHoliday?: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => Int, { nullable: true })
+  slotDuration?: number;
 
   @IsOptional()
   @IsString()

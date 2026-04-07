@@ -349,7 +349,18 @@ export class BaseService<
                 value as WhereSearchInput,
               );
             } else {
-              where[key] = value;
+              // Use 'contains' for string fields to enable partial matching (LIKE query)
+              // Keep exact match for enums, numbers, dates, booleans, etc.
+              if (
+                typeof value === 'string' &&
+                !this.isEnumOrSpecialField(key, value)
+              ) {
+                where[key] = {
+                  contains: value,
+                };
+              } else {
+                where[key] = value;
+              }
             }
           }
         },
@@ -357,6 +368,50 @@ export class BaseService<
     }
 
     return where;
+  }
+
+  private isEnumOrSpecialField(fieldName: string, value: string): boolean {
+    // List of field names that are enums or should use exact match
+    const exactMatchFields = [
+      'status',
+      'role',
+      'paymentMethod',
+      'paymentStatus',
+      'bookingStatus',
+      'sessionStatus',
+      'leaveStatus',
+      'salaryStatus',
+      'driverStatus',
+      'declarationType',
+      'bloodGroup',
+      'id',
+      'bookingId',
+      'userId',
+      'schoolId',
+      'carId',
+      'driverId',
+      'courseId',
+      'serviceId',
+      'otp',
+    ];
+
+    // Check if field name matches known enum/exact match fields
+    if (exactMatchFields.includes(fieldName)) {
+      return true;
+    }
+
+    // Check if field name ends with 'Id' (foreign keys should be exact match)
+    if (fieldName.endsWith('Id')) {
+      return true;
+    }
+
+    // Check if the value is all uppercase with underscores (common enum pattern)
+    // e.g., "ACTIVE", "PENDING", "IN_PROGRESS"
+    if (/^[A-Z][A-Z0-9_]*$/.test(value)) {
+      return true;
+    }
+
+    return false;
   }
 
   private async processPasswordFields(

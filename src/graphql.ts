@@ -337,6 +337,11 @@ export interface CreateLicenseApplicationInput {
     testStatus?: Nullable<TestStatus>;
 }
 
+export interface CreateLocationInput {
+    location: string;
+    schoolId: number;
+}
+
 export interface CreatePaymentInput {
     amount: number;
     bankName?: Nullable<string>;
@@ -517,6 +522,11 @@ export interface SearchHolidayInput {
     schoolId?: Nullable<number>;
     startDate?: Nullable<string>;
     status?: Nullable<string>;
+}
+
+export interface SearchLocationInput {
+    location?: Nullable<string>;
+    schoolId?: Nullable<number>;
 }
 
 export interface SearchPaginationInput {
@@ -736,6 +746,11 @@ export interface UpdateLicenseApplicationInput {
     status?: Nullable<LicenseApplicationStatus>;
     testDate?: Nullable<DateTime>;
     testStatus?: Nullable<TestStatus>;
+}
+
+export interface UpdateLocationInput {
+    location?: Nullable<string>;
+    schoolId?: Nullable<number>;
 }
 
 export interface UpdatePaymentInput {
@@ -1108,6 +1123,7 @@ export interface BookingService {
     schoolService?: Nullable<SchoolService>;
     schoolServiceId: number;
     serviceName: string;
+    servicePayments?: Nullable<ServicePayment[]>;
     serviceType: BookingServiceType;
     updatedAt: DateTime;
     user?: Nullable<User>;
@@ -1385,6 +1401,20 @@ export interface LicenseApplicationPagination {
     total: number;
 }
 
+export interface Location {
+    id: number;
+    location: string;
+    school?: Nullable<School>;
+    schoolId: number;
+}
+
+export interface LocationPagination {
+    data: Location[];
+    skip: number;
+    take: number;
+    total: number;
+}
+
 export interface IMutation {
     createBooking(inputType: CreateBookingInput): Booking | Promise<Booking>;
     createBookingService(inputType: CreateBookingServiceInput): BookingService | Promise<BookingService>;
@@ -1397,6 +1427,7 @@ export interface IMutation {
     createHoliday(inputType: CreateHolidayInput): Holiday | Promise<Holiday>;
     createLeaveHistory(inputType: CreateLeaveHistoryInput): LeaveHistory | Promise<LeaveHistory>;
     createLicenseApplication(inputType: CreateLicenseApplicationInput): LicenseApplication | Promise<LicenseApplication>;
+    createLocation(inputType: CreateLocationInput): Location | Promise<Location>;
     createPayment(inputType: CreatePaymentInput): Payment | Promise<Payment>;
     createSalaryHistory(inputType: CreateSalaryHistoryInput): SalaryHistory | Promise<SalaryHistory>;
     createSchool(inputType: CreateSchoolInput): School | Promise<School>;
@@ -1417,6 +1448,7 @@ export interface IMutation {
     deleteHoliday(id: number, userid: number): Holiday | Promise<Holiday>;
     deleteLeaveHistory(id: number, userid: number): LeaveHistory | Promise<LeaveHistory>;
     deleteLicenseApplication(id: number, userid: number): LicenseApplication | Promise<LicenseApplication>;
+    deleteLocation(id: number, userid: number): Location | Promise<Location>;
     deletePayment(id: number, userid: number): Payment | Promise<Payment>;
     deleteSalaryHistory(id: number, userid: number): SalaryHistory | Promise<SalaryHistory>;
     deleteSchool(id: number, userid: number): School | Promise<School>;
@@ -1441,6 +1473,7 @@ export interface IMutation {
     updateHoliday(id: number, updateType: UpdateHolidayInput): Holiday | Promise<Holiday>;
     updateLeaveHistory(id: number, updateType: UpdateLeaveHistoryInput): LeaveHistory | Promise<LeaveHistory>;
     updateLicenseApplication(id: number, updateType: UpdateLicenseApplicationInput): LicenseApplication | Promise<LicenseApplication>;
+    updateLocation(id: number, updateType: UpdateLocationInput): Location | Promise<Location>;
     updatePayment(id: number, updateType: UpdatePaymentInput): Payment | Promise<Payment>;
     updateSalaryHistory(id: number, updateType: UpdateSalaryHistoryInput): SalaryHistory | Promise<SalaryHistory>;
     updateSchool(id: number, updateType: UpdateSchoolInput): School | Promise<School>;
@@ -1493,6 +1526,7 @@ export interface IQuery {
     getAllHoliday(whereSearchInput: SearchHolidayInput): Holiday[] | Promise<Holiday[]>;
     getAllLeaveHistory(whereSearchInput: WhereLeaveHistorySearchInput): LeaveHistory[] | Promise<LeaveHistory[]>;
     getAllLicenseApplication(whereSearchInput: WhereLicenseApplicationSearchInput): LicenseApplication[] | Promise<LicenseApplication[]>;
+    getAllLocation(whereSearchInput: SearchLocationInput): Location[] | Promise<Location[]>;
     getAllPayment(whereSearchInput: SearchPaymentInput): Payment[] | Promise<Payment[]>;
     getAllSalaryHistory(whereSearchInput: WhereSalaryHistorySearchInput): SalaryHistory[] | Promise<SalaryHistory[]>;
     getAllSchool(whereSearchInput: WhereSchoolSearchInput): School[] | Promise<School[]>;
@@ -1514,6 +1548,7 @@ export interface IQuery {
     getHolidayById(id: number): Holiday | Promise<Holiday>;
     getLeaveHistoryById(id: number): LeaveHistory | Promise<LeaveHistory>;
     getLicenseApplicationById(id: number): LicenseApplication | Promise<LicenseApplication>;
+    getLocationById(id: number): Location | Promise<Location>;
     getPaginatedBooking(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereBookingSearchInput): BookingPagination | Promise<BookingPagination>;
     getPaginatedBookingService(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereBookingServiceSearchInput): BookingServicePagination | Promise<BookingServicePagination>;
     getPaginatedBookingSession(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereBookingSessionSearchInput): BookingSessionPagination | Promise<BookingSessionPagination>;
@@ -1525,6 +1560,7 @@ export interface IQuery {
     getPaginatedHoliday(searchPaginationInput: SearchPaginationInput, whereSearchInput: SearchHolidayInput): HolidayPagination | Promise<HolidayPagination>;
     getPaginatedLeaveHistory(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereLeaveHistorySearchInput): LeaveHistoryPagination | Promise<LeaveHistoryPagination>;
     getPaginatedLicenseApplication(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereLicenseApplicationSearchInput): LicenseApplicationPagination | Promise<LicenseApplicationPagination>;
+    getPaginatedLocation(searchPaginationInput: SearchPaginationInput, whereSearchInput: SearchLocationInput): LocationPagination | Promise<LocationPagination>;
     getPaginatedPayment(searchPaginationInput: SearchPaginationInput, whereSearchInput: SearchPaymentInput): PaymentPagination | Promise<PaymentPagination>;
     getPaginatedSalaryHistory(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereSalaryHistorySearchInput): SalaryHistoryPagination | Promise<SalaryHistoryPagination>;
     getPaginatedSchool(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereSchoolSearchInput): SchoolPagination | Promise<SchoolPagination>;
@@ -1558,6 +1594,7 @@ export interface IQuery {
     searchHoliday(whereSearchInput: SearchHolidayInput): Nullable<Holiday> | Promise<Nullable<Holiday>>;
     searchLeaveHistory(whereSearchInput: WhereLeaveHistorySearchInput): Nullable<LeaveHistory> | Promise<Nullable<LeaveHistory>>;
     searchLicenseApplication(whereSearchInput: WhereLicenseApplicationSearchInput): Nullable<LicenseApplication> | Promise<Nullable<LicenseApplication>>;
+    searchLocation(whereSearchInput: SearchLocationInput): Nullable<Location> | Promise<Nullable<Location>>;
     searchPayment(whereSearchInput: SearchPaymentInput): Nullable<Payment> | Promise<Nullable<Payment>>;
     searchSalaryHistory(whereSearchInput: WhereSalaryHistorySearchInput): Nullable<SalaryHistory> | Promise<Nullable<SalaryHistory>>;
     searchSchool(whereSearchInput: WhereSchoolSearchInput): Nullable<School> | Promise<Nullable<School>>;

@@ -288,6 +288,7 @@ model school {
   bookingServices bookingService[]
   schoolServices  schoolService[]
   traingRules     traingRules[]
+  locations       location[]
 }
 
 enum CarCategory {
@@ -921,4 +922,11 @@ model traingRules {
   school school @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
   @@index([schoolId])
+}
+
+model location {
+  id       Int    @id @default(autoincrement())
+  location String @db.LongText
+  school   school @relation(fields: [schoolId], references: [id])
+  schoolId Int
 }

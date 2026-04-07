@@ -30,6 +30,7 @@ import { LicenseApplicationModule } from './license-application/license-applicat
 import { UtilsModule } from './utils/utils.module';
 import { ServicePaymentModule } from './service-payment/service-payment.module';
 import { TraingRulesModule } from './traing-rules/traing-rules.module';
+import { LocationModule } from './location/location.module';
 
 @Module({
   imports: [
@@ -71,6 +72,7 @@ import { TraingRulesModule } from './traing-rules/traing-rules.module';
     SchoolServiceModule,
     LicenseApplicationModule,
     TraingRulesModule,
+    LocationModule,
     UtilsModule,
   ],
   controllers: [AppController],

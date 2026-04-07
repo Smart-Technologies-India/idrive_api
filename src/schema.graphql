@@ -61,6 +61,7 @@ type BookingService {
   schoolService: SchoolService
   schoolServiceId: Int!
   serviceName: String!
+  servicePayments: [ServicePayment!]
   serviceType: BookingServiceType!
   updatedAt: DateTime!
   user: User
@@ -460,6 +461,11 @@ input CreateLicenseApplicationInput {
   testStatus: TestStatus = NONE
 }
 
+input CreateLocationInput {
+  location: String!
+  schoolId: Int!
+}
+
 input CreatePaymentInput {
   """Payment amount"""
   amount: Float!
@@ -803,6 +809,20 @@ enum LicenseApplicationStatus {
   SUBMIT
 }
 
+type Location {
+  id: Int!
+  location: String!
+  school: School
+  schoolId: Int!
+}
+
+type LocationPagination {
+  data: [Location!]!
+  skip: Int!
+  take: Int!
+  total: Int!
+}
+
 input LoginUserInput {
   contact: String!
   password: String!
@@ -820,6 +840,7 @@ type Mutation {
   createHoliday(inputType: CreateHolidayInput!): Holiday!
   createLeaveHistory(inputType: CreateLeaveHistoryInput!): LeaveHistory!
   createLicenseApplication(inputType: CreateLicenseApplicationInput!): LicenseApplication!
+  createLocation(inputType: CreateLocationInput!): Location!
   createPayment(inputType: CreatePaymentInput!): Payment!
   createSalaryHistory(inputType: CreateSalaryHistoryInput!): SalaryHistory!
   createSchool(inputType: CreateSchoolInput!): School!
@@ -840,6 +861,7 @@ type Mutation {
   deleteHoliday(id: Int!, userid: Int!): Holiday!
   deleteLeaveHistory(id: Int!, userid: Int!): LeaveHistory!
   deleteLicenseApplication(id: Int!, userid: Int!): LicenseApplication!
+  deleteLocation(id: Int!, userid: Int!): Location!
   deletePayment(id: Int!, userid: Int!): Payment!
   deleteSalaryHistory(id: Int!, userid: Int!): SalaryHistory!
   deleteSchool(id: Int!, userid: Int!): School!
@@ -864,6 +886,7 @@ type Mutation {
   updateHoliday(id: Int!, updateType: UpdateHolidayInput!): Holiday!
   updateLeaveHistory(id: Int!, updateType: UpdateLeaveHistoryInput!): LeaveHistory!
   updateLicenseApplication(id: Int!, updateType: UpdateLicenseApplicationInput!): LicenseApplication!
+  updateLocation(id: Int!, updateType: UpdateLocationInput!): Location!
   updatePayment(id: Int!, updateType: UpdatePaymentInput!): Payment!
   updateSalaryHistory(id: Int!, updateType: UpdateSalaryHistoryInput!): SalaryHistory!
   updateSchool(id: Int!, updateType: UpdateSchoolInput!): School!
@@ -921,6 +944,7 @@ type Query {
   getAllHoliday(whereSearchInput: SearchHolidayInput!): [Holiday!]!
   getAllLeaveHistory(whereSearchInput: WhereLeaveHistorySearchInput!): [LeaveHistory!]!
   getAllLicenseApplication(whereSearchInput: WhereLicenseApplicationSearchInput!): [LicenseApplication!]!
+  getAllLocation(whereSearchInput: SearchLocationInput!): [Location!]!
   getAllPayment(whereSearchInput: SearchPaymentInput!): [Payment!]!
   getAllSalaryHistory(whereSearchInput: WhereSalaryHistorySearchInput!): [SalaryHistory!]!
   getAllSchool(whereSearchInput: WhereSchoolSearchInput!): [School!]!
@@ -942,6 +966,7 @@ type Query {
   getHolidayById(id: Int!): Holiday!
   getLeaveHistoryById(id: Int!): LeaveHistory!
   getLicenseApplicationById(id: Int!): LicenseApplication!
+  getLocationById(id: Int!): Location!
   getPaginatedBooking(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereBookingSearchInput!): BookingPagination!
   getPaginatedBookingService(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereBookingServiceSearchInput!): BookingServicePagination!
   getPaginatedBookingSession(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereBookingSessionSearchInput!): BookingSessionPagination!
@@ -953,6 +978,7 @@ type Query {
   getPaginatedHoliday(searchPaginationInput: SearchPaginationInput!, whereSearchInput: SearchHolidayInput!): HolidayPagination!
   getPaginatedLeaveHistory(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereLeaveHistorySearchInput!): LeaveHistoryPagination!
   getPaginatedLicenseApplication(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereLicenseApplicationSearchInput!): LicenseApplicationPagination!
+  getPaginatedLocation(searchPaginationInput: SearchPaginationInput!, whereSearchInput: SearchLocationInput!): LocationPagination!
   getPaginatedPayment(searchPaginationInput: SearchPaginationInput!, whereSearchInput: SearchPaymentInput!): PaymentPagination!
   getPaginatedSalaryHistory(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereSalaryHistorySearchInput!): SalaryHistoryPagination!
   getPaginatedSchool(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereSchoolSearchInput!): SchoolPagination!
@@ -986,6 +1012,7 @@ type Query {
   searchHoliday(whereSearchInput: SearchHolidayInput!): Holiday
   searchLeaveHistory(whereSearchInput: WhereLeaveHistorySearchInput!): LeaveHistory
   searchLicenseApplication(whereSearchInput: WhereLicenseApplicationSearchInput!): LicenseApplication
+  searchLocation(whereSearchInput: SearchLocationInput!): Location
   searchPayment(whereSearchInput: SearchPaymentInput!): Payment
   searchSalaryHistory(whereSearchInput: WhereSalaryHistorySearchInput!): SalaryHistory
   searchSchool(whereSearchInput: WhereSchoolSearchInput!): School
@@ -1215,6 +1242,11 @@ input SearchHolidayInput {
   schoolId: Int
   startDate: String
   status: String
+}
+
+input SearchLocationInput {
+  location: String
+  schoolId: Int
 }
 
 input SearchPaginationInput {
@@ -1593,6 +1625,11 @@ input UpdateLicenseApplicationInput {
   status: LicenseApplicationStatus = PENDING
   testDate: DateTime
   testStatus: TestStatus = NONE
+}
+
+input UpdateLocationInput {
+  location: String
+  schoolId: Int
 }
 
 input UpdatePaymentInput {

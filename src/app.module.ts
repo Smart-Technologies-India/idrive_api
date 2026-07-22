@@ -31,6 +31,7 @@ import { UtilsModule } from './utils/utils.module';
 import { ServicePaymentModule } from './service-payment/service-payment.module';
 import { TraingRulesModule } from './traing-rules/traing-rules.module';
 import { LocationModule } from './location/location.module';
+import { DriverSchoolRegistrationModule } from './driver-school-registration/driver-school-registration.module';
 
 @Module({
   imports: [
@@ -73,6 +74,7 @@ import { LocationModule } from './location/location.module';
     LicenseApplicationModule,
     TraingRulesModule,
     LocationModule,
+    DriverSchoolRegistrationModule,
     UtilsModule,
   ],
   controllers: [AppController],

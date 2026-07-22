@@ -303,6 +303,13 @@ export interface CreateDriverInput {
     userId: number;
 }
 
+export interface CreateDriverSchoolRegistrationInput {
+    name: string;
+    number: string;
+    schoolAddress: string;
+    schoolName: string;
+}
+
 export interface CreateHolidayInput {
     carId?: Nullable<number>;
     declarationType: string;
@@ -714,6 +721,13 @@ export interface UpdateDriverInput {
     totalBookings?: Nullable<number>;
 }
 
+export interface UpdateDriverSchoolRegistrationInput {
+    name?: Nullable<string>;
+    number?: Nullable<string>;
+    schoolAddress?: Nullable<string>;
+    schoolName?: Nullable<string>;
+}
+
 export interface UpdateHolidayInput {
     carId?: Nullable<number>;
     declarationType?: Nullable<string>;
@@ -961,6 +975,14 @@ export interface WhereCarAdminSearchInput {
     manufacturer?: Nullable<string>;
     name?: Nullable<string>;
     status?: Nullable<string>;
+}
+
+export interface WhereDriverSchoolRegistrationSearchInput {
+    id?: Nullable<number>;
+    name?: Nullable<string>;
+    number?: Nullable<string>;
+    schoolAddress?: Nullable<string>;
+    schoolName?: Nullable<string>;
 }
 
 export interface WhereDriverSearchInput {
@@ -1332,6 +1354,23 @@ export interface DriverPagination {
     total: number;
 }
 
+export interface DriverSchoolRegistration {
+    createdAt: DateTime;
+    id: number;
+    name: string;
+    number: string;
+    schoolAddress: string;
+    schoolName: string;
+    updatedAt: DateTime;
+}
+
+export interface DriverSchoolRegistrationPagination {
+    data: DriverSchoolRegistration[];
+    skip: number;
+    take: number;
+    total: number;
+}
+
 export interface Holiday {
     car?: Nullable<Car>;
     carId?: Nullable<number>;
@@ -1424,6 +1463,7 @@ export interface IMutation {
     createCarCourse(inputType: CreateCarCourseInput): CarCourse | Promise<CarCourse>;
     createCourse(inputType: CreateCourseInput): Course | Promise<Course>;
     createDriver(inputType: CreateDriverInput): Driver | Promise<Driver>;
+    createDriverSchoolRegistration(inputType: CreateDriverSchoolRegistrationInput): DriverSchoolRegistration | Promise<DriverSchoolRegistration>;
     createHoliday(inputType: CreateHolidayInput): Holiday | Promise<Holiday>;
     createLeaveHistory(inputType: CreateLeaveHistoryInput): LeaveHistory | Promise<LeaveHistory>;
     createLicenseApplication(inputType: CreateLicenseApplicationInput): LicenseApplication | Promise<LicenseApplication>;
@@ -1445,6 +1485,7 @@ export interface IMutation {
     deleteCarCourse(id: number, userid: number): CarCourse | Promise<CarCourse>;
     deleteCourse(id: number, userid: number): Course | Promise<Course>;
     deleteDriver(id: number, userid: number): Driver | Promise<Driver>;
+    deleteDriverSchoolRegistration(id: number, userid: number): DriverSchoolRegistration | Promise<DriverSchoolRegistration>;
     deleteHoliday(id: number, userid: number): Holiday | Promise<Holiday>;
     deleteLeaveHistory(id: number, userid: number): LeaveHistory | Promise<LeaveHistory>;
     deleteLicenseApplication(id: number, userid: number): LicenseApplication | Promise<LicenseApplication>;
@@ -1470,6 +1511,7 @@ export interface IMutation {
     updateCarCourse(id: number, updateType: UpdateCarCourseInput): CarCourse | Promise<CarCourse>;
     updateCourse(id: number, updateType: UpdateCourseInput): Course | Promise<Course>;
     updateDriver(id: number, updateType: UpdateDriverInput): Driver | Promise<Driver>;
+    updateDriverSchoolRegistration(id: number, updateType: UpdateDriverSchoolRegistrationInput): DriverSchoolRegistration | Promise<DriverSchoolRegistration>;
     updateHoliday(id: number, updateType: UpdateHolidayInput): Holiday | Promise<Holiday>;
     updateLeaveHistory(id: number, updateType: UpdateLeaveHistoryInput): LeaveHistory | Promise<LeaveHistory>;
     updateLicenseApplication(id: number, updateType: UpdateLicenseApplicationInput): LicenseApplication | Promise<LicenseApplication>;
@@ -1523,6 +1565,7 @@ export interface IQuery {
     getAllCarCourse(whereSearchInput: SearchCarCourseInput): CarCourse[] | Promise<CarCourse[]>;
     getAllCourse(whereSearchInput: SearchCourseInput): Course[] | Promise<Course[]>;
     getAllDriver(whereSearchInput: WhereDriverSearchInput): Driver[] | Promise<Driver[]>;
+    getAllDriverSchoolRegistration(whereSearchInput: WhereDriverSchoolRegistrationSearchInput): DriverSchoolRegistration[] | Promise<DriverSchoolRegistration[]>;
     getAllHoliday(whereSearchInput: SearchHolidayInput): Holiday[] | Promise<Holiday[]>;
     getAllLeaveHistory(whereSearchInput: WhereLeaveHistorySearchInput): LeaveHistory[] | Promise<LeaveHistory[]>;
     getAllLicenseApplication(whereSearchInput: WhereLicenseApplicationSearchInput): LicenseApplication[] | Promise<LicenseApplication[]>;
@@ -1545,6 +1588,7 @@ export interface IQuery {
     getCarCourseById(id: number): CarCourse | Promise<CarCourse>;
     getCourseById(id: number): Course | Promise<Course>;
     getDriverById(id: number): Driver | Promise<Driver>;
+    getDriverSchoolRegistrationById(id: number): DriverSchoolRegistration | Promise<DriverSchoolRegistration>;
     getHolidayById(id: number): Holiday | Promise<Holiday>;
     getLeaveHistoryById(id: number): LeaveHistory | Promise<LeaveHistory>;
     getLicenseApplicationById(id: number): LicenseApplication | Promise<LicenseApplication>;
@@ -1557,6 +1601,7 @@ export interface IQuery {
     getPaginatedCarCourse(searchPaginationInput: SearchPaginationInput, whereSearchInput: SearchCarCourseInput): CarCoursePagination | Promise<CarCoursePagination>;
     getPaginatedCourse(searchPaginationInput: SearchPaginationInput, whereSearchInput: SearchCourseInput): CoursePagination | Promise<CoursePagination>;
     getPaginatedDriver(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereDriverSearchInput): DriverPagination | Promise<DriverPagination>;
+    getPaginatedDriverSchoolRegistration(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereDriverSchoolRegistrationSearchInput): DriverSchoolRegistrationPagination | Promise<DriverSchoolRegistrationPagination>;
     getPaginatedHoliday(searchPaginationInput: SearchPaginationInput, whereSearchInput: SearchHolidayInput): HolidayPagination | Promise<HolidayPagination>;
     getPaginatedLeaveHistory(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereLeaveHistorySearchInput): LeaveHistoryPagination | Promise<LeaveHistoryPagination>;
     getPaginatedLicenseApplication(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereLicenseApplicationSearchInput): LicenseApplicationPagination | Promise<LicenseApplicationPagination>;
@@ -1591,6 +1636,7 @@ export interface IQuery {
     searchCarCourse(whereSearchInput: SearchCarCourseInput): Nullable<CarCourse> | Promise<Nullable<CarCourse>>;
     searchCourse(whereSearchInput: SearchCourseInput): Nullable<Course> | Promise<Nullable<Course>>;
     searchDriver(whereSearchInput: WhereDriverSearchInput): Nullable<Driver> | Promise<Nullable<Driver>>;
+    searchDriverSchoolRegistration(whereSearchInput: WhereDriverSchoolRegistrationSearchInput): Nullable<DriverSchoolRegistration> | Promise<Nullable<DriverSchoolRegistration>>;
     searchHoliday(whereSearchInput: SearchHolidayInput): Nullable<Holiday> | Promise<Nullable<Holiday>>;
     searchLeaveHistory(whereSearchInput: WhereLeaveHistorySearchInput): Nullable<LeaveHistory> | Promise<Nullable<LeaveHistory>>;
     searchLicenseApplication(whereSearchInput: WhereLicenseApplicationSearchInput): Nullable<LicenseApplication> | Promise<Nullable<LicenseApplication>>;

@@ -427,6 +427,13 @@ input CreateDriverInput {
   userId: Int!
 }
 
+input CreateDriverSchoolRegistrationInput {
+  name: String!
+  number: String!
+  schoolAddress: String!
+  schoolName: String!
+}
+
 input CreateHolidayInput {
   carId: Int
   declarationType: String!
@@ -695,6 +702,23 @@ type DriverPagination {
   total: Int!
 }
 
+type DriverSchoolRegistration {
+  createdAt: DateTime!
+  id: Int!
+  name: String!
+  number: String!
+  schoolAddress: String!
+  schoolName: String!
+  updatedAt: DateTime!
+}
+
+type DriverSchoolRegistrationPagination {
+  data: [DriverSchoolRegistration!]!
+  skip: Int!
+  take: Int!
+  total: Int!
+}
+
 enum DriverStatus {
   ACTIVE
   INACTIVE
@@ -837,6 +861,7 @@ type Mutation {
   createCarCourse(inputType: CreateCarCourseInput!): CarCourse!
   createCourse(inputType: CreateCourseInput!): Course!
   createDriver(inputType: CreateDriverInput!): Driver!
+  createDriverSchoolRegistration(inputType: CreateDriverSchoolRegistrationInput!): DriverSchoolRegistration!
   createHoliday(inputType: CreateHolidayInput!): Holiday!
   createLeaveHistory(inputType: CreateLeaveHistoryInput!): LeaveHistory!
   createLicenseApplication(inputType: CreateLicenseApplicationInput!): LicenseApplication!
@@ -858,6 +883,7 @@ type Mutation {
   deleteCarCourse(id: Int!, userid: Int!): CarCourse!
   deleteCourse(id: Int!, userid: Int!): Course!
   deleteDriver(id: Int!, userid: Int!): Driver!
+  deleteDriverSchoolRegistration(id: Int!, userid: Int!): DriverSchoolRegistration!
   deleteHoliday(id: Int!, userid: Int!): Holiday!
   deleteLeaveHistory(id: Int!, userid: Int!): LeaveHistory!
   deleteLicenseApplication(id: Int!, userid: Int!): LicenseApplication!
@@ -883,6 +909,7 @@ type Mutation {
   updateCarCourse(id: Int!, updateType: UpdateCarCourseInput!): CarCourse!
   updateCourse(id: Int!, updateType: UpdateCourseInput!): Course!
   updateDriver(id: Int!, updateType: UpdateDriverInput!): Driver!
+  updateDriverSchoolRegistration(id: Int!, updateType: UpdateDriverSchoolRegistrationInput!): DriverSchoolRegistration!
   updateHoliday(id: Int!, updateType: UpdateHolidayInput!): Holiday!
   updateLeaveHistory(id: Int!, updateType: UpdateLeaveHistoryInput!): LeaveHistory!
   updateLicenseApplication(id: Int!, updateType: UpdateLicenseApplicationInput!): LicenseApplication!
@@ -941,6 +968,7 @@ type Query {
   getAllCarCourse(whereSearchInput: SearchCarCourseInput!): [CarCourse!]!
   getAllCourse(whereSearchInput: SearchCourseInput!): [Course!]!
   getAllDriver(whereSearchInput: WhereDriverSearchInput!): [Driver!]!
+  getAllDriverSchoolRegistration(whereSearchInput: WhereDriverSchoolRegistrationSearchInput!): [DriverSchoolRegistration!]!
   getAllHoliday(whereSearchInput: SearchHolidayInput!): [Holiday!]!
   getAllLeaveHistory(whereSearchInput: WhereLeaveHistorySearchInput!): [LeaveHistory!]!
   getAllLicenseApplication(whereSearchInput: WhereLicenseApplicationSearchInput!): [LicenseApplication!]!
@@ -963,6 +991,7 @@ type Query {
   getCarCourseById(id: Int!): CarCourse!
   getCourseById(id: Int!): Course!
   getDriverById(id: Int!): Driver!
+  getDriverSchoolRegistrationById(id: Int!): DriverSchoolRegistration!
   getHolidayById(id: Int!): Holiday!
   getLeaveHistoryById(id: Int!): LeaveHistory!
   getLicenseApplicationById(id: Int!): LicenseApplication!
@@ -975,6 +1004,7 @@ type Query {
   getPaginatedCarCourse(searchPaginationInput: SearchPaginationInput!, whereSearchInput: SearchCarCourseInput!): CarCoursePagination!
   getPaginatedCourse(searchPaginationInput: SearchPaginationInput!, whereSearchInput: SearchCourseInput!): CoursePagination!
   getPaginatedDriver(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereDriverSearchInput!): DriverPagination!
+  getPaginatedDriverSchoolRegistration(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereDriverSchoolRegistrationSearchInput!): DriverSchoolRegistrationPagination!
   getPaginatedHoliday(searchPaginationInput: SearchPaginationInput!, whereSearchInput: SearchHolidayInput!): HolidayPagination!
   getPaginatedLeaveHistory(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereLeaveHistorySearchInput!): LeaveHistoryPagination!
   getPaginatedLicenseApplication(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereLicenseApplicationSearchInput!): LicenseApplicationPagination!
@@ -1009,6 +1039,7 @@ type Query {
   searchCarCourse(whereSearchInput: SearchCarCourseInput!): CarCourse
   searchCourse(whereSearchInput: SearchCourseInput!): Course
   searchDriver(whereSearchInput: WhereDriverSearchInput!): Driver
+  searchDriverSchoolRegistration(whereSearchInput: WhereDriverSchoolRegistrationSearchInput!): DriverSchoolRegistration
   searchHoliday(whereSearchInput: SearchHolidayInput!): Holiday
   searchLeaveHistory(whereSearchInput: WhereLeaveHistorySearchInput!): LeaveHistory
   searchLicenseApplication(whereSearchInput: WhereLicenseApplicationSearchInput!): LicenseApplication
@@ -1593,6 +1624,13 @@ input UpdateDriverInput {
   totalBookings: Int
 }
 
+input UpdateDriverSchoolRegistrationInput {
+  name: String
+  number: String
+  schoolAddress: String
+  schoolName: String
+}
+
 input UpdateHolidayInput {
   carId: Int
   declarationType: String
@@ -1893,6 +1931,14 @@ input WhereCarAdminSearchInput {
   manufacturer: String
   name: String
   status: String
+}
+
+input WhereDriverSchoolRegistrationSearchInput {
+  id: Int
+  name: String
+  number: String
+  schoolAddress: String
+  schoolName: String
 }
 
 input WhereDriverSearchInput {

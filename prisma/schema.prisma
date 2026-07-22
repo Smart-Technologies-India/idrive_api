@@ -291,6 +291,16 @@ model school {
   locations       location[]
 }
 
+model driverSchoolRegistration {
+  id            Int      @id @default(autoincrement())
+  name          String
+  number        String
+  schoolName    String
+  schoolAddress String   @db.LongText
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
 enum CarCategory {
   SEDAN
   MUV
